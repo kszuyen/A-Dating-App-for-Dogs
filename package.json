@@ -9,29 +9,29 @@
     "start": "next start && antd-tools run clean && cross-env NODE_ENV=development NODE_OPTIONS=--openssl-legacy-provider concurrently \"bisheng start -c ./site/bisheng.config.js\""
   },
   "dependencies": {
-    "fs": "^0.0.1-security",
     "@clerk/nextjs": "^4.27.2",
+    "fs": "^0.0.1-security",
     "jimp": "^0.16.2",
     "lodash": "^4.17.21",
     "ndarray": "^1.0.19",
     "ndarray-ops": "^1.2.2",
-    "next": "14.0.3",
+    "next": "^14.0.3",
     "onnxruntime-web": "^1.13.1",
-    "react": "^18",
-    "react-dom": "^18"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "node-polyfill-webpack-plugin": "^1.1.4",
-    "copy-webpack-plugin": "^9.0.1",
     "@types/lodash": "^4.14.191",
+    "@types/ndarray": "^1.0.11",
+    "@types/ndarray-ops": "^1.2.4",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "@types/ndarray": "^1.0.11",
-    "@types/ndarray-ops": "^1.2.4",
     "autoprefixer": "^10.0.1",
+    "copy-webpack-plugin": "^9.0.1",
     "eslint": "^8",
-    "eslint-config-next": "14.0.3",
+    "eslint-config-next": "^14.0.3",
+    "node-polyfill-webpack-plugin": "^1.1.4",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"

@@ -1,3 +1,4 @@
+"use client";
 import { ChangeEvent, useRef, useState } from 'react';
 import { IMAGE_URLS } from '../data/sample-image-urls';
 import { inferenceSqueezenet } from '../utils/predict';
@@ -23,30 +24,6 @@ const ImageCanvas = (props: Props) => {
     var random = Math.floor(Math.random() * (9 - 0 + 1) + 0);
     return sampleImageUrls[random];
   }
-
-  // Draw image and other  UI elements then run inference
-  const displayImageAndRunInference = () => { 
-    // Get the image
-    image = new Image();
-    var sampleImage = getImage();
-    image.src = sampleImage.value;
-
-    // Clear out previous values.
-    setLabel(`Inferencing...`);
-    setConfidence("");
-    setInferenceTime("");
-    setDogClassification("");
-
-    // Draw the image on the canvas
-    const canvas = canvasRef.current;
-    const ctx = canvas!.getContext('2d');
-    image.onload = () => {
-      ctx!.drawImage(image, 0, 0, props.width, props.height);
-    }
-   
-    // Run the inference
-    submitInference();
-  };
 
   const submitInference = async () => {
 
@@ -101,12 +78,12 @@ const ImageCanvas = (props: Props) => {
         Run Resnet50 inference
       </button>
       <div className="mt-4">
-            <label
+            {/* <label
               htmlFor="image"
               className="p-4 border-dashed border-4 border-gray-600 block cursor-pointer"
             >
               Click to add image (.jpg)
-            </label>
+            </label> */}
             <input
               id="image"
               name="image"
