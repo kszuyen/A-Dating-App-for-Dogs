@@ -7,7 +7,7 @@ export async function runSqueezenetModel(preprocessedData: any): Promise<[any, n
   // Create session and set options. See the docs here for more options: 
   //https://onnxruntime.ai/docs/api/js/interfaces/InferenceSession.SessionOptions.html#graphOptimizationLevel
   const session = await ort.InferenceSession
-                          .create('./_next/static/chunks/pages/resnet50v2.onnx', 
+                          .create('./_next/static/chunks/pages/My_Dog_Classifier.onnx', 
                           { executionProviders: ['webgl'], graphOptimizationLevel: 'all' });
   console.log('Inference session created')
   // Run inference and get results.
@@ -32,11 +32,11 @@ async function runInference(session: ort.InferenceSession, preprocessedData: any
   const output = outputData[session.outputNames[0]];
   //Get the softmax of the output data. The softmax transforms values to be between 0 and 1
   var outputSoftmax = softmax(Array.prototype.slice.call(output.data));
-  
+  console.log(outputSoftmax);
   //Get the top 5 results.
-  var results = imagenetClassesTopK(outputSoftmax, 5);
-  console.log('results: ', results);
-  return [results, inferenceTime];
+  // var results = imagenetClassesTopK(outputSoftmax, 5);
+  // console.log('results: ', results);
+  return [outputSoftmax, inferenceTime];
 }
 
 //The softmax transforms values to be between 0 and 1
@@ -53,21 +53,21 @@ function softmax(resultArray: number[]): any {
 /**
  * Find top k imagenet classes
  */
-export function imagenetClassesTopK(classProbabilities: any, k = 5) {
-  const probs =
-      _.isTypedArray(classProbabilities) ? Array.prototype.slice.call(classProbabilities) : classProbabilities;
+// export function imagenetClassesTopK(classProbabilities: any, k = 5) {
+//   const probs =
+//       _.isTypedArray(classProbabilities) ? Array.prototype.slice.call(classProbabilities) : classProbabilities;
 
-  const sorted = _.reverse(_.sortBy(probs.map((prob: any, index: number) => [prob, index]), (probIndex: Array<number> ) => probIndex[0]));
+//   const sorted = _.reverse(_.sortBy(probs.map((prob: any, index: number) => [prob, index]), (probIndex: Array<number> ) => probIndex[0]));
 
-  const topK = _.take(sorted, k).map((probIndex: Array<number>) => {
-    const iClass = imagenetClasses[probIndex[1]];
-    return {
-      id: iClass[0],
-      index: parseInt(probIndex[1].toString(), 10),
-      name: iClass[1].replace(/_/g, ' '),
-      probability: probIndex[0]
-    };
-  });
-  return topK;
-}
+//   const topK = _.take(sorted, k).map((probIndex: Array<number>) => {
+//     const iClass = imagenetClasses[probIndex[1]];
+//     return {
+//       id: iClass[0],
+//       index: parseInt(probIndex[1].toString(), 10),
+//       name: iClass[1].replace(/_/g, ' '),
+//       probability: probIndex[0]
+//     };
+//   });
+//   return topK;
+// }
 

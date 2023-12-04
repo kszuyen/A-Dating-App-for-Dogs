@@ -1,6 +1,5 @@
 "use client";
 import { ChangeEvent, useRef, useState } from 'react';
-import { IMAGE_URLS } from '../data/sample-image-urls';
 import { inferenceSqueezenet } from '../utils/predict';
 import styles from '../styles/Home.module.css';
 
@@ -13,52 +12,31 @@ const ImageCanvas = (props: Props) => {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   var image: HTMLImageElement;
-  const [topResultLabel, setLabel] = useState("");
-  const [topResultConfidence, setConfidence] = useState("");
+  const [inferencing, setInferencing] = useState("");
+  const [confidence, setConfidence] = useState("");
   const [inferenceTime, setInferenceTime] = useState("");
-  const [dogClassification, setDogClassification] = useState("");
-  
-  // Load the image from the IMAGE_URLS array
-  const getImage = () => {
-    var sampleImageUrls: Array<{ text: string; value: string }> = IMAGE_URLS;
-    var random = Math.floor(Math.random() * (9 - 0 + 1) + 0);
-    return sampleImageUrls[random];
-  }
 
   const submitInference = async () => {
 
     // Get the image data from the canvas and submit inference.
     var [inferenceResult,inferenceTime] = await inferenceSqueezenet(image.src);
 
-    // Get the highest confidence.
-    var topResult = inferenceResult[0];
-
     // Update the label and confidence
-    setLabel(`${topResult.index} ${topResult.name.toUpperCase()}`);
-    setConfidence(topResult.probability);
+    setConfidence(`${(inferenceResult[0] * 100).toFixed(2)} % dog`);
     setInferenceTime(`Inference speed: ${inferenceTime} seconds`);
-
-    // Classify whether is dog or not
-    if (topResult.index >= 151 && topResult.index <= 268)
-    {
-      setDogClassification("This is a dog.");
-    } else {
-      setDogClassification("This is not a dog.");
-    }
+    setInferencing("");
 
   };
   const [previewImage, setPreviewImage] = useState<string>("");
   const RunInference = () => { 
     // Get the image
     image = new Image();
-    // var sampleImage = getImage();
     image.src = previewImage;
 
     // Clear out previous values.
-    setLabel(`Inferencing...`);
+    setInferencing(`Inferencing...`);
     setConfidence("");
     setInferenceTime("");
-    setDogClassification("");
 
     // Draw the image on the canvas
     const canvas = canvasRef.current;
@@ -75,7 +53,7 @@ const ImageCanvas = (props: Props) => {
       <button
         className={styles.grid}
         onClick={RunInference} >
-        Run Resnet50 inference
+        Run My_Dog_Classifier inference
       </button>
       <div className="mt-4">
             {/* <label
@@ -111,9 +89,9 @@ const ImageCanvas = (props: Props) => {
           </div>
       <br/>
       <canvas ref={canvasRef} width={props.width} height={props.height} />
-      <span>{topResultLabel} {topResultConfidence}</span>
+      <span>{inferencing}</span>
+      <span>{confidence}</span>
       <span>{inferenceTime}</span>
-      <span>{dogClassification}</span>
     </>
   )
 
