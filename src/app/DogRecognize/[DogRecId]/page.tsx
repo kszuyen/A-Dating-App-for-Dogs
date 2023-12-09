@@ -1,7 +1,9 @@
 "use client";
-import { ChangeEvent, useRef, useState } from 'react';
-import { inferenceSqueezenet } from '../utils/predict';
-import styles from '../styles/Home.module.css';
+
+import { ChangeEvent, useRef, useState } from "react";
+
+// import styles from "../styles/Home.module.css";
+import { inferenceSqueezenet } from "../../../utils/predict";
 
 interface Props {
   height: number;
@@ -9,7 +11,6 @@ interface Props {
 }
 
 const ImageCanvas = (props: Props) => {
-
   const canvasRef = useRef<HTMLCanvasElement>(null);
   var image: HTMLImageElement;
   const [inferencing, setInferencing] = useState("");
@@ -17,18 +18,16 @@ const ImageCanvas = (props: Props) => {
   const [inferenceTime, setInferenceTime] = useState("");
 
   const submitInference = async () => {
-
     // Get the image data from the canvas and submit inference.
-    var [inferenceResult,inferenceTime] = await inferenceSqueezenet(image.src);
+    var [inferenceResult, inferenceTime] = await inferenceSqueezenet(image.src);
 
     // Update the label and confidence
     setConfidence(`${(inferenceResult[0] * 100).toFixed(2)} % dog`);
     setInferenceTime(`Inference speed: ${inferenceTime} seconds`);
     setInferencing("");
-
   };
   const [previewImage, setPreviewImage] = useState<string>("");
-  const RunInference = () => { 
+  const RunInference = () => {
     // Get the image
     image = new Image();
     image.src = previewImage;
@@ -40,61 +39,58 @@ const ImageCanvas = (props: Props) => {
 
     // Draw the image on the canvas
     const canvas = canvasRef.current;
-    const ctx = canvas!.getContext('2d');
+    const ctx = canvas!.getContext("2d");
     image.onload = () => {
       ctx!.drawImage(image, 0, 0, props.width, props.height);
-    }
-   
+    };
+
     // Run the inference
     submitInference();
   };
   return (
     <>
-      <button
-        className={styles.grid}
-        onClick={RunInference} >
+      <button onClick={RunInference}>
         Run My_Dog_Classifier inference
       </button>
       <div className="mt-4">
-            {/* <label
+        {/* <label
               htmlFor="image"
               className="p-4 border-dashed border-4 border-gray-600 block cursor-pointer"
             >
               Click to add image (.jpg)
             </label> */}
-            <input
-              id="image"
-              name="image"
-              type="file"
-              accept="image/*"
-              // style={{ display: "none" }}
-              onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                if (event?.target?.files?.[0]) {
-                  const file = event.target.files[0];
-                  const reader = new FileReader();
-                  reader.onloadend = () => {
-                    setPreviewImage(reader.result as string);
-                  };
-                  reader.readAsDataURL(file);
-                }
-              }}
-            />
-            {/* {previewImage && (
+        <input
+          id="image"
+          name="image"
+          type="file"
+          accept="image/*"
+          // style={{ display: "none" }}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+            if (event?.target?.files?.[0]) {
+              const file = event.target.files[0];
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                setPreviewImage(reader.result as string);
+              };
+              reader.readAsDataURL(file);
+            }
+          }}
+        />
+        {/* {previewImage && (
               <img
                 src={previewImage}
                 className="mt-4 object-cover"
                 style={{ width: "576px", height: `${(16 / 9) * 576}px` }}
               />
             )} */}
-          </div>
-      <br/>
+      </div>
+      <br />
       <canvas ref={canvasRef} width={props.width} height={props.height} />
       <span>{inferencing}</span>
       <span>{confidence}</span>
       <span>{inferenceTime}</span>
     </>
-  )
-
+  );
 };
 
 export default ImageCanvas;
