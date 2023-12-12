@@ -3,7 +3,7 @@
 import { ChangeEvent, useRef, useState } from "react";
 
 // import styles from "../styles/Home.module.css";
-import { inferenceSqueezenet } from "../../../utils/predict";
+import { inferenceSqueezenet } from "../utils/predict";
 
 interface Props {
   height: number;
@@ -49,9 +49,7 @@ const ImageCanvas = (props: Props) => {
   };
   return (
     <>
-      <button onClick={RunInference}>
-        Run My_Dog_Classifier inference
-      </button>
+      <button onClick={RunInference}>Run My_Dog_Classifier inference</button>
       <div className="mt-4">
         {/* <label
               htmlFor="image"
