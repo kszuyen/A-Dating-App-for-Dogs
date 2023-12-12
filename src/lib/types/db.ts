@@ -5,8 +5,3 @@ export type User = {
   provider: "github" | "credentials";
 };
 
-export type Document = {
-  id: string;
-  title: string;
-  content: string;
-};

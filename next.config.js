@@ -22,7 +22,7 @@ module.exports = {
             to: "static/chunks/pages",
           },
           {
-            from: "./model",
+            from: "./src/model",
             to: "static/chunks/pages",
           },
         ],
