@@ -16,24 +16,28 @@ import AuthInput from "./AuthInput";
 function AuthForm({
   showForm,
   setShowForm,
+  isSignUp,
+  setIsSignUp,
 }: {
   showForm: boolean;
   setShowForm: any;
+  isSignUp: boolean;
+  setIsSignUp: any;
 }) {
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [isSignUp, setIsSignUp] = useState<boolean>(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // TODO: sign in logic
+    console.log("Submitted");
     signIn("credentials", {
       email,
       username,
       password,
-      callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/docs`,
+      callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}`,
     });
   };
   const handleClick = () => {
