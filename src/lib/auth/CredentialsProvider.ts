@@ -11,7 +11,7 @@ export default CredentialsProvider({
   name: "credentials",
   credentials: {
     email: { label: "Email", type: "text" },
-    username: { label: "Userame", type: "text", optional: true },
+    username: { label: "Username", type: "text", optional: true },
     password: { label: "Password", type: "password" },
   },
   async authorize(credentials) {

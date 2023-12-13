@@ -30,6 +30,7 @@
     "next-auth": "^5.0.0-beta.4",
     "onnxruntime-web": "^1.13.1",
     "pg": "^8.11.3",
+    "postgres": "^3.4.3",
     "pusher": "^5.2.0",
     "pusher-js": "^8.4.0-rc2",
     "react": "^18.2.0",

@@ -1,9 +1,14 @@
 "use client";
 
-import ImageCanvas from "../../components/ImageCanvas";
+// import ImageCanvas from "../../components/ImageCanvas";
 
-function DogRecPage() {
-  return <ImageCanvas height={224} width={224} />;
+function UserPage() {
+  // return <ImageCanvas height={224} width={224} />;
+  return (
+    <>
+      <div>UserPage</div>
+    </>
+  );
 }
 
-export default DogRecPage;
+export default UserPage;
