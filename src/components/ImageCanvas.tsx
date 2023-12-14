@@ -3,7 +3,7 @@
 import { ChangeEvent, useRef, useState } from "react";
 
 // import styles from "../styles/Home.module.css";
-import { inference } from "../utils/predict";
+import { inference } from "../lib/model/predict";
 
 interface Props {
   height: number;
