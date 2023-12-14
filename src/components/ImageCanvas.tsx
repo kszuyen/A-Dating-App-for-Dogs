@@ -3,7 +3,7 @@
 import { ChangeEvent, useRef, useState } from "react";
 
 // import styles from "../styles/Home.module.css";
-import { inferenceSqueezenet } from "../utils/predict";
+import { inference } from "../utils/predict";
 
 interface Props {
   height: number;
@@ -19,7 +19,7 @@ const ImageCanvas = (props: Props) => {
 
   const submitInference = async () => {
     // Get the image data from the canvas and submit inference.
-    var [inferenceResult, inferenceTime] = await inferenceSqueezenet(image.src);
+    var [inferenceResult, inferenceTime] = await inference(image.src);
 
     // Update the label and confidence
     setConfidence(`${(inferenceResult[0] * 100).toFixed(2)} % dog`);
@@ -51,18 +51,11 @@ const ImageCanvas = (props: Props) => {
     <>
       <button onClick={RunInference}>Run My_Dog_Classifier inference</button>
       <div className="mt-4">
-        {/* <label
-              htmlFor="image"
-              className="p-4 border-dashed border-4 border-gray-600 block cursor-pointer"
-            >
-              Click to add image (.jpg)
-            </label> */}
         <input
           id="image"
           name="image"
           type="file"
           accept="image/*"
-          // style={{ display: "none" }}
           onChange={(event: ChangeEvent<HTMLInputElement>) => {
             if (event?.target?.files?.[0]) {
               const file = event.target.files[0];
@@ -74,13 +67,6 @@ const ImageCanvas = (props: Props) => {
             }
           }}
         />
-        {/* {previewImage && (
-              <img
-                src={previewImage}
-                className="mt-4 object-cover"
-                style={{ width: "576px", height: `${(16 / 9) * 576}px` }}
-              />
-            )} */}
       </div>
       <br />
       <canvas ref={canvasRef} width={props.width} height={props.height} />

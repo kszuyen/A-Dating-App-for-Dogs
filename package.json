@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build && next export",
     "lint": "next lint",
-    "start": "next start && antd-tools run clean && cross-env NODE_ENV=development NODE_OPTIONS=--openssl-legacy-provider concurrently \"bisheng start -c ./site/bisheng.config.js\"",
+    "start": "next start",
     "migrate": "drizzle-kit push:pg",
     "studio": "drizzle-kit studio",
     "format": "prettier --write ."
@@ -57,7 +57,6 @@
     "eslint": "^8.55.0",
     "eslint-config-next": "^14.0.3",
     "eslint-config-prettier": "^9.1.0",
-    "node-polyfill-webpack-plugin": "^1.1.4",
     "postcss": "^8",
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.9",
