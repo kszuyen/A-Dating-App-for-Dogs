@@ -40,9 +40,9 @@ function OnBoardForm({}: {}) {
 
             <DogImageInput
               label="Dog image"
-              type="file"
               value={dogImage}
               setValue={setDogImage}
+              setDisableSubmit={setDisableSubmit}
             />
             <div className="text-sm text-gray-500"></div>
 

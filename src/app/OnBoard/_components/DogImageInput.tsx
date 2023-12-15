@@ -10,12 +10,13 @@ import { inference } from "@/lib/model/predict";
 
 type Props = {
   label: string;
-  type: React.HTMLInputTypeAttribute;
+  // type: React.HTMLInputTypeAttribute;
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
+  setDisableSubmit: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function OnBoardInput({ label, value, setValue }: Props) {
+function OnBoardInput({ label, value, setValue, setDisableSubmit }: Props) {
   var image: HTMLImageElement;
   const [previewImage, setPreviewImage] = useState<string>("");
 
@@ -30,6 +31,11 @@ function OnBoardInput({ label, value, setValue }: Props) {
     setConfidence(`${(inferenceResult[0] * 100).toFixed(2)} % dog`);
     setInferenceTime(`Inference speed: ${inferenceTime} seconds`);
     setInferencing("");
+    if (inferenceResult[0] > 0.5) {
+      setDisableSubmit(false);
+    } else {
+      setDisableSubmit(true);
+    }
   };
   const RunInference = () => {
     // Get the image
