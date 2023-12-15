@@ -15,7 +15,7 @@ const Navbar = ({
     setShowForm(true);
   };
   return (
-    <nav id="header" className="fixed top-0 z-30 w-full">
+    <nav id="header" className="top-0 z-30 w-full">
       <div className="container mx-auto mt-0 flex w-full flex-wrap items-center justify-between py-2">
         <div className="flex flex-row items-center pl-4 pt-2">
           <a

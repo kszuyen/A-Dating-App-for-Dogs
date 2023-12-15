@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 
+import Google from "@auth/core/providers/google";
 import { eq } from "drizzle-orm";
 
 import { db } from "@/db";
@@ -12,7 +13,14 @@ export const {
   handlers: { GET, POST },
   auth,
 } = NextAuth({
-  providers: [GitHub, CredentialsProvider],
+  providers: [
+    GitHub,
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+    CredentialsProvider,
+  ],
   callbacks: {
     async session({ session, token }) {
       const email = token.email || session?.user?.email;

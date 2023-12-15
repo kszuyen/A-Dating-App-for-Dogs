@@ -37,7 +37,7 @@ function AuthForm({
       email,
       username,
       password,
-      callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/UserPage`,
+      callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/OnBoard`,
     });
   };
   const handleClick = () => {
@@ -118,12 +118,28 @@ function AuthForm({
               <p className="text-xs text-gray-400">or</p>
               <div className="h-[1px] grow border-t"></div>
             </div>
-
+            <Button
+              onClick={async () => {
+                signIn("google", {
+                  callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/OnBoard`,
+                });
+              }}
+              className="flex w-full"
+              variant={"outline"}
+            >
+              <Image
+                src="/google.png"
+                alt="google icon"
+                width={20}
+                height={20}
+              />
+              <span className="grow">Sign In with Google</span>
+            </Button>
             <Button
               onClick={async () => {
                 // TODO: sign in with github
                 signIn("github", {
-                  callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/UserPage`,
+                  callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/OnBoard`,
                 });
               }}
               className="flex w-full"
