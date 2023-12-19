@@ -1,3 +1,6 @@
+import Header from "@/components/Header";
+import { Separator } from "@/components/ui/separator";
+
 type Props = {
   children: React.ReactNode;
 };
@@ -5,9 +8,14 @@ type Props = {
 function UserPageLayout({ children }: Props) {
   return (
     // overflow-hidden for parent to hide scrollbar
-    <main className="flex-rows fixed top-0 flex h-screen w-full overflow-hidden">
-      <div className="w-full overflow-y-scroll">{children}</div>
-    </main>
+    <div className="mx-auto flex max-w-6xl">
+      <Header />
+      <main className="flex min-h-screen w-full">
+        <Separator orientation="vertical" />
+        {children}
+        {/* <Separator orientation="vertical" /> */}
+      </main>
+    </div>
   );
 }
 
