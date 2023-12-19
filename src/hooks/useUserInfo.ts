@@ -8,8 +8,8 @@ import { useSearchParams } from "next/navigation";
 export default function useUserInfo() {
   const searchParams = useSearchParams();
   const username = useMemo(() => searchParams.get("username"), [searchParams]);
-//   const handle = useMemo(() => searchParams.get("handle"), [searchParams]);
-//   const avatarURL = useMemo(() => getAvatar(username), [username]);
+  //   const handle = useMemo(() => searchParams.get("handle"), [searchParams]);
+  //   const avatarURL = useMemo(() => getAvatar(username), [username]);
 
   return {
     username,

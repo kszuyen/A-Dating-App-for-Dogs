@@ -34,22 +34,25 @@ export const usersTable = pgTable(
   }),
 );
 
-export const usersToDogsRelations = relations(usersTable, ({ one }) => ({
-  dogs: one(dogsTable),
-}));
+// export const usersToDogsRelations = relations(usersTable, ({ one }) => ({
+//   dogs: one(dogsTable),
+// }));
 
 export const dogsTable = pgTable(
-  'dogs', {
-    id: serial('id').primaryKey(),
-    displayId: uuid("display_id")
-      .references(() => usersTable.displayId, { onDelete: "cascade" }),
+  "dogs",
+  {
+    id: serial("id").primaryKey(),
+    displayId: uuid("display_id").references(() => usersTable.displayId, {
+      onDelete: "cascade",
+    }),
+    //狗的displayId應該要跟人的displayId一樣，實現一對一
     dogname: varchar("dogname", { length: 100 }).notNull(),
     breed: varchar("breed", { length: 100 }).notNull(),
     gender: varchar("gender", {
       length: 100,
       enum: ["male", "female"],
     }).notNull(),
-    birthday: date('date', { mode: "string" }),
+    birthday: date("date", { mode: "string" }),
     description: varchar("description", { length: 280 }).notNull(),
   },
   (table) => ({
@@ -58,8 +61,9 @@ export const dogsTable = pgTable(
 );
 
 export const likedTable = pgTable(
-  'liked', {
-    id: serial('id').primaryKey(),
+  "liked",
+  {
+    id: serial("id").primaryKey(),
     firstId: uuid("firstId").notNull(),
     secondId: uuid("secondId").notNull(),
   },
@@ -71,11 +75,12 @@ export const likedTable = pgTable(
     // like the same tweet twice.
     uniqCombination: unique().on(table.firstId, table.secondId),
   }),
-)
+);
 
 export const viewedTable = pgTable(
-  'viewed', {
-    id: serial('id').primaryKey(),
+  "viewed",
+  {
+    id: serial("id").primaryKey(),
     firstId: uuid("firstId").notNull(),
     secondId: uuid("secondId").notNull(),
   },
@@ -84,18 +89,19 @@ export const viewedTable = pgTable(
     secondIdIndex: index("second_id_index").on(table.secondId),
     uniqCombination: unique().on(table.firstId, table.secondId),
   }),
-)
+);
 
 export const messagesTable = pgTable(
-  'messages', {
-    id: serial('id').primaryKey(),
+  "messages",
+  {
+    id: serial("id").primaryKey(),
     content: varchar("content", { length: 280 }).notNull(),
     senderId: uuid("senderId").notNull(),
     receiverId: uuid("receiverId").notNull(),
-    sentAt: timestamp('sentAt').default(sql`now()`),
+    sentAt: timestamp("sentAt").default(sql`now()`),
   },
   (table) => ({
     senderIdIndex: index("sender_id_index").on(table.senderId),
     receiverIdIndex: index("receiver_id_index").on(table.receiverId),
   }),
-)
+);

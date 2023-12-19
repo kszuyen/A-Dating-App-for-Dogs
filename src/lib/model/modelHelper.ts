@@ -1,9 +1,7 @@
 import _ from "lodash";
 import * as ort from "onnxruntime-web";
 
-export async function runModel(
-  preprocessedData: any,
-): Promise<[any, number]> {
+export async function runModel(preprocessedData: any): Promise<[any, number]> {
   // Create session and set options. See the docs here for more options:
   //https://onnxruntime.ai/docs/api/js/interfaces/InferenceSession.SessionOptions.html#graphOptimizationLevel
   const session = await ort.InferenceSession.create(
@@ -57,4 +55,3 @@ function softmax(resultArray: number[]): any {
     return Math.exp(resultValue - largestNumber) / sumOfExp;
   });
 }
-

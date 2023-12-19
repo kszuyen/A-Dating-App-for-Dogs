@@ -62,7 +62,7 @@ export const {
         .where(eq(usersTable.email, email.toLowerCase()))
         .execute();
       if (existedUser) return token;
-      if (provider !== "github") return token;
+      if (provider !== "github" && provider != "google") return token;
 
       // Sign up
       await db.insert(usersTable).values({

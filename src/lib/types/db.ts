@@ -4,4 +4,3 @@ export type User = {
   email: string;
   provider: "github" | "google" | "credentials";
 };
-

@@ -7,7 +7,6 @@ import Image from "next/image";
 
 // Run: npx shadcn-ui@latest add button
 import { Button } from "@/components/ui/button";
-// Run: npx shadcn-ui@latest add card
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { publicEnv } from "@/lib/env/public";
 
@@ -29,11 +28,44 @@ function AuthForm({
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [invalidEmail, setInvalidEmail] = useState<boolean>(false);
+  // const [userExists, setUserExists] = useState<boolean>(false);
+  const [invalidUsername, setInvalidUsername] = useState<boolean>(false);
+  const [passwordTooShort, setPasswordTooShort] = useState<boolean>(false);
+  const [wrongConfirmPassword, setWrongConfirmPassword] =
+    useState<boolean>(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // TODO: sign in logic
     console.log("Submitted");
+    if (!email) {
+      setInvalidEmail(true);
+      return;
+    } else {
+      setInvalidEmail(false);
+    }
+    if (isSignUp) {
+      if (!username) {
+        setInvalidUsername(true);
+        return;
+      } else {
+        setInvalidUsername(false);
+      }
+      if (password.length < 8) {
+        setPasswordTooShort(true);
+        return;
+      } else {
+        setPasswordTooShort(false);
+      }
+      if (password != confirmPassword) {
+        setWrongConfirmPassword(true);
+        return;
+      }
+    } else {
+    }
     signIn("credentials", {
+      isSignUp,
       email,
       username,
       password,
@@ -63,6 +95,11 @@ function AuthForm({
                 value={email}
                 setValue={setEmail}
               />
+              {invalidEmail && (
+                <div className="text-xs text-red-500">
+                  Please enter your email.
+                </div>
+              )}
               {isSignUp && (
                 <AuthInput
                   label="Username"
@@ -71,12 +108,22 @@ function AuthForm({
                   setValue={setUsername}
                 />
               )}
+              {isSignUp && invalidUsername && (
+                <div className="text-xs text-red-500">
+                  Please enter your username.
+                </div>
+              )}
               <AuthInput
                 label="Password"
                 type="password"
                 value={password}
                 setValue={setPassword}
               />
+              {isSignUp && passwordTooShort && (
+                <div className="text-xs text-red-500">
+                  Password must be at least 8 characters long.
+                </div>
+              )}
               {isSignUp && (
                 <AuthInput
                   label="Confirm Password"
@@ -84,6 +131,11 @@ function AuthForm({
                   value={confirmPassword}
                   setValue={setConfirmPassword}
                 />
+              )}
+              {wrongConfirmPassword && (
+                <div className="text-xs text-red-500">
+                  Must match the previous entry.
+                </div>
               )}
               <div className="text-sm text-gray-500">
                 {isSignUp ? (
