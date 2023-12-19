@@ -3,7 +3,8 @@
 function UserPage() {
   return (
     <>
-      <div>UserPage</div>
+      <div>MainPage</div>
+      <div>Add swipe functions here</div>
     </>
   );
 }
