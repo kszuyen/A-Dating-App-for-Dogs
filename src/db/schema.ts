@@ -1,16 +1,17 @@
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   index,
-  text,
   pgTable,
   serial,
   uuid,
   varchar,
+  date,
+  timestamp,
   unique,
 } from "drizzle-orm/pg-core";
 
-// Checkout the many-to-many relationship in the following tutorial:
-// https://orm.drizzle.team/docs/rqb#many-to-many
+// Checkout the relationship in the following tutorial:
+// https://orm.drizzle.team/docs/rqb
 
 export const usersTable = pgTable(
   "users",
@@ -22,7 +23,7 @@ export const usersTable = pgTable(
     hashedPassword: varchar("hashed_password", { length: 100 }),
     provider: varchar("provider", {
       length: 100,
-      enum: ["github", "credentials"],
+      enum: ["github", "credentials", "google"],
     })
       .notNull()
       .default("credentials"),
@@ -33,3 +34,68 @@ export const usersTable = pgTable(
   }),
 );
 
+export const usersToDogsRelations = relations(usersTable, ({ one }) => ({
+  dogs: one(dogsTable),
+}));
+
+export const dogsTable = pgTable(
+  'dogs', {
+    id: serial('id').primaryKey(),
+    displayId: uuid("display_id")
+      .references(() => usersTable.displayId, { onDelete: "cascade" }),
+    dogname: varchar("dogname", { length: 100 }).notNull(),
+    breed: varchar("breed", { length: 100 }).notNull(),
+    gender: varchar("gender", {
+      length: 100,
+      enum: ["male", "female"],
+    }).notNull(),
+    birthday: date('date', { mode: "string" }),
+    description: varchar("description", { length: 280 }).notNull(),
+  },
+  (table) => ({
+    displayIdIndex: index("display_id_index").on(table.displayId),
+  }),
+);
+
+export const likedTable = pgTable(
+  'liked', {
+    id: serial('id').primaryKey(),
+    firstId: uuid("firstId").notNull(),
+    secondId: uuid("secondId").notNull(),
+  },
+  (table) => ({
+    firstIdIndex: index("first_id_index").on(table.firstId),
+    secondIdIndex: index("second_id_index").on(table.secondId),
+    // unique constraints ensure that there are no duplicate combinations of
+    // values in the table. In this case, we want to ensure that a user can't
+    // like the same tweet twice.
+    uniqCombination: unique().on(table.firstId, table.secondId),
+  }),
+)
+
+export const viewedTable = pgTable(
+  'viewed', {
+    id: serial('id').primaryKey(),
+    firstId: uuid("firstId").notNull(),
+    secondId: uuid("secondId").notNull(),
+  },
+  (table) => ({
+    firstIdIndex: index("first_id_index").on(table.firstId),
+    secondIdIndex: index("second_id_index").on(table.secondId),
+    uniqCombination: unique().on(table.firstId, table.secondId),
+  }),
+)
+
+export const messagesTable = pgTable(
+  'messages', {
+    id: serial('id').primaryKey(),
+    content: varchar("content", { length: 280 }).notNull(),
+    senderId: uuid("senderId").notNull(),
+    receiverId: uuid("receiverId").notNull(),
+    sentAt: timestamp('sentAt').default(sql`now()`),
+  },
+  (table) => ({
+    senderIdIndex: index("sender_id_index").on(table.senderId),
+    receiverIdIndex: index("receiver_id_index").on(table.receiverId),
+  }),
+)
