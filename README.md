@@ -28,7 +28,6 @@ Deploy your site with Azure. Checkout the docs for deploying to a Static Web App
 
 - [Deploy with Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/)
 
-
 ## Credits/Resources
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
@@ -41,13 +40,13 @@ ONNX Runtime Web demo is an interactive demo portal showing real use cases runni
 
 ### How to Run Machine-Learning Models in the Browser using ONNX
 
-In this tutorial we will dive into onnxruntime-web by deploying a pre-trained PyTorch model to the browser. 
+In this tutorial we will dive into onnxruntime-web by deploying a pre-trained PyTorch model to the browser.
 
 - [How to Run Machine-Learning Models in the Browser using ONNX](https://hackernoon.com/how-to-run-machine-learning-models-in-the-browser-using-onnx)
 
 ## Contributing
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
+This project welcomes contributions and suggestions. Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
 the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
 
@@ -61,8 +60,8 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 ## Trademarks
 
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
-trademarks or logos is subject to and must follow 
+This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft
+trademarks or logos is subject to and must follow
 [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
