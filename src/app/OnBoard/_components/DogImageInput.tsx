@@ -1,11 +1,14 @@
 // OnBoardInput.tsx
-
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
+
+import Link from "next/link";
+
 import { SingleImageDropzone } from "../_components/single-image-dropzone";
+import { Fullscreen } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import { useEdgeStore } from "@/lib/edgestore";
 import { inference } from "@/lib/model/predict";
-import Link from "next/link";
 
 const DogImageInput: React.FC = () => {
   const [file, setFile] = useState<File | undefined>(undefined);
@@ -25,7 +28,8 @@ const DogImageInput: React.FC = () => {
     if (!previewImage) return;
 
     setInferencing("Inferencing...");
-    const [inferenceResult, inferenceTimeResult] = await inference(previewImage);
+    const [inferenceResult, inferenceTimeResult] =
+      await inference(previewImage);
 
     setConfidence(`${(inferenceResult[0] * 100).toFixed(2)}% dog`);
     setInferenceTime(`Inference speed: ${inferenceTimeResult} seconds`);
@@ -49,25 +53,41 @@ const DogImageInput: React.FC = () => {
     }
   };
 
-  
   return (
-    <div className="grid w-full max-w-sm items-center gap-1.5">
-      <SingleImageDropzone
-        width={200}
-        height={200}
-        value={file}
-        onChange={(newFile?: File) => {
-          setFile(newFile);
-          if (newFile) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              setPreviewImage(reader.result as string);
-            };
-            reader.readAsDataURL(newFile);
-          }
-        }}
-      />
-      <div className="h-[6px] w-44 border rounded overflow-hidden">
+    <div className="flex w-full flex-col items-center justify-center gap-1.5">
+      <div className="flex items-center justify-center">
+        <SingleImageDropzone
+          className=""
+          width={200}
+          height={200}
+          value={file}
+          onChange={(newFile?: File) => {
+            setFile(newFile);
+            if (newFile) {
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                setPreviewImage(reader.result as string);
+              };
+              reader.readAsDataURL(newFile);
+            }
+          }}
+        />
+      </div>
+      <Button type="button" onClick={submitInference} className="w-full">
+        Test Image
+      </Button>
+      {inferencing && <span>{inferencing}</span>}
+      {confidence && <span>{confidence}</span>}
+      {inferenceTime && <span>{inferenceTime}</span>}
+      <Button
+        type="button"
+        disabled={!isImageValid}
+        onClick={uploadImage}
+        className="w-full rounded bg-white px-2 text-black hover:opacity-80"
+      >
+        Upload to Database
+      </Button>
+      <div className="h-[6px] w-full overflow-hidden rounded border">
         <div
           className="h-full bg-black transition-all duration-150"
           style={{
@@ -75,15 +95,6 @@ const DogImageInput: React.FC = () => {
           }}
         />
       </div>
-      <Button type="button" onClick={submitInference}>
-        Test Image
-      </Button>
-      {inferencing && <span>{inferencing}</span>}
-      {confidence && <span>{confidence}</span>}
-      {inferenceTime && <span>{inferenceTime}</span>}
-      <Button type="button" disabled={!isImageValid} onClick={uploadImage} className="bg-white text-black rounded px-2 hover:opacity-80">
-        Upload to Database
-      </Button>
       {urls?.url && (
         <Link href={urls.url} target="_blank">
           URL
