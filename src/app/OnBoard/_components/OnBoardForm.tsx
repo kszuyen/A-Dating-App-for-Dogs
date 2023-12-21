@@ -29,9 +29,15 @@ function OnBoardForm({}: {}) {
     gender: "",
     birthday: "",
     description: "",
+    imageUrl: "",
+    thumbnailUrl: "",
   });
   const [dogImage, setDogImage] = useState<any>(null);
   const { edgestore } = useEdgeStore();
+
+  const handleImageUpload = (url: string, thumbnailUrl: string) => {
+    setDogData({ ...dogData, imageUrl: url, thumbnailUrl: thumbnailUrl });
+  };
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -98,6 +104,9 @@ function OnBoardForm({}: {}) {
             <CardTitle>Fill out your dog's info!</CardTitle>
           </CardHeader>
           <CardContent className="p-4">
+            <div>
+              <DogImageInput onImageUpload={handleImageUpload} />
+            </div>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <input
                 type="text"
@@ -151,10 +160,6 @@ function OnBoardForm({}: {}) {
               >
                 Submit
               </button>
-              <div className="">
-                <DogImageInput />
-              </div>
-              {/* Rest of your components */}
             </form>
           </CardContent>
         </Card>

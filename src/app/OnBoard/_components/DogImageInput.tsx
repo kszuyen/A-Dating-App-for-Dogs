@@ -4,13 +4,15 @@ import React, { useState } from "react";
 import Link from "next/link";
 
 import { SingleImageDropzone } from "../_components/single-image-dropzone";
-import { Fullscreen } from "lucide-react";
 
+// import { Fullscreen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEdgeStore } from "@/lib/edgestore";
 import { inference } from "@/lib/model/predict";
 
-const DogImageInput: React.FC = () => {
+const DogImageInput: React.FC<{
+  onImageUpload: (url: string, thumbnailUrl: string) => void;
+}> = ({ onImageUpload }) => {
   const [file, setFile] = useState<File | undefined>(undefined);
   const [previewImage, setPreviewImage] = useState<string>("");
   const [inferencing, setInferencing] = useState<string>("");
@@ -50,6 +52,9 @@ const DogImageInput: React.FC = () => {
         url: res.url,
         thumbnailUrl: res.thumbnailUrl,
       });
+      if (res && res.url && res.thumbnailUrl) {
+        onImageUpload(res.url, res.thumbnailUrl); // Call the callback function here
+      }
     }
   };
 
@@ -73,7 +78,11 @@ const DogImageInput: React.FC = () => {
           }}
         />
       </div>
-      <Button type="button" onClick={submitInference} className="w-full">
+      <Button
+        type="button"
+        onClick={submitInference}
+        className="w-full bg-purple-400 p-2 text-white hover:bg-purple-500"
+      >
         Test Image
       </Button>
       {inferencing && <span>{inferencing}</span>}
