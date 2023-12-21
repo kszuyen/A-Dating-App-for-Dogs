@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { SingleImageDropzone } from "../_components/single-image-dropzone";
 import { useEdgeStore } from "@/lib/edgestore";
 import { inference } from "@/lib/model/predict";
+import Link from "next/link";
 
 const DogImageInput: React.FC = () => {
   const [file, setFile] = useState<File | undefined>(undefined);
@@ -13,6 +14,11 @@ const DogImageInput: React.FC = () => {
   const [confidence, setConfidence] = useState<string>("");
   const [inferenceTime, setInferenceTime] = useState<string>("");
   const [isImageValid, setIsImageValid] = useState<boolean>(false);
+  const [progress, setProgress] = useState(0);
+  const [urls, setUrls] = useState<{
+    url: string;
+    thumbnailUrl: string | null;
+  }>();
   const { edgestore } = useEdgeStore();
 
   const submitInference = async () => {
@@ -29,17 +35,21 @@ const DogImageInput: React.FC = () => {
 
   const uploadImage = async () => {
     if (file && isImageValid) {
-      await edgestore.myPublicImages.upload({
+      const res = await edgestore.myPublicImages.upload({
         file,
         input: { type: "post" },
         onProgressChange: (progress: number) => {
-          // Handle progress
+          setProgress(progress);
         },
       });
-      // Handle successful upload
+      setUrls({
+        url: res.url,
+        thumbnailUrl: res.thumbnailUrl,
+      });
     }
   };
 
+  
   return (
     <div className="grid w-full max-w-sm items-center gap-1.5">
       <SingleImageDropzone
@@ -57,15 +67,33 @@ const DogImageInput: React.FC = () => {
           }
         }}
       />
+      <div className="h-[6px] w-44 border rounded overflow-hidden">
+        <div
+          className="h-full bg-black transition-all duration-150"
+          style={{
+            width: `${progress}%`,
+          }}
+        />
+      </div>
       <Button type="button" onClick={submitInference}>
         Test Image
       </Button>
       {inferencing && <span>{inferencing}</span>}
       {confidence && <span>{confidence}</span>}
       {inferenceTime && <span>{inferenceTime}</span>}
-      <Button type="button" disabled={!isImageValid} onClick={uploadImage}>
+      <Button type="button" disabled={!isImageValid} onClick={uploadImage} className="bg-white text-black rounded px-2 hover:opacity-80">
         Upload to Database
       </Button>
+      {urls?.url && (
+        <Link href={urls.url} target="_blank">
+          URL
+        </Link>
+      )}
+      {urls?.thumbnailUrl && (
+        <Link href={urls.thumbnailUrl} target="_blank">
+          THUMBNAIL
+        </Link>
+      )}
     </div>
   );
 };
