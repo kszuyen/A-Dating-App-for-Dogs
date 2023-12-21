@@ -54,6 +54,8 @@ export const dogsTable = pgTable(
     }).notNull(),
     birthday: date("date", { mode: "string" }),
     description: varchar("description", { length: 280 }).notNull(),
+    imageUrl: varchar("image_url", { length: 280 }),
+    thumbnailUrl: varchar("thumbnail_url", { length: 280 }),
   },
   (table) => ({
     displayIdIndex: index("display_id_index").on(table.displayId),
