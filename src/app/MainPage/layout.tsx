@@ -13,7 +13,7 @@ function UserPageLayout({ children }: Props) {
     <div className="flex overflow-hidden">
       <SessionProvider>
         <Header />
-        <main className="flex flex-grow flex-row items-center justify-between overflow-hidden text-center">
+        <main className="flex flex-grow flex-row items-center justify-between text-center">
           <Separator orientation="vertical" />
           {children}
           <Separator orientation="vertical" />

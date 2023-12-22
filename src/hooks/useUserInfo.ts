@@ -2,7 +2,6 @@ import { useMemo } from "react";
 
 // import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Router } from "lucide-react";
 
 
 // import { getAvatar } from "@/lib/utils";
@@ -17,13 +16,13 @@ export default function useUserInfo() {
   // const username = useMemo(() => searchParams.get("username"), [searchParams]);
   //   const handle = useMemo(() => searchParams.get("handle"), [searchParams]);
   //   const avatarURL = useMemo(() => getAvatar(username), [username]);
-  const userId = session?.user?.id;
-  const username = session?.user?.name;
-  console.log(userId, username);
-  return {
-    userId,
-    username,
-    // handle,
-    // avatarURL,
-  };
+
+    const userId = session?.user?.id;
+    const username = session?.user?.name;
+    console.log(userId, username);
+    return {
+      userId,
+      username,
+    };
+
 }
