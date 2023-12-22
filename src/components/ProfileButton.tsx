@@ -1,14 +1,12 @@
 "use client";
 
 // import { useRouter } from "next/navigation";
-import { MoreHorizontal } from "lucide-react";
-
+// import { MoreHorizontal } from "lucide-react";
 // import UserAvatar from "@/components/UserAvatar";
 import useUserInfo from "@/hooks/useUserInfo";
 
 export default function ProfileButton() {
   const { username } = useUserInfo();
-  //   const router = useRouter();
 
   return (
     <div

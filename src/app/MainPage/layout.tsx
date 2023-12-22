@@ -1,15 +1,21 @@
 import { SessionProvider } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 import Header from "@/components/Header";
 import { Separator } from "@/components/ui/separator";
+import { auth } from "@/lib/auth";
 
 type Props = {
   children: React.ReactNode;
 };
 
-function UserPageLayout({ children }: Props) {
+export default async function UserPageLayout({ children }: Props) {
+  const session = await auth();
+  console.log(session);
+  if (!session?.user) {
+    redirect("/error");
+  }
   return (
-    // overflow-hidden for parent to hide scrollbar
     <div className="flex overflow-hidden">
       <SessionProvider>
         <Header />
@@ -23,4 +29,15 @@ function UserPageLayout({ children }: Props) {
   );
 }
 
-export default UserPageLayout;
+// export default UserPageLayout;
+
+// function Auth({ children }) {
+//   // if `{ required: true }` is supplied, `status` can only be "loading" or "authenticated"
+//   const { status } = useSession({ required: true });
+
+//   if (status === "loading") {
+//     return <div>Loading...</div>;
+//   }
+
+//   return children;
+// }
