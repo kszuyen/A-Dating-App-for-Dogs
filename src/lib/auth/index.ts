@@ -40,7 +40,7 @@ export const {
         ...session,
         user: {
           id: user.id,
-          username: user.username,
+          name: user.username,
           email: user.email,
           provider: user.provider,
         },

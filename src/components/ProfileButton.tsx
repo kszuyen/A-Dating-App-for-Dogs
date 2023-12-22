@@ -19,11 +19,11 @@ export default function ProfileButton() {
       //   onClick={() => router.push("/")}
     >
       {/* <UserAvatar /> */}
-      <div className="w-40 max-lg:hidden">
-        <p className="text-sm font-bold">{username ?? "username"}</p>
+      <div className="max-lg w-40">
+        <p className="text-sm font-bold">{username ?? "..."}</p>
         <p className="text-sm text-gray-500">{`with {dogname}`}</p>
       </div>
-      <MoreHorizontal size={24} className="max-lg:hidden" />
+      {/* <MoreHorizontal size={24} className="max-lg:hidden" /> */}
     </div>
   );
 }

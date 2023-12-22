@@ -5,6 +5,8 @@ import TinderCard from "react-tinder-card";
 
 function UserPage() {
   const [lastDirection, setLastDirection] = useState();
+
+  //TODO: get dogs and images from db
   const dogs = [
     {
       id: "a",
@@ -60,6 +62,7 @@ function UserPage() {
   const outOfFrame = (name: string) => {
     console.log(name + " left the screen!");
   };
+
   return (
     <>
       {/* <div>MainPage</div>
@@ -72,6 +75,7 @@ function UserPage() {
               key={dog.dogname}
               onSwipe={(dir) => swiped(dir, dog.dogname)}
               onCardLeftScreen={() => outOfFrame(dog.dogname)}
+              preventSwipe={["up", "down"]}
             >
               <div
                 style={{ backgroundImage: "url(" + dog.url + ")" }}
