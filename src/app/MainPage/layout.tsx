@@ -8,12 +8,12 @@ type Props = {
 function UserPageLayout({ children }: Props) {
   return (
     // overflow-hidden for parent to hide scrollbar
-    <div className="mx-auto flex max-w-6xl">
+    <div className="flex">
       <Header />
-      <main className="flex min-h-screen w-full">
+      <main className="flex flex-grow flex-row items-center justify-between text-center">
         <Separator orientation="vertical" />
         {children}
-        {/* <Separator orientation="vertical" /> */}
+        <Separator orientation="vertical" />
       </main>
     </div>
   );
