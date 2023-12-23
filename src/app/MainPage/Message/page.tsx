@@ -143,8 +143,8 @@ function MessagePage() {
           {matches.map((dog) => (
             <DogCard
               id={""}
-              name={""}
-              description={""}
+              name={dog.dogname}
+              lastMessage={"message"}
               key={dog.displayId}
               {...dog}
               mode={false}

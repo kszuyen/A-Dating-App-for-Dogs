@@ -5,7 +5,6 @@ import Image from "next/image";
 // import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 
@@ -14,7 +13,7 @@ import BagelAlbum from "./BagelAlbum.jpg";
 export type PlayListProps = {
   id: string;
   name: string;
-  description: string;
+  lastMessage: string;
   //   cards: SongProps[];
 };
 
@@ -26,12 +25,9 @@ export default function PlayList({
   mode: deleteMode,
   id,
   name,
-  description,
-  //   cards,
+  lastMessage, // or just pass the whole messages, and get the last message from messages
+  //   messages,
 }: Props) {
-  //   const [openNewCardDialog, setOpenPlayListPage] = useState(false);
-
-  //   const { fetchLists } = useCards();
   const handleClickedMessage = async () => {
     console.log("Clicked a dog");
     // TODO
@@ -51,15 +47,6 @@ export default function PlayList({
   return (
     <div className="flex-auto">
       <div>
-        {/* {deleteMode ? (
-          <div className="grid place-items-center">
-            <button>
-              <IconButton color="error" onClick={handleDelete}>
-                {/* <DeleteIcon /> */}
-        {/* </IconButton>
-            </button>
-          </div>
-        ) : null} */}
         <Button onClick={() => handleClickedMessage()} disabled={deleteMode}>
           <Paper>
             <Image
@@ -68,14 +55,26 @@ export default function PlayList({
               width={200}
               height={200}
             />
-            <Divider variant="middle" sx={{ mt: 1, mb: 2 }} />
-            <div className="flex items-center justify-between">
-              <div className="flex-grow">
+            <Divider variant="middle" sx={{ mt: 1, mb: 1 }} />
+            <div className="flex flex-col justify-between">
+              <div className="">
                 <Typography
-                  variant="h5"
-                  style={{ textAlign: "left", textTransform: "none" }}
+                  variant="h6"
+                  style={{ textAlign: "center", textTransform: "none" }}
                 >
                   {name}
+                </Typography>
+              </div>
+              <div>
+                <Typography
+                  //   variant="h5"
+                  style={{ textAlign: "left", textTransform: "none" }}
+                >
+                  {lastMessage ? (
+                    <span className="text-gray-500">{lastMessage}</span>
+                  ) : (
+                    <span>Click to start chat!</span>
+                  )}
                 </Typography>
               </div>
             </div>
