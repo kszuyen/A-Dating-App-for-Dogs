@@ -17,10 +17,10 @@ export default async function MainPageLayout({ children }: Props) {
   }
 
   return (
-    <div className="flex overflow-hidden">
+    <div className="mx-auto flex">
       <SessionProvider>
         <Header />
-        <main className="flex flex-grow flex-row items-center justify-between text-center">
+        <main className="flex flex-grow flex-row items-center justify-between overflow-y-auto text-center">
           <Separator orientation="vertical" />
           {children}
           <Separator orientation="vertical" />

@@ -6,10 +6,8 @@ type Props = {
 };
 
 function MessageLayout({ children }: Props) {
-  return (
-    // overflow-hidden for parent to hide scrollbar
-    <div className="mx-auto flex max-w-6xl">{children}</div>
-  );
+  // return <div className="mx-auto flex max-w-6xl">{children}</div>;
+  return <>{children}</>;
 }
 
 export default MessageLayout;

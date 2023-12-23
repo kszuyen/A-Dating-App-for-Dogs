@@ -3,13 +3,13 @@
 import { useState } from "react";
 import TinderCard from "react-tinder-card";
 
-function UserPage() {
+function MainPage() {
   const [lastDirection, setLastDirection] = useState();
 
   //TODO: get dogs and images from db
   const dogs = [
     {
-      id: "a",
+      displayId: "a",
       dogname: "Richard Hendricks",
       url: "./img/richard.jpg",
       breed: "a",
@@ -18,7 +18,7 @@ function UserPage() {
       discription: "I am a dog",
     },
     {
-      id: "a",
+      displayId: "a",
       dogname: "Erlich Bachman",
       url: "./img/richard.jpg",
       breed: "a",
@@ -27,7 +27,7 @@ function UserPage() {
       discription: "I am a dog",
     },
     {
-      id: "a",
+      displayId: "a",
       dogname: "Monica Hall",
       url: "./img/monica.jpg",
       breed: "a",
@@ -36,7 +36,7 @@ function UserPage() {
       discription: "I am a dog",
     },
     {
-      id: "a",
+      displayId: "a",
       dogname: "Jared Dunn",
       url: "./img/jared.jpg",
       breed: "a",
@@ -45,7 +45,7 @@ function UserPage() {
       discription: "I am a dog",
     },
     {
-      id: "a",
+      displayId: "a",
       dogname: "Dinesh Chugtai",
       url: "./img/dinesh.jpg",
       breed: "a",
@@ -54,9 +54,10 @@ function UserPage() {
       discription: "I am a dog",
     },
   ];
-  const swiped = (direction: any, nameToDelete: string) => {
-    console.log("removing: " + nameToDelete);
+  const swiped = (direction: any, dogDisplayId: string) => {
+    console.log("removing: " + dogDisplayId);
     setLastDirection(direction);
+    // Add
   };
 
   const outOfFrame = (name: string) => {
@@ -73,7 +74,7 @@ function UserPage() {
             <TinderCard
               className="absolute"
               key={dog.dogname}
-              onSwipe={(dir) => swiped(dir, dog.dogname)}
+              onSwipe={(dir) => swiped(dir, dog.displayId)}
               onCardLeftScreen={() => outOfFrame(dog.dogname)}
               preventSwipe={["up", "down"]}
             >
@@ -91,4 +92,4 @@ function UserPage() {
   );
 }
 
-export default UserPage;
+export default MainPage;
