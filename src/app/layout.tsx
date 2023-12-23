@@ -18,8 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+    // 如果沒有加"overflow-x-hidden"，swipe頁面往右滑之後會有bug，有可能會可以往右拖移看到滑出去的卡
     <html lang="en" className="overflow-x-hidden">
-      {/* <html lang="en"> */}
       <body className={inter.className}>
         <EdgeStoreProvider>{children}</EdgeStoreProvider>
       </body>
