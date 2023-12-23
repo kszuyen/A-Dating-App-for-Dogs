@@ -29,7 +29,7 @@ export const usersTable = pgTable(
       .default("credentials"),
   },
   (table) => ({
-    displayIdIndex: index("display_id_index").on(table.displayId),
+    userDisplayIdIndex: index("user_display_id_index").on(table.displayId),
     emailIndex: index("email_index").on(table.email),
   }),
 );
@@ -58,7 +58,7 @@ export const dogsTable = pgTable(
     thumbnailUrl: varchar("thumbnail_url", { length: 280 }),
   },
   (table) => ({
-    displayIdIndex: index("display_id_index").on(table.displayId),
+    dogDisplayIdIndex: index("dog_display_id_index").on(table.displayId),
   }),
 );
 
@@ -70,8 +70,8 @@ export const likedTable = pgTable(
     secondId: uuid("secondId").notNull(),
   },
   (table) => ({
-    firstIdIndex: index("first_id_index").on(table.firstId),
-    secondIdIndex: index("second_id_index").on(table.secondId),
+    likedFirstIdIndex: index("liked_first_id_index").on(table.firstId),
+    likedSecondIdIndex: index("liked_second_id_index").on(table.secondId),
     // unique constraints ensure that there are no duplicate combinations of
     // values in the table. In this case, we want to ensure that a user can't
     // like the same tweet twice.
@@ -87,8 +87,8 @@ export const viewedTable = pgTable(
     secondId: uuid("secondId").notNull(),
   },
   (table) => ({
-    firstIdIndex: index("first_id_index").on(table.firstId),
-    secondIdIndex: index("second_id_index").on(table.secondId),
+    viewedFirstIdIndex: index("viewed_first_id_index").on(table.firstId),
+    ViewedSecondIdIndex: index("viewed_second_id_index").on(table.secondId),
     uniqCombination: unique().on(table.firstId, table.secondId),
   }),
 );
