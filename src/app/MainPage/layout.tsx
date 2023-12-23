@@ -9,12 +9,13 @@ type Props = {
   children: React.ReactNode;
 };
 
-export default async function UserPageLayout({ children }: Props) {
+export default async function MainPageLayout({ children }: Props) {
   const session = await auth();
-  console.log(session);
+
   if (!session?.user) {
     redirect("/error");
   }
+
   return (
     <div className="flex overflow-hidden">
       <SessionProvider>
@@ -28,16 +29,3 @@ export default async function UserPageLayout({ children }: Props) {
     </div>
   );
 }
-
-// export default UserPageLayout;
-
-// function Auth({ children }) {
-//   // if `{ required: true }` is supplied, `status` can only be "loading" or "authenticated"
-//   const { status } = useSession({ required: true });
-
-//   if (status === "loading") {
-//     return <div>Loading...</div>;
-//   }
-
-//   return children;
-// }
