@@ -34,6 +34,7 @@ export default function PlayList({
   //   const { fetchLists } = useCards();
   const handleClickedMessage = async () => {
     console.log("Clicked a dog");
+    // TODO
     // redirect to /MainPage/Message/[otherDogDisplayId]
   };
 
