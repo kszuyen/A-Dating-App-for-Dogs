@@ -1,6 +1,7 @@
 // route.ts
 import { NextResponse, type NextRequest } from "next/server";
 
+import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "@/db";
@@ -22,19 +23,15 @@ type PostDogRequest = z.infer<typeof postDogRequestSchema>;
 
 export async function POST(request: NextRequest, res: string) {
   const data = await request.json();
+  // let displayId;
 
-  // try {
-  //     // const session = await auth();
-  //     // if (!session || !session?.user?.id) {
-  //     //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  //     // }
-  //     // const userId = session.user.id;
+  const session = await auth();
+  if (!session || !session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const displayId = session.user.id;
 
-  //     postDogRequestSchema.parse(data);
-  //     res = "success";
-  // } catch (error) {
-  //     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
-  // }
+  postDogRequestSchema.parse(data);
 
   const {
     dogname,
@@ -51,6 +48,7 @@ export async function POST(request: NextRequest, res: string) {
       .insert(dogsTable)
       .values({
         dogname,
+        displayId,
         breed,
         gender,
         birthday,
@@ -59,11 +57,7 @@ export async function POST(request: NextRequest, res: string) {
         thumbnailUrl,
       })
       .execute();
-    // await db
-    //     .insert(dogsTable)
-    //     .values({ dogname })
-    //     .execute();
-
+    res = "success";
     return NextResponse.json({ message: "Dog info created successfully" });
   } catch (error) {
     console.error(error);
@@ -71,5 +65,42 @@ export async function POST(request: NextRequest, res: string) {
       { error: "Something went wrong" },
       { status: 500 },
     );
+  }
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const session = await auth();
+
+    if (!session || !session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const displayId = session.user.id;
+
+    if (!displayId) {
+      return new Response(JSON.stringify({ error: "Display ID is required" }), {
+        status: 400,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
+
+    const dbDogs = await db
+      .select()
+      .from(dogsTable)
+      .where(and(eq(dogsTable.displayId, displayId)))
+      .execute();
+
+    return NextResponse.json(dbDogs);
+  } catch (error) {
+    console.error("Error fetching dogs data:", error);
+    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }
 }

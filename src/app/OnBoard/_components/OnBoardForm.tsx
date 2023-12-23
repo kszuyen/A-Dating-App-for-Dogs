@@ -2,6 +2,8 @@
 
 import { ChangeEvent, useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 // import { signIn } from "next-auth/react";
 // import Image from "next/image";
 // Run: npx shadcn-ui@latest add button
@@ -15,14 +17,10 @@ import DogImageInput from "./DogImageInput";
 
 // import DogForm  from "./DogForm";
 
-interface DogData {
-  dogname: string;
-  // 您可以根據需要添加其他屬性，例如 breed, gender, birthday, description 等
-}
-
 function OnBoardForm({}: {}) {
   // const [disableSubmit, setDisableSubmit] = useState<boolean>(true);
   // const [dogname, setDogname] = useState<string>("");
+  const router = useRouter();
   const [dogData, setDogData] = useState({
     dogname: "",
     breed: "",
@@ -44,6 +42,7 @@ function OnBoardForm({}: {}) {
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >,
   ) => {
+    console.log(e.target);
     const { name, value, type } = e.target;
     let finalValue = value;
     if (type === "date") {
@@ -57,7 +56,6 @@ function OnBoardForm({}: {}) {
     e.preventDefault();
     try {
       const response = await fetch("/api/dogs", {
-        // 替换为您的API端点
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -71,6 +69,7 @@ function OnBoardForm({}: {}) {
 
       const result = await response.json();
       console.log("Submit Success:", result);
+      router.push("/MainPage/DogPage");
     } catch (error) {
       console.error("Submit Error:", error);
     }
@@ -132,6 +131,9 @@ function OnBoardForm({}: {}) {
                 onChange={handleInputChange}
                 className="rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
               >
+                <option value="" selected disabled hidden>
+                  Choose gender
+                </option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
               </select>
