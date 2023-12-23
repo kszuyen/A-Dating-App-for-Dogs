@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
-import "./globals.css";
 import { EdgeStoreProvider } from "@/lib/edgestore";
+
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    // 如果沒有加"overflow-x-hidden"，swipe頁面往右滑之後會有bug，有可能會可以往右拖移看到滑出去的卡
+    <html lang="en" className="overflow-x-hidden">
       <body className={inter.className}>
         <EdgeStoreProvider>{children}</EdgeStoreProvider>
       </body>
