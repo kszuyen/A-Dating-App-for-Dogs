@@ -70,17 +70,13 @@ console.log("inserted");
   });
 
   // Private channels are in the format: private-...
-//   const channelName =
-//     newMessage.senderId > newMessage.receiverId
-//       ? `private-${newMessage.senderId}_${newMessage.receiverId}`
-//       : `private-${newMessage.receiverId}_${newMessage.senderId}`;
-    const channelName = "private-channel";
-      console.log(channelName);
-      console.log("triggered");
+  const channelName =
+    newMessage.senderId > newMessage.receiverId
+      ? `private-${newMessage.senderId}_${newMessage.receiverId}`
+      : `private-${newMessage.receiverId}_${newMessage.senderId}`;
   await pusher.trigger(channelName, "message:post", {
     messages: messages,
   });
-  console.log("triggered", channelName, "message:post")
   return NextResponse.json(
     {
       messages,
@@ -107,9 +103,6 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     const userId = session.user.id;
-    console.log("start query");
-    console.log(userId);
-    console.log(params);
     // Get the document
     const dbMessage = await db
       .select({

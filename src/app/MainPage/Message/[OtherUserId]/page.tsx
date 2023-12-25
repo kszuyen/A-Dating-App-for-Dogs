@@ -5,7 +5,7 @@ import ChatRoomMessages from "./_components/ChatRoomMessages";
 function ChatPage() {
   return (
     <div>
-      <div className="flex h-full min-h-screen w-full flex-col overflow-hidden shadow-lg ">
+      <div className="flex h-full min-h-screen w-full flex-col shadow-lg ">
         <div className=" sticky top-0 bg-purple-200">
           <div className="p-2">
             <ChatRoomHeader />
@@ -14,7 +14,7 @@ function ChatPage() {
         <div className="flex-1 overflow-y-auto">
           <ChatRoomMessages />
         </div>
-        <div className="sticky bottom-0 p-2">
+        <div className="sticky bottom-0 bg-white p-2">
           <ChatRoomInput />
         </div>
       </div>
