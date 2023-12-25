@@ -58,7 +58,7 @@ function ChatRoomInput() {
         // if (data?.message) {
         //   socket.emit("send_message", data.message);
         // }
-        console.log(res);
+        // console.log(res);
       } catch (error) {
         console.log(error);
       }

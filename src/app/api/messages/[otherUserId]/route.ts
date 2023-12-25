@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
   // db.messages.push(newMessage);
   await db.insert(messagesTable).values(newMessage);
   // .returning();
-
+console.log("inserted");
   const messages = await db
     .select({
       id: messagesTable.id,
@@ -58,6 +58,7 @@ export async function POST(request: NextRequest) {
       ),
     )
     .orderBy(asc(messagesTable.sentAt));
+    console.log("fetched");
 
   //     // Trigger pusher event
   const pusher = new Pusher({
@@ -69,15 +70,17 @@ export async function POST(request: NextRequest) {
   });
 
   // Private channels are in the format: private-...
-  const channelName =
-    newMessage.senderId > newMessage.receiverId
-      ? `private-${newMessage.senderId}_${newMessage.receiverId}`
-      : `private-${newMessage.receiverId}_${newMessage.senderId}`;
-
+//   const channelName =
+//     newMessage.senderId > newMessage.receiverId
+//       ? `private-${newMessage.senderId}_${newMessage.receiverId}`
+//       : `private-${newMessage.receiverId}_${newMessage.senderId}`;
+    const channelName = "private-channel";
+      console.log(channelName);
+      console.log("triggered");
   await pusher.trigger(channelName, "message:post", {
     messages: messages,
   });
-
+  console.log("triggered", channelName, "message:post")
   return NextResponse.json(
     {
       messages,
