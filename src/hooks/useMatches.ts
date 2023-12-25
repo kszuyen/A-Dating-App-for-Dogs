@@ -38,11 +38,14 @@ import type { Dog } from "@/lib/types/db";
 
 export function useMatches(): {
   matches: Dog[];
+  loading: boolean;
 } {
   const [matches, setMatches] = useState<Dog[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
+        setLoading(true);
       try {
         const response = await fetch(`/api/matches`);
         if (!response.ok) {
@@ -54,6 +57,8 @@ export function useMatches(): {
       } catch (error) {
         console.log(error);
         alert("error loading matches")
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -62,5 +67,6 @@ export function useMatches(): {
 
   return { 
     matches, 
+    loading
  };
 }

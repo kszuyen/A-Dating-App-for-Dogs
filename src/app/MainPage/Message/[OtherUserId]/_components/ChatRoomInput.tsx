@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { redirect, useParams } from "next/navigation";
 
+import useUserInfo from "@/hooks/useUserInfo";
 import { publicEnv } from "@/lib/env/public";
 
 // import type { newMessage } from "@/lib/types/db";
@@ -22,18 +23,21 @@ type newMessage = {
 function ChatRoomInput() {
   // const { sendMessage } = useContext(MessagesContext);
   // const { user } = useContext(UserContext);
-  const { data: session } = useSession();
-  const userId = session?.user?.id;
+  //   const { data: session } = useSession();
+  const { userId } = useUserInfo();
+
+  //   const userId = session?.user?.id;
   //   if (!userId) {
   //     redirect(publicEnv.NEXT_PUBLIC_BASE_URL);
   //   }
-  const { chatroomId } = useParams();
-  const otherpersonId = Array.isArray(chatroomId) ? chatroomId[0] : chatroomId;
+  const { OtherUserId } = useParams();
+  const otherUserId = Array.isArray(OtherUserId) ? OtherUserId[0] : OtherUserId;
   const [content, setContent] = useState<string>("");
   const router = useRouter();
   //   useEffect(() => {
   //     if (!userId) {
-  //       redirect(publicEnv.NEXT_PUBLIC_BASE_URL);
+  //       //   redirect(publicEnv.NEXT_PUBLIC_BASE_URL);
+  //       console.log(userId);
   //     }
   //   }, [userId, router]);
 
@@ -43,7 +47,7 @@ function ChatRoomInput() {
     if (!userId) return;
     const sendMessage = async (message: Omit<newMessage, "sentAt">) => {
       try {
-        const res = await fetch(`/api/messages/${otherpersonId}`, {
+        const res = await fetch(`/api/messages/${otherUserId}`, {
           method: "POST",
           body: JSON.stringify(message),
           headers: {
@@ -54,13 +58,14 @@ function ChatRoomInput() {
         // if (data?.message) {
         //   socket.emit("send_message", data.message);
         // }
+        console.log(res);
       } catch (error) {
         console.log(error);
       }
     };
     sendMessage({
       senderId: userId,
-      receiverId: otherpersonId,
+      receiverId: otherUserId,
       content: content,
     });
     setContent("");

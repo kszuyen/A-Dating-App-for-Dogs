@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 // import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
@@ -36,10 +37,13 @@ export default function DogCard({
   lastMessage,
   mode,
 }: Props) {
-  const handleClickedMessage = async () => {
+  const router = useRouter();
+
+  const handleClickedCard = async () => {
     console.log("Clicked a dog");
+    // console.log(id);
     // TODO
-    // redirect to /MainPage/Message/[otherDogDisplayId]
+    router.push(`Message/${id}`);
   };
 
   const handleDelete = async () => {
@@ -53,9 +57,9 @@ export default function DogCard({
   };
 
   return (
-    <div className="flex-auto">
+    <div className="flex">
       <div>
-        <Button onClick={() => handleClickedMessage()} disabled={false}>
+        <Button onClick={() => handleClickedCard()} disabled={false}>
           <Paper>
             <Image
               src={BagelAlbum}

@@ -6,8 +6,10 @@ function ChatPage() {
   return (
     <div>
       <div className="flex h-full min-h-screen w-full flex-col overflow-hidden shadow-lg">
-        <div className="sticky top-0 p-2">
-          <ChatRoomHeader />
+        <div className=" bg-purple-200 ">
+          <div className="sticky top-0 p-2">
+            <ChatRoomHeader />
+          </div>
         </div>
         <div className="flex-1 overflow-y-scroll">
           <ChatRoomMessages />

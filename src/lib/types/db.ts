@@ -15,3 +15,10 @@ export type Dog = {
   image_url: string | null;
   thumbnail_url: string | null;
 }
+
+export type newMessage = {
+  senderId: string;
+  receiverId: string;
+  content: string;
+  sentAt: Date;
+};

@@ -1,6 +1,3 @@
-// import Header from "@/components/Header";
-// import { Separator } from "@/components/ui/separator";
-
 type Props = {
   children: React.ReactNode;
 };

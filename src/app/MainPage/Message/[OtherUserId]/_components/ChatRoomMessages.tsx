@@ -15,49 +15,12 @@ import { useMessages } from "@/hooks/useMessages";
 // import { newNotShowMessage } from "@/lib/types/db";
 
 function ChatRoomMessages() {
-  const { userId, messages, notShowMessage } = useMessages();
-
-  const handleSubmit = (
-    e: React.FormEvent<HTMLFormElement>,
-    messageId: string,
-    personId: string | undefined,
-  ) => {
-    e.preventDefault();
-    console.log(messageId);
-    console.log(personId);
-
-    if (personId !== undefined) {
-      notShowMessage({
-        messageId: messageId,
-        userId: personId,
-      });
-    }
-  };
-
-  const [selectedMessageIndex, setSelectedMessageIndex] = useState<
-    number | null
-  >(null);
-  const [isSelected, setIsSelected] = useState(false);
-  const handleContextMenu = (
-    event: MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
-    index: number,
-  ) => {
-    event.preventDefault();
-    setSelectedMessageIndex(index);
-    setIsSelected(true);
-  };
-
-  // const closeContextMenu = () => {
-  //   setIsSelected(false);
-  // };
-  //   const [pinnedMessage, setPinnedMessage] = useState<string | null>(null);
-
+  const { userId, messages } = useMessages();
+  if (!messages) {
+    return <div>Say hi to your new friend!!</div>;
+  }
   return (
     <div className="px-2 pt-4">
-      {/* {pinnedMessage && (
-        <div className="absolute">Pinned Message: {pinnedMessage}</div>
-      )} */}
-
       {messages?.map((message, index) => {
         const isSender = message.senderId === userId;
         return (
@@ -68,67 +31,12 @@ function ChatRoomMessages() {
               }`}
             >
               <div
-                className={`max-w-[60%] rounded-2xl px-3 py-1 leading-6 ${
+                className={`max-w-[60%] rounded-2xl px-3 py-2 leading-6 ${
                   isSender ? "bg-black text-white" : " bg-gray-200 text-black"
                 }`}
-                onContextMenu={(e) => handleContextMenu(e, index)}
               >
                 {message.content}
               </div>
-              {isSelected && selectedMessageIndex == index && (
-                <ScrollArea className="h-54 w-48 rounded-md border">
-                  <div className="p-4">
-                    <>
-                      <form
-                        className="flex gap-2"
-                        onSubmit={(e) => {
-                          handleSubmit(e, message.id, message.receiverId);
-                          handleSubmit(e, message.id, message.senderId);
-                          setIsSelected(false);
-                        }}
-                      >
-                        <button
-                          // type="withdraw"
-                          className="rounded-lg bg-black px-2 py-1 text-xs text-white transition duration-200 ease-in-out hover:bg-gray-700"
-                        >
-                          withdraw message (for both)
-                        </button>
-                      </form>
-
-                      <Separator className="my-2" />
-                      <form
-                        className="flex gap-2"
-                        onSubmit={(e) => {
-                          handleSubmit(e, message.id, userId);
-                          setIsSelected(false);
-                        }}
-                      >
-                        <button
-                          // type="withdraw"
-                          className="rounded-lg bg-black px-2 py-1 text-xs text-white transition duration-200 ease-in-out hover:bg-gray-700"
-                        >
-                          delete message (only for me)
-                        </button>
-                      </form>
-                      {/* <Separator className="my-2" />
-                      <form
-                        className="flex gap-2"
-                        onSubmit={() => {
-                          setPinnedMessage(message.content);
-                          setIsSelected(false);
-                        }}
-                      >
-                        <button
-                          // type="withdraw"
-                          className="rounded-lg bg-black px-2 py-1 text-xs text-white transition duration-200 ease-in-out hover:bg-gray-700"
-                        >
-                          pin this message
-                        </button>
-                      </form> */}
-                    </>
-                  </div>
-                </ScrollArea>
-              )}
             </div>
           </div>
         );

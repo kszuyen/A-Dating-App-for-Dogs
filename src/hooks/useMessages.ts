@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 
 // import { useDebounce } from "use-debounce";
 import { pusherClient } from "@/lib/pusher/client";
-// import type { Message, newNotShowMessage } from "@/lib/types/db";
 
 type Message = {
     id: string;
@@ -15,20 +14,13 @@ type Message = {
     sentAt: Date;
   };
 
-type newNotShowMessage = {
-messageId: string;
-userId: string;
-};
-
 type PusherPayload = {
-  // otherpersonId: User["id"];
-  // document: Document;
   messages: Message[];
 };
 
 export const useMessages = () => {
   const { OtherUserId } = useParams();
-  const otherpersonId = Array.isArray(OtherUserId) ? OtherUserId[0] : OtherUserId;
+  const otherUserId = Array.isArray(OtherUserId) ? OtherUserId[0] : OtherUserId;
   // const otherpersonName = getNameFromId(otherpersonId);
 
   const [messages, setMessages] = useState<Message[] | null>(null);
@@ -39,76 +31,30 @@ export const useMessages = () => {
   const { data: session } = useSession();
   const userId = session?.user?.id;
 
-  const notShowMessage = async (notShowMessage: newNotShowMessage) => {
-    try {
-      await fetch(`/api/notShowMessages`, {
-        method: "POST",
-        body: JSON.stringify(notShowMessage),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      // const data = await res.json();
-      // if (data?.message) {
-      //   socket.emit("send_message", data.message);
-      // }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const filterMessages = async (messages: Message[]) => {
-    const res2 = await fetch(`/api/notShowMessages`);
-    if (!res2.ok) {
-      console.log(res2.json());
-      router.push(`/chatrooms`);
-      return;
-    }
-    const data2 = await res2.json();
-    const allNotShowMessages = data2.notShowMessages;
-    console.log(allNotShowMessages);
-    const filteredNotShowMessages = allNotShowMessages.filter(
-      (message: { userId: string; messageId: string }) =>
-        message.userId === userId,
-    );
-    console.log(filteredNotShowMessages);
-    const blockedMessageIds = filteredNotShowMessages.map(
-      (message: { userId: string; messagesId: string }) => message.messagesId,
-    );
-    console.log(blockedMessageIds);
-    const filteredMessages = messages.filter(
-      (message) => !blockedMessageIds.includes(message.id),
-    );
-    console.log("filteredMessages");
-    console.log(filteredMessages);
-    return filteredMessages;
-  };
-
   // 2nd use effect
   // Subscribe to pusher events
   useEffect(() => {
-    if (!userId || !otherpersonId) return;
+    if (!userId || !otherUserId) return;
     // Private channels are in the format: private-...
 
     const channelName =
-      userId > otherpersonId
-        ? `private-${userId}_${otherpersonId}`
-        : `private-${otherpersonId}_${userId}`;
+      userId > otherUserId
+        ? `private-${userId}_${otherUserId}`
+        : `private-${otherUserId}_${userId}`;
     try {
       const channel = pusherClient.subscribe(channelName);
       channel.bind("message:post", async ({ messages }: PusherPayload) => {
-        const filteredMessages = await filterMessages(messages);
-        if (filteredMessages !== undefined) {
-          setMessages(filteredMessages);
-          setDbMessage(filteredMessages);
-        }
-
+        // const filteredMessages = await fetchMessages(messages);
+        // if (messages !== undefined) {
+          setMessages(messages);
+          setDbMessage(messages);
+        // }
         router.refresh();
       });
     } catch (error) {
       console.log("subscribe error");
       console.error(error);
-      router.push("/chatrooms");
+      router.push("/Message");
     }
     // Unsubscribe from pusher events when the component unmounts
     return () => {
@@ -117,36 +63,38 @@ export const useMessages = () => {
       console.log(dbMessage);
       console.log("2nd use effect end");
     };
-  }, [otherpersonId, router, userId]);
+  }, [otherUserId, router, userId]);
 
   // 3rd use effect
   useEffect(() => {
-    if (!otherpersonId) return;
+    if (!otherUserId) return;
     const fetchMessages = async () => {
-      const res1 = await fetch(`/api/messages/${otherpersonId}`);
+      const res1 = await fetch(`/api/messages/${otherUserId}`);
       if (!res1.ok) {
         console.log(res1.json());
-        router.push(`/chatrooms`);
+        router.push(`/Message`);
         return;
       }
-      const data = await res1.json();
+    //   const data = await res1.json();
+    const data = await res1.json();
+    console.log("3rd use effect");
+
       console.log(data.messages);
+    //   const messages = await fetchMessages();
 
-      const filteredMessages = await filterMessages(data.messages);
-
-      // setMessages(data.messages);
-      // setDbMessage(data.messages);
-      if (filteredMessages !== undefined) {
-        setMessages(filteredMessages);
-        setDbMessage(filteredMessages);
-      }
+      setMessages(data.messages);
+      setDbMessage(data.messages);
+      router.refresh();
+    //   if (messages !== undefined) {
+    //     setMessages(messages);
+    //     setDbMessage(messages);
+    //   }
     };
     fetchMessages();
-  }, [otherpersonId, router, notShowMessage]);
+  }, [otherUserId, router, messages]);
 
   return {
     userId,
     messages,
-    notShowMessage,
   };
 };

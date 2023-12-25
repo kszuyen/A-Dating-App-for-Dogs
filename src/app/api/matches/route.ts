@@ -60,7 +60,7 @@ export async function GET(
       // get the dogs' data
       const matchedDogsData = await db
       .select({
-        displayId: dogsTable.displayId,
+        id: dogsTable.displayId,
         dogname: dogsTable.dogname,
         breed: dogsTable.breed,
         gender: dogsTable.gender,
