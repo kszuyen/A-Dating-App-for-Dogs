@@ -8,25 +8,33 @@ import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 
+import { Dog } from "@/lib/types/db";
+
 import BagelAlbum from "./BagelAlbum.jpg";
 
-export type PlayListProps = {
-  id: string;
-  name: string;
-  lastMessage: string;
-  //   cards: SongProps[];
-};
+// export type DogCardProps = {
+//   id: string;
+//   name: string;
+//   lastMessage: string;
+//   //   cards: SongProps[];
+// };
 
-type Props = PlayListProps & {
+type Props = Dog & {
+  lastMessage: string;
   mode: boolean;
 };
 
-export default function PlayList({
-  mode: deleteMode,
+export default function DogCard({
   id,
-  name,
-  lastMessage, // or just pass the whole messages, and get the last message from messages
-  //   messages,
+  dogname,
+  breed,
+  gender,
+  birthday,
+  description,
+  image_url,
+  thumbnail_url,
+  lastMessage,
+  mode,
 }: Props) {
   const handleClickedMessage = async () => {
     console.log("Clicked a dog");
@@ -47,7 +55,7 @@ export default function PlayList({
   return (
     <div className="flex-auto">
       <div>
-        <Button onClick={() => handleClickedMessage()} disabled={deleteMode}>
+        <Button onClick={() => handleClickedMessage()} disabled={false}>
           <Paper>
             <Image
               src={BagelAlbum}
@@ -62,7 +70,7 @@ export default function PlayList({
                   variant="h6"
                   style={{ textAlign: "center", textTransform: "none" }}
                 >
-                  {name}
+                  {dogname}
                 </Typography>
               </div>
               <div>
