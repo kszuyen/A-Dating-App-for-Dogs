@@ -33,18 +33,23 @@ export async function GET(
 
     const displayId = session.user.id;
     
-    // Filter the dogs that i liked
+    // Filter the dogs that I liked
     const dogsILiked = await db
       .select({
         id: likedTable.secondId,
       })
       .from(likedTable)
-      .where(eq(likedTable.firstId, displayId))
+      .where(and(
+        eq(likedTable.firstId, displayId),
+        eq(likedTable.likeStatus, true)
+      ))
       .execute();
 
     const dogsILikedArray: string[] = dogsILiked.map((dog) => dog.id as string);
-
-    // check that if it likes me too
+    if (dogsILikedArray.length === 0) {
+      return NextResponse.json([]);
+    }
+    // check that if it liked me too
     const matchedDogs = await db
       .select({
         id: likedTable.firstId,
@@ -52,50 +57,14 @@ export async function GET(
       .from(likedTable)
       .where(and(
         eq(likedTable.secondId, displayId),
-        inArray(likedTable.firstId, dogsILikedArray)
+        inArray(likedTable.firstId, dogsILikedArray),
+        eq(likedTable.likeStatus, true)
       ));
 
       const matchedDogsArray: string[] = matchedDogs.map((dog) => dog.id as string);
-
-      
-      // get the dogs' data
-      // const matchedDogsData = await db
-      // .selectDistinctOn([dogsTable.displayId],{
-      //   id: dogsTable.displayId,
-      //   dogname: dogsTable.dogname,
-      //   breed: dogsTable.breed,
-      //   gender: dogsTable.gender,
-      //   birthday: dogsTable.birthday,
-      //   description: dogsTable.description,
-      //   image_url: dogsTable.imageUrl,
-      //   thumbnail_url: dogsTable.thumbnailUrl,
-      //   lastMessage: messagesTable.content,
-      //   senderId: messagesTable.senderId,
-      //   sentAt: max(messagesTable.sentAt),
-      // })
-      // .from(dogsTable)
-      // .leftJoin(
-      //   messagesTable, 
-      //   or(
-      //     and(
-      //       eq(messagesTable.senderId, displayId),
-      //       eq(messagesTable.receiverId, dogsTable.displayId)
-      //     ),
-      //     and(
-      //       eq(messagesTable.senderId, dogsTable.displayId),
-      //       eq(messagesTable.receiverId, displayId)
-      //     )
-      //   )  
-      // )
-      // .groupBy(dogsTable.displayId)
-      // .where(
-      //   and(
-      //     ne(dogsTable.displayId, displayId),
-      //     inArray(dogsTable.displayId, matchedDogsArray)
-      //   )
-      // )
-      // .orderBy(asc(messagesTable.sentAt))
-      // .execute();
+      if (dogsILikedArray.length === 0) {
+        return NextResponse.json([]);
+      }
       const matchedDogsData = await db
       .select({
         id: dogsTable.displayId,
@@ -154,7 +123,9 @@ export async function GET(
     // For each matched dog, get the last message
     const matchedDogsDataWithLastMessage = await Promise.all(
       matchedDogsData.map(async (dog) => {
+
         const lastMessage = await getLastMessage(displayId, dog.id);
+
         if (lastMessage)
         {
           return { dog, lastMessage };
@@ -178,16 +149,20 @@ export async function GET(
     const sortedList = matchedDogsDataWithLastMessage.sort((a, b) => {
       const sentAtA = a.lastMessage?.sentAt || null;
       const sentAtB = b.lastMessage?.sentAt || null;
-    
-      if (sentAtA === null && sentAtB === null) {
-        return 0; // Both dates are null, consider them equal
-      } else if (sentAtA === null) {
-        return 1; // Null is considered greater than any date
-      } else if (sentAtB === null) {
-        return -1; // Null is considered greater than any date
-      } else {
-        return sentAtB.getTime() - sentAtA.getTime();
+
+      if (!sentAtA || !sentAtB) {
+        return 0;
       }
+    
+      // if (sentAtA === null && sentAtB === null) {
+      //   return 0; // Both dates are null, consider them equal
+      // } else if (sentAtA === null) {
+      //   return 1; // Null is considered greater than any date
+      // } else if (sentAtB === null) {
+      //   return -1; // Null is considered greater than any date
+      // } else {
+        return sentAtB.getTime() - sentAtA.getTime();
+      // }
     });
     
     return NextResponse.json(sortedList);

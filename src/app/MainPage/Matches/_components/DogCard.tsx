@@ -34,7 +34,7 @@ export default function DogCard({
   const router = useRouter();
   const [mode, setMode] = useState<boolean>(true);
   const handleClickedCard = async () => {
-    router.push(`Message/${id}`);
+    router.push(`/MainPage/Matches/${id}`);
   };
 
   function limit(string = "", limit = 0) {
@@ -48,7 +48,7 @@ export default function DogCard({
           <Button
             className="absolute right-0 top-0"
             onClick={(e) => {
-              e.stopPropagation();
+              // e.stopPropagation();
               setMode(!mode);
             }}
           >

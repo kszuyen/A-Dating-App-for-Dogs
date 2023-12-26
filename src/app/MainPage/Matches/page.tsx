@@ -9,6 +9,9 @@ function MessagePage() {
   if (loading) {
     return <>Loading...</>;
   }
+  if (matches.length === 0) {
+    return <>No matches yet!!</>;
+  }
   return (
     <div>
       <div className="grid grid-cols-1 gap-10 overflow-y-auto py-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
