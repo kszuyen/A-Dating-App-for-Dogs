@@ -30,7 +30,7 @@ export default function Header() {
         <HeaderButton
           Icon={MessageSquareText}
           text="Matches"
-          link="/MainPage/Message"
+          link="/MainPage/Matches"
         />
         {/* <HeaderButton Icon={Bell} text="Notifications" />
         <HeaderButton Icon={Mail} text="Messages" />

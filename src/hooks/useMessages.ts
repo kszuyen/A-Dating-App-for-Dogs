@@ -56,7 +56,7 @@ export const useMessages = (bottomRef: RefObject<HTMLDivElement>) => {
       });
     } catch (error) {
       console.log("subscribe error:", error);
-      router.push("/Message");
+      router.push("/Matches");
     }
     // Unsubscribe from pusher events when the component unmounts
     return () => {
@@ -71,7 +71,7 @@ export const useMessages = (bottomRef: RefObject<HTMLDivElement>) => {
       const res = await fetch(`/api/messages/${otherUserId}`);
       if (!res.ok) {
         console.log(res.json());
-        router.push(`/Message`);
+        router.push(`/Matches`);
         return;
       }
     const data = await res.json();

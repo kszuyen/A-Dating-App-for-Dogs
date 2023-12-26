@@ -18,7 +18,7 @@ function ChatRoomHeader() {
     <div className="flex items-center gap-2 text-center">
       <Link
         className="rounded-lg bg-white px-2 py-1 text-sm text-gray-500 transition duration-200 ease-in-out hover:bg-gray-100"
-        href="/MainPage/Message"
+        href="/MainPage/Matches"
       >
         <ChevronLeft />
       </Link>
