@@ -1,17 +1,10 @@
 "use client";
 
-// import { MessagesContext } from "@/context/message";
-// import { UserContext } from "@/context/user";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { redirect, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 
 import useUserInfo from "@/hooks/useUserInfo";
-import { publicEnv } from "@/lib/env/public";
-
-// import type { newMessage } from "@/lib/types/db";
 
 type newMessage = {
   senderId: string;
@@ -21,25 +14,11 @@ type newMessage = {
 };
 
 function ChatRoomInput() {
-  // const { sendMessage } = useContext(MessagesContext);
-  // const { user } = useContext(UserContext);
-  //   const { data: session } = useSession();
   const { userId } = useUserInfo();
 
-  //   const userId = session?.user?.id;
-  //   if (!userId) {
-  //     redirect(publicEnv.NEXT_PUBLIC_BASE_URL);
-  //   }
   const { OtherUserId } = useParams();
   const otherUserId = Array.isArray(OtherUserId) ? OtherUserId[0] : OtherUserId;
   const [content, setContent] = useState<string>("");
-  const router = useRouter();
-  //   useEffect(() => {
-  //     if (!userId) {
-  //       //   redirect(publicEnv.NEXT_PUBLIC_BASE_URL);
-  //       console.log(userId);
-  //     }
-  //   }, [userId, router]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,10 +34,6 @@ function ChatRoomInput() {
           },
         });
         await res.json();
-        // if (data?.message) {
-        //   socket.emit("send_message", data.message);
-        // }
-        // console.log(res);
       } catch (error) {
         console.log(error);
       }

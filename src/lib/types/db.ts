@@ -10,10 +10,10 @@ export type Dog = {
   dogname: string;
   breed: string;
   gender: "male" | "female";
-  birthday: string | null;
+  birthday: string;
   description: string;
-  image_url: string | null;
-  thumbnail_url: string | null;
+  image_url: string;
+  thumbnail_url: string;
 }
 
 export type newMessage = {

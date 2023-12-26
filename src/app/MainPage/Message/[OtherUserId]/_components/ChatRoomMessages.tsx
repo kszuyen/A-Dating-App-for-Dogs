@@ -17,7 +17,11 @@ import { useMessages } from "@/hooks/useMessages";
 function ChatRoomMessages() {
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  const { userId, messages } = useMessages(bottomRef);
+  const { userId, messages, loading } = useMessages(bottomRef);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
   if (!messages) {
     return <div>Start a conversation!!</div>;
   }
@@ -45,8 +49,8 @@ function ChatRoomMessages() {
             </div>
           );
         })}
+        <div ref={bottomRef} />
       </div>
-      <div ref={bottomRef} />
     </>
   );
 }

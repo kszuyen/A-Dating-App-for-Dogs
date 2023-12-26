@@ -14,7 +14,7 @@ function ChatPage() {
         <div className="flex-1 overflow-y-auto">
           <ChatRoomMessages />
         </div>
-        <div className="sticky bottom-0 bg-white p-2">
+        <div className="sticky bottom-0 p-2">
           <ChatRoomInput />
         </div>
       </div>

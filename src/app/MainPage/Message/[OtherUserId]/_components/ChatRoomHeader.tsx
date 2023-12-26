@@ -1,34 +1,18 @@
 "use client";
 
-// import { MessagesContext } from "@/context/message";
-// import { UserContext } from "@/context/user";
-import { useEffect, useState } from "react";
-
-import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { redirect, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 
 import { ChevronLeft } from "lucide-react";
 
-import { publicEnv } from "@/lib/env/public";
-
-// import type { newMessage } from "@/lib/types/db";
-
-type newMessage = {
-  senderId: string;
-  receiverId: string;
-  content: string;
-  sentAt: Date;
-};
+import { useDogById } from "@/hooks/useDogById";
 
 function ChatRoomHeader() {
-  // const { sendMessage } = useContext(MessagesContext);
-  // const { user } = useContext(UserContext);
-  const { data: session } = useSession();
+  const { OtherUserId } = useParams();
+  const displayId = Array.isArray(OtherUserId) ? OtherUserId[0] : OtherUserId;
 
-  const { chatroomId } = useParams();
-  const otherpersonId = Array.isArray(chatroomId) ? chatroomId[0] : chatroomId;
+  const { dogData } = useDogById(displayId);
+  console.log(dogData);
 
   return (
     <div className="flex items-center gap-2 text-center">
@@ -38,7 +22,7 @@ function ChatRoomHeader() {
       >
         <ChevronLeft />
       </Link>
-      <div>Other Dog Name</div>
+      <div>{dogData.dogname}</div>
     </div>
   );
 }

@@ -1,46 +1,25 @@
-// import { useEffect, useState } from "react";
-
-// import { useSession } from "next-auth/react";
-// import { useRouter } from "next/navigation";
-
-// import type { Dog } from "@/lib/types/db";
-
-// export const useMatches = async () => {
-
-// //   const [matches, setMatches] = useState<Dog[] | null>(null);
-// //   const [dbMatches, setDbsetDbMatches] = useState<Dog[] | null>(null);
-
-//   const router = useRouter();
-
-//   const { data: session } = useSession();
-//   const userId = session?.user?.id;
-
-//   const getMatches = async () => {
-//     const res = await fetch(`/api/matches`);
-//     if (!res.ok) {
-//       console.log(res.json());
-//       router.push(`/error`);
-//       return;
-//     }
-//     const data = await res.json();
-//     console.log(data);
-//     return data.o;
-//   };
-//   const matches = await getMatches();
-//   return {
-//     userId,
-//     matches
-//   };
-// };
 import { useState, useEffect } from "react";
 import type { Dog } from "@/lib/types/db";
 
+type matchesType = {
+    id: string;
+    dogname: string;
+    breed: string;
+    gender: "male" | "female";
+    birthday: string;
+    description: string;
+    image_url: string;
+    thumbnail_url: string;
+    lastMessage: string | null;
+    senderId: string | null;
+    sentAt: string | null;
+}
 
 export function useMatches(): {
-  matches: Dog[];
+  matches: any[];
   loading: boolean;
 } {
-  const [matches, setMatches] = useState<Dog[]>([]);
+  const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -52,6 +31,7 @@ export function useMatches(): {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
+        console.log(data);
         // Process and format data if needed
         setMatches(data);
       } catch (error) {

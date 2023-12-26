@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 
 import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
@@ -19,13 +19,13 @@ type PusherPayload = {
 };
 
 export const useMessages = (bottomRef: RefObject<HTMLDivElement>) => {
-
+    const [loading, setLoading] = useState<boolean>(true);
   const { OtherUserId } = useParams();
   const otherUserId = Array.isArray(OtherUserId) ? OtherUserId[0] : OtherUserId;
   // const otherpersonName = getNameFromId(otherpersonId);
 
   const [messages, setMessages] = useState<Message[] | null>(null);
-
+  
   const router = useRouter();
 
   const { data: session } = useSession();
@@ -45,9 +45,13 @@ export const useMessages = (bottomRef: RefObject<HTMLDivElement>) => {
     try {
       pusherClient.subscribe(channelName);
       bottomRef?.current?.scrollIntoView();
-      pusherClient.bind("message:post", async ({ messages }: PusherPayload) => {
+
+      pusherClient.bind("message:post", ({ messages }: PusherPayload) => {
+
         setMessages(messages);
-        bottomRef?.current?.scrollIntoView();
+        // bottomRef?.current?.scrollIntoView();
+        setLoading(false);
+        console.log("bottom");
 
       });
     } catch (error) {
@@ -74,13 +78,21 @@ export const useMessages = (bottomRef: RefObject<HTMLDivElement>) => {
     console.log("3rd use effect");
 
       setMessages(data.messages);
-      router.refresh();
+      setLoading(false);
+
+    //   router.refresh();
     };
     fetchMessages();
   }, [otherUserId, router]);
 
+  useEffect(() => {
+    bottomRef?.current?.scrollIntoView();
+    console.log("scrolled");
+  }, [messages])
+
   return {
     userId,
     messages,
+    loading,
   };
 };

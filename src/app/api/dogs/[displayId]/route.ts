@@ -1,60 +1,43 @@
-// import { NextRequest, NextResponse } from "next/server";
+// route.ts
+import { NextResponse, type NextRequest } from "next/server";
 
-// import { and, eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
+import { z } from "zod";
 
-// import { db } from "@/db";
-// import { dogsTable } from "@/db/schema";
-// import { auth } from "@/lib/auth";
+import { db } from "@/db";
+import { dogsTable } from "@/db/schema";
+import { auth } from "@/lib/auth";
 
-// export async function GET(request: NextRequest) {
-//   // Authenticate the session
-//   const session = await auth();
-//   if (!session || !session.user?.id) {
-//     return new Response(JSON.stringify({ error: "Unauthorized" }), {
-//       status: 401,
-//       headers: { "Content-Type": "application/json" },
-//     });
-//   }
+export async function GET(  req: NextRequest,
+  {
+    params,
+  }: {
+    params: {
+      displayId: string;
+    };
+  },) {
+  try {
+    const session = await auth();
 
-//   // Get the displayId from the session
-//   const displayId = session.user.id;
+    if (!session || !session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-//   try {
-//     // Query the dog information based on displayId
-//     const dogInfo = await db.query.dogsTable.findFirst({
-//       where: eq(dogsTable.displayId, displayId),
-//       with: {
-//         columns: {
-//           displayId: true,
-//           dogname: true,
-//           breed: true,
-//           gender: true,
-//           birthday: true,
-//           description: true,
-//           imageUrl: true,
-//           thumbnailUrl: true,
-//         },
-//       },
-//     });
+    const dog = await db
+      .select()
+      .from(dogsTable)
+      .where(eq(dogsTable.displayId, params.displayId))
+      .limit(1)
+      .execute();
 
-//     // If no dog information is found
-//     if (!dogInfo) {
-//       return new Response(JSON.stringify({ error: "Dog Not Found" }), {
-//         status: 404,
-//         headers: { "Content-Type": "application/json" },
-//       });
-//     }
-
-//     // If dog information is found, return it
-//     return new Response(JSON.stringify(dogInfo), {
-//       status: 200,
-//       headers: { "Content-Type": "application/json" },
-//     });
-//   } catch (error) {
-//     // Handle any other errors
-//     return new Response(JSON.stringify({ error: "Internal Server Error" }), {
-//       status: 500,
-//       headers: { "Content-Type": "application/json" },
-//     });
-//   }
-// }
+    return NextResponse.json(dog[0]);
+  } catch (error) {
+    console.error("Error fetching dogs data:", error);
+    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
+}
