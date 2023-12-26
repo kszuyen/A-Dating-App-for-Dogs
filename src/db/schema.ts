@@ -76,7 +76,7 @@ export const likedTable = pgTable(
     likedSecondIdIndex: index("liked_second_id_index").on(table.secondId),
     // unique constraints ensure that there are no duplicate combinations of
     // values in the table. In this case, we want to ensure that a user can't
-    // like the same tweet twice.
+    // like the same dog twice.
     uniqCombination: unique().on(table.firstId, table.secondId),
   }),
 );

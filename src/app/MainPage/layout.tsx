@@ -22,7 +22,7 @@ export default async function MainPageLayout({ children }: Props) {
         <div className="sticky top-0 h-screen">
           <Header />
         </div>
-        <main className="flex flex-grow flex-row items-center justify-between overflow-y-auto text-center">
+        <main className="flex flex-grow flex-row items-center justify-between text-center">
           <Separator orientation="vertical" />
           {children}
           <Separator orientation="vertical" />
