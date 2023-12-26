@@ -8,6 +8,7 @@ import {
   date,
   timestamp,
   unique,
+  boolean,
 } from "drizzle-orm/pg-core";
 
 // Checkout the relationship in the following tutorial:
@@ -68,6 +69,7 @@ export const likedTable = pgTable(
     id: serial("id").primaryKey(),
     firstId: uuid("firstId").notNull(),
     secondId: uuid("secondId").notNull(),
+    likeStatus: boolean("like_status").notNull(),
   },
   (table) => ({
     likedFirstIdIndex: index("liked_first_id_index").on(table.firstId),
