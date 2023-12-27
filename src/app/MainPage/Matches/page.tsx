@@ -26,7 +26,7 @@ function MessagePage() {
               description={match.dog.description}
               image_url={match.dog.image_url}
               thumbnail_url={match.dog.thumbnail_url}
-              lastMessage={
+              content={
                 match.lastMessage.content ? match.lastMessage.content : null
               }
               senderId={match.lastMessage.senderId}

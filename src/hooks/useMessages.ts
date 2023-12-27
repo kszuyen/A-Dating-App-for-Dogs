@@ -1,21 +1,22 @@
-import { RefObject, useEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useState } from "react";
 
 import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
 
 // import { useDebounce } from "use-debounce";
 import { pusherClient } from "@/lib/pusher/client";
+import { find } from "lodash";
 
 type Message = {
-    id: string;
-    senderId: string;
-    receiverId: string;
-    content: string;
-    sentAt: Date;
-  };
+  id: string;
+  senderId: string;
+  receiverId: string;
+  content: string;
+  sentAt: Date;
+};
 
 type PusherPayload = {
-  messages: Message[];
+  newMessage: Message;
 };
 
 export const useMessages = (bottomRef: RefObject<HTMLDivElement>) => {
@@ -24,7 +25,7 @@ export const useMessages = (bottomRef: RefObject<HTMLDivElement>) => {
   const otherUserId = Array.isArray(OtherUserId) ? OtherUserId[0] : OtherUserId;
   // const otherpersonName = getNameFromId(otherpersonId);
 
-  const [messages, setMessages] = useState<Message[] | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
   
   const router = useRouter();
 
@@ -46,9 +47,16 @@ export const useMessages = (bottomRef: RefObject<HTMLDivElement>) => {
       pusherClient.subscribe(channelName);
       bottomRef?.current?.scrollIntoView();
 
-      pusherClient.bind("message:post", ({ messages }: PusherPayload) => {
+      pusherClient.bind("message:post", ({ newMessage }: PusherPayload) => {
 
-        setMessages(messages);
+        setMessages((prev) => {
+          if (find(prev, { id: newMessage.id })) {
+            return prev;
+          }
+  
+          return [...prev, newMessage]
+        });
+        // setMessages(messages);
         // bottomRef?.current?.scrollIntoView();
         setLoading(false);
         console.log("bottom");
@@ -85,9 +93,10 @@ export const useMessages = (bottomRef: RefObject<HTMLDivElement>) => {
     fetchMessages();
   }, [otherUserId, router]);
 
+  // scroll to bottom if messages changed
   useEffect(() => {
     bottomRef?.current?.scrollIntoView();
-    console.log("scrolled");
+    // console.log("scrolled");
   }, [messages])
 
   return {
