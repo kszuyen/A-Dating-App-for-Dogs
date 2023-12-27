@@ -104,7 +104,7 @@ export default function DogCard({
         <Paper className="h-80 w-60">
           <Button
             className="absolute right-0 top-0"
-            onClick={(e) => {
+            onClick={() => {
               // e.stopPropagation();
               setMode(!mode);
             }}
