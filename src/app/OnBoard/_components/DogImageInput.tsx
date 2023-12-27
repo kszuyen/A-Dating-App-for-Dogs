@@ -67,6 +67,7 @@ const DogImageInput: React.FC<{
           height={200}
           value={file}
           onChange={(newFile?: File) => {
+            setProgress(0);
             setFile(newFile);
             if (newFile) {
               const reader = new FileReader();
@@ -85,9 +86,9 @@ const DogImageInput: React.FC<{
       >
         Test Image
       </Button>
-      {inferencing && <span>{inferencing}</span>}
+      {/* {inferencing && <span>{inferencing}</span>}
       {confidence && <span>{confidence}</span>}
-      {inferenceTime && <span>{inferenceTime}</span>}
+      {inferenceTime && <span>{inferenceTime}</span>} */}
       <Button
         type="button"
         disabled={!isImageValid}
@@ -104,7 +105,7 @@ const DogImageInput: React.FC<{
           }}
         />
       </div>
-      {urls?.url && (
+      {/* {urls?.url && (
         <Link href={urls.url} target="_blank">
           URL
         </Link>
@@ -113,7 +114,7 @@ const DogImageInput: React.FC<{
         <Link href={urls.thumbnailUrl} target="_blank">
           THUMBNAIL
         </Link>
-      )}
+      )} */}
     </div>
   );
 };

@@ -8,7 +8,8 @@ type Props = {
 function DogLayout({ children }: Props) {
   return (
     // overflow-hidden for parent to hide scrollbar
-    <div className="mx-auto flex max-w-6xl">{children}</div>
+    // <div className="mx-auto flex max-w-6xl">{children}</div>
+    <div className="mx-auto max-w-6xl">{children}</div>
   );
 }
 

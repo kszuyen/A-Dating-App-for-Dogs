@@ -7,6 +7,8 @@ import TinderCard from "react-tinder-card";
 import { useDogsInfo } from "../../hooks/useDogsInfo";
 import useUserInfo from "../../hooks/useUserInfo";
 
+// import "./styles.css";
+
 interface LikedItem {
   id: number;
   firstId: string;
@@ -35,6 +37,8 @@ function MainPage() {
   const [swipedCardCount, setSwipedCardCount] = useState(0);
   const [noCardsLeft, setNoCardsLeft] = useState(false);
   const [dislikedDogs, setDislikedDogs] = useState<DogItem[]>([]);
+  const [swipedCards, setSwipedCards] = useState<Set<string>>(new Set());
+  // const [animateCard, setAnimateCard] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     async function fetchFilterDogs() {
@@ -77,34 +81,6 @@ function MainPage() {
     fetchFilterDogs();
     // console.log("noCardsLeft: ", noCardsLeft);
   }, []);
-
-  // const fetchDislikedDogs = async () => {
-  //   try {
-  //     setNoCardsLeft(true);
-  //     // Fetch liked data
-  //     const likedResponse = await fetch("/api/liked");
-  //     const likedData: LikedItem[] = await likedResponse.json();
-
-  //     // Fetch all dogs data
-  //     const dogsResponse = await fetch("/api/alldogs");
-  //     const allDogsData: DogItem[] = await dogsResponse.json();
-
-  //     // Filter out dogs that are marked as disliked in the liked table
-  //     const dislikedDogIds = new Set(
-  //       likedData
-  //         .filter((item) => !item.likeStatus)
-  //         .map((item) => item.secondId),
-  //     );
-  //     const dislikedDogs = allDogsData.filter((dog: DogItem) =>
-  //       dislikedDogIds.has(dog.displayId),
-  //     );
-
-  //     setDislikedDogs(dislikedDogs);
-  //     console.log("dislikedDogs: ", dislikedDogs);
-  //   } catch (error) {
-  //     console.error("Error fetching disliked dogs:", error);
-  //   }
-  // };
 
   const sendLike = async (userId: string, dogDisplayId: string) => {
     try {
@@ -155,7 +131,23 @@ function MainPage() {
       console.error("Submit Error:", error);
     }
   };
+  const handleSwipe = (direction: "left" | "right", dogDisplayId: string) => {
+    setSwipedCards((prev) => {
+      const newSwipedCards = new Set(prev);
+      newSwipedCards.add(dogDisplayId);
+      return newSwipedCards;
+    });
 
+    if (typeof userId === "string") {
+      if (direction === "left") {
+        sendDislike(userId, dogDisplayId);
+      } else if (direction === "right") {
+        sendLike(userId, dogDisplayId);
+      }
+    } else {
+      console.error("UserId is undefined");
+    }
+  };
   const swiped = (direction: any, dogDisplayId: string) => {
     console.log("removing: " + dogDisplayId);
     setLastDirection(direction);
@@ -191,6 +183,17 @@ function MainPage() {
       return newCount;
     });
   };
+  // const animateSwipe = (direction: "left" | "right", dogDisplayId: string) => {
+  //   setAnimateCard({ [dogDisplayId]: direction });
+  //   setTimeout(() => {
+  //     handleSwipe(direction, dogDisplayId);
+  //     setAnimateCard((prev) => {
+  //       const newAnim = { ...prev };
+  //       delete newAnim[dogDisplayId];
+  //       return newAnim;
+  //     });
+  //   }, 500); // duration of the animation
+  // };
   // const dogsToDisplay = filteredDogs.length > 1 ? filteredDogs : dislikedDogs;
   // console.log(filteredDogs.length, dislikedDogs.length);
   // console.log("filteredDogs: ", filteredDogs);
@@ -203,64 +206,6 @@ function MainPage() {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  // return (
-  //   <>
-  //     <div className="flex h-screen w-[60%] flex-col items-center justify-center">
-  //       <div className="flex h-[400px] items-center justify-center">
-  //         {/* {showSpecialCard && (
-  //           <TinderCard
-  //             className="special-card-styling"
-  //             key="special-card"
-  //             onSwipe={swipeSpecialCard}
-  //             preventSwipe={["up", "down"]}
-  //           >
-  //             <div>這是一個特殊卡片，滑動來重新獲取所有卡片</div>
-  //           </TinderCard>
-  //         )} */}
-  //         {filteredDogs.map(
-  //           (dog) =>
-  //             userId !== dog.displayId && (
-  //               <TinderCard
-  //                 className="absolute rounded-2xl shadow-[0px_0px_60px_0px_rgba(0,0,0,0.2)]"
-  //                 key={dog.displayId}
-  //                 onSwipe={(dir) => swiped(dir, dog.displayId)}
-  //                 onCardLeftScreen={() => outOfFrame(dog.dogname)}
-  //                 preventSwipe={["up", "down"]}
-  //               >
-  //                 <div className="rounded-t-2xl bg-white p-10 pb-0">
-  //                   <div
-  //                     style={{ backgroundImage: "url(" + dog.imageUrl + ")" }}
-  //                     className="relative h-[400px] w-[100vw] max-w-[300px] overflow-hidden rounded-[20px] bg-cover bg-center"
-  //                   ></div>
-  //                 </div>
-  //                 <div className="flex rounded-b-2xl bg-white p-10 shadow-lg">
-  //                   <div className="flex w-1/2 flex-col justify-center">
-  //                     <div className="mb-1 text-5xl font-bold text-gray-900">
-  //                       {dog.dogname}
-  //                     </div>
-  //                   </div>
-  //                   <div className="flex w-1/2 flex-col justify-center text-right">
-  //                     <div className="text-sm text-gray-600">
-  //                       生日 : {dog.birthday}
-  //                     </div>
-  //                     <div className="text-sm text-gray-600">
-  //                       品種 : {dog.breed}
-  //                     </div>
-  //                     <div className="text-sm text-gray-600">
-  //                       介紹 : {dog.description}
-  //                     </div>
-  //                     <div className="text-sm text-gray-600">
-  //                       性別 : {dog.gender}
-  //                     </div>
-  //                   </div>
-  //                 </div>
-  //               </TinderCard>
-  //             ),
-  //         )}
-  //       </div>
-  //     </div>
-  //   </>
-  // );
   const renderContent = () => {
     if (noCardsLeft === true) {
       return <div className="text-center text-xl">你已經看完所有狗狗了！</div>;
@@ -271,38 +216,79 @@ function MainPage() {
             (dog) =>
               userId !== dog.displayId && (
                 <TinderCard
-                  className="absolute rounded-2xl shadow-[0px_0px_60px_0px_rgba(0,0,0,0.2)]"
+                  // className={`absolute rounded-2xl ${
+                  //   animateCard[dog.displayId] === "left" ? "swipe-left" : ""
+                  // } ${
+                  //   animateCard[dog.displayId] === "right" ? "swipe-right" : ""
+                  // }`}
+                  className="absolute rounded-2xl border-2 border-purple-400 shadow-[0px_0px_60px_0px_rgba(0,0,0,0.2)]"
                   key={dog.displayId}
                   onSwipe={(dir) => swiped(dir, dog.displayId)}
                   onCardLeftScreen={() => outOfFrame(dog.dogname)}
                   preventSwipe={["up", "down"]}
                 >
-                  <div className="rounded-t-2xl bg-white p-10 pb-0">
+                  <div className="rounded-t-2xl bg-purple-200 p-4 pb-1 pt-6">
                     <div
                       style={{ backgroundImage: "url(" + dog.imageUrl + ")" }}
-                      className="relative h-[400px] w-[100vw] max-w-[300px] overflow-hidden rounded-[20px] bg-cover bg-center"
+                      className="relative h-56 w-56 max-w-[300px] overflow-hidden rounded-xl bg-cover bg-center"
                     ></div>
                   </div>
-                  <div className="flex rounded-b-2xl bg-white p-10 shadow-lg">
-                    <div className="flex w-1/2 flex-col justify-center">
-                      <div className="mb-1 text-5xl font-bold text-gray-900">
+                  <div className="flex flex-col rounded-b-2xl bg-purple-200 px-4 pb-4 shadow-lg">
+                    <div className="w-full py-1 pl-1 font-bold">
+                      <div className="flex items-end gap-3 text-3xl">
                         {dog.dogname}
+                        {/* <div className="flex text-base text-zinc-500">
+                          {calculateAge(dogInfo[0].birthday)}
+                        </div> */}
                       </div>
                     </div>
-                    <div className="flex w-1/2 flex-col justify-center text-right">
-                      <div className="text-sm text-gray-600">
-                        生日 : {dog.birthday}
+
+                    <div className="gap-5 py-1 pl-2 font-bold">
+                      <div className="my-1 flex items-center gap-2 text-base">
+                        <div className="rounded-2xl bg-slate-200 px-1 text-zinc-500">
+                          品種
+                        </div>
+                        <div className="flex text-xs text-zinc-500">
+                          {dog.breed}
+                        </div>
                       </div>
-                      <div className="text-sm text-gray-600">
-                        品種 : {dog.breed}
+                      <div className="my-1 flex items-center gap-2 text-base">
+                        <div className="rounded-2xl bg-slate-200 px-1 text-zinc-500">
+                          性別
+                        </div>
+                        <div className="flex text-xs text-zinc-500">
+                          {dog.gender}
+                        </div>
                       </div>
-                      <div className="text-sm text-gray-600">
-                        介紹 : {dog.description}
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        性別 : {dog.gender}
+                      <div className="my-1 flex items-center gap-2 text-base">
+                        <div className="rounded-2xl bg-slate-200 px-1 text-zinc-500">
+                          生日
+                        </div>
+                        <div className="flex text-xs text-zinc-500">
+                          {dog.birthday}
+                        </div>
                       </div>
                     </div>
+                    <div className="flex items-center pl-1 font-bold text-zinc-600 hover:text-zinc-500">
+                      About me
+                    </div>
+                    <div className="my-1 flex items-center px-2 text-base text-gray-700">
+                      <p>{dog.description}</p>
+                    </div>
+                    {/* <div className="absolute bottom-0 left-0 right-0 flex justify-around p-4">
+                      <button
+                        className="rounded bg-red-500 px-4 py-2 text-white"
+                        onClick={() => animateSwipe("left", dog.displayId)}
+                      >
+                        Dislike
+                      </button>
+                      <button
+                        className="rounded bg-green-500 px-4 py-2 text-white"
+                        onClick={() => animateSwipe("right", dog.displayId)}
+                      >
+                        Like
+                      </button>
+                    </div> */}
                   </div>
                 </TinderCard>
               ),

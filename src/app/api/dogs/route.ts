@@ -8,8 +8,8 @@ import { db } from "@/db";
 import { dogsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
-// 定義 POST 請求的結構
-const postDogRequestSchema = z.object({
+// 定義 PUT 請求的結構
+const putDogRequestSchema = z.object({
   dogname: z.string().min(1).max(100),
   breed: z.string().min(1).max(100),
   gender: z.enum(["male", "female"]),
@@ -19,11 +19,10 @@ const postDogRequestSchema = z.object({
   thumbnailUrl: z.string().optional(),
 });
 
-type PostDogRequest = z.infer<typeof postDogRequestSchema>;
+type PutDogRequest = z.infer<typeof putDogRequestSchema>;
 
-export async function POST(request: NextRequest, res: string) {
+export async function PUT(request: NextRequest) {
   const data = await request.json();
-  // let displayId;
 
   const session = await auth();
   if (!session || !session?.user?.id) {
@@ -31,7 +30,7 @@ export async function POST(request: NextRequest, res: string) {
   }
   const displayId = session.user.id;
 
-  postDogRequestSchema.parse(data);
+  putDogRequestSchema.parse(data);
 
   const {
     dogname,
@@ -41,24 +40,49 @@ export async function POST(request: NextRequest, res: string) {
     description,
     imageUrl,
     thumbnailUrl,
-  } = data as PostDogRequest;
-  // const { dogname } = data as PostDogRequest;
+  } = data as PutDogRequest;
+
   try {
-    await db
-      .insert(dogsTable)
-      .values({
-        dogname,
-        displayId,
-        breed,
-        gender,
-        birthday,
-        description,
-        imageUrl,
-        thumbnailUrl,
-      })
+    // 檢查是否存在對應的狗狗資料
+    const existingDog = await db
+      .select()
+      .from(dogsTable)
+      .where(eq(dogsTable.displayId, displayId))
       .execute();
-    res = "success";
-    return NextResponse.json({ message: "Dog info created successfully" });
+
+    if (existingDog.length > 0) {
+      // 更新已存在的狗狗資料
+      await db
+        .update(dogsTable)
+        .set({
+          dogname,
+          breed,
+          gender,
+          birthday,
+          description,
+          imageUrl,
+          thumbnailUrl,
+        })
+        .where(eq(dogsTable.displayId, displayId))
+        .execute();
+      return NextResponse.json({ message: "Dog info updated successfully" });
+    } else {
+      // 創建新的狗狗資料
+      await db
+        .insert(dogsTable)
+        .values({
+          dogname,
+          displayId,
+          breed,
+          gender,
+          birthday,
+          description,
+          imageUrl,
+          thumbnailUrl,
+        })
+        .execute();
+      return NextResponse.json({ message: "Dog info created successfully" });
+    }
   } catch (error) {
     console.error(error);
     return NextResponse.json(
