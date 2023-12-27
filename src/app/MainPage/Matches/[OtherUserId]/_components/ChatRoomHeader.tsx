@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 
 import { ChevronLeft } from "lucide-react";
 
+import UserAvatar from "@/components/UserAvatar";
 import { useDogById } from "@/hooks/useDogById";
 
 function ChatRoomHeader() {
@@ -22,6 +23,7 @@ function ChatRoomHeader() {
       >
         <ChevronLeft />
       </Link>
+      <UserAvatar displayId={displayId} />
       <div>{dogData.dogname}</div>
     </div>
   );

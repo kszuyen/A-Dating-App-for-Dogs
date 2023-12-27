@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -10,12 +10,32 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { Bone } from "lucide-react";
 
+import useUserInfo from "@/hooks/useUserInfo";
+import { pusherClient } from "@/lib/pusher/client";
 import { Dog } from "@/lib/types/db";
 
 type Props = Dog & {
-  lastMessage: string | null;
+  content: string | null;
   senderId: string | null;
-  sentAt: string | null;
+  sentAt: Date | null;
+};
+
+type Message = {
+  senderId: string;
+  content: string | null;
+  // sentAt: Date;
+};
+
+type fullMessage = {
+  id: string;
+  senderId: string;
+  receiverId: string;
+  content: string;
+  sentAt: Date;
+};
+
+type PusherPayload = {
+  newMessage: fullMessage;
 };
 
 export default function DogCard({
@@ -27,10 +47,11 @@ export default function DogCard({
   description,
   image_url,
   thumbnail_url,
-  lastMessage,
+  content,
   senderId,
   sentAt,
 }: Props) {
+  const { userId } = useUserInfo();
   const router = useRouter();
   const [mode, setMode] = useState<boolean>(true);
   const handleClickedCard = async () => {
@@ -38,8 +59,44 @@ export default function DogCard({
   };
 
   function limit(string = "", limit = 0) {
-    return string.substring(0, limit);
+    if (string.length < limit) {
+      return string;
+    } else {
+      return string.substring(0, limit) + "...";
+    }
   }
+
+  const [lM, setLM] = useState<Message>({
+    content: content,
+    senderId: senderId || "",
+    // sentAt: sentAt || null,
+  });
+
+  useEffect(() => {
+    if (!userId || !id) return;
+
+    // Private channels are in the format: private-...
+    // Make a channel for the chatroom according to the 2 person's id
+    const channelName =
+      userId > id ? `private-${userId}_${id}` : `private-${id}_${userId}`;
+    try {
+      pusherClient.subscribe(channelName);
+      pusherClient.bind("message:post", ({ newMessage }: PusherPayload) => {
+        setLM({
+          content: newMessage.content,
+          senderId: newMessage.senderId,
+          // sentAt: newMessage.sentAt,
+        });
+      });
+    } catch (error) {
+      console.log("subscribe error:", error);
+      router.push("/Matches");
+    }
+    // Unsubscribe from pusher events when the component unmounts
+    return () => {
+      pusherClient.unsubscribe(channelName);
+    };
+  }, [id, router, userId]);
 
   return (
     <div className="flex items-center">
@@ -84,8 +141,17 @@ export default function DogCard({
                       //   variant="h5"
                       style={{ textAlign: "center", textTransform: "none" }}
                     >
-                      {lastMessage ? (
-                        <span className="text-gray-500">{lastMessage}</span>
+                      {lM.content ? (
+                        <>
+                          {lM.senderId == userId ? (
+                            <span className="text-gray-500">you: </span>
+                          ) : (
+                            <></>
+                          )}
+                          <span className="text-gray-500">
+                            {limit(lM.content, 15)}
+                          </span>
+                        </>
                       ) : (
                         <span>Click to start chat!</span>
                       )}

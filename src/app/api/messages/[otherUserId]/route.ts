@@ -31,34 +31,7 @@ export async function POST(request: NextRequest) {
     sentAt,
   };
   // db.messages.push(newMessage);
-  await db.insert(messagesTable).values(newMessage);
-  // .returning();
-console.log("inserted");
-  const messages = await db
-    .select({
-      id: messagesTable.id,
-      senderId: messagesTable.senderId,
-      receiverId: messagesTable.receiverId,
-      content: messagesTable.content,
-      sentAt: messagesTable.sentAt,
-    })
-    .from(messagesTable)
-    .where(
-      and(
-        or(
-          and(
-            eq(messagesTable.senderId, newMessage.senderId),
-            eq(messagesTable.receiverId, newMessage.receiverId),
-          ),
-          and(
-            eq(messagesTable.senderId, newMessage.receiverId),
-            eq(messagesTable.receiverId, newMessage.senderId),
-          ),
-        ),
-      ),
-    )
-    .orderBy(asc(messagesTable.sentAt));
-    console.log("fetched");
+  const [inputMessage] = await db.insert(messagesTable).values(newMessage).returning();
 
   //     // Trigger pusher event
   const pusher = new Pusher({
@@ -75,12 +48,13 @@ console.log("inserted");
       ? `private-${newMessage.senderId}_${newMessage.receiverId}`
       : `private-${newMessage.receiverId}_${newMessage.senderId}`;
   await pusher.trigger(channelName, "message:post", {
-    messages: messages,
+    // messages: messages,
+    newMessage: inputMessage
   });
   return NextResponse.json(
-    {
-      messages,
-    },
+    // {
+    //   messages,
+    // },
     { status: 200 },
   );
 }
