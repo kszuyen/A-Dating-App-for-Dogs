@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-import { auth } from "@/lib/auth";
+// import { auth } from "@/lib/auth";
 
 interface DogInfo {
   id: number;
@@ -17,9 +17,20 @@ interface DogInfo {
 
 function DogPage() {
   const [dogInfo, setDogInfo] = useState<DogInfo[]>([]);
+  // const [editMode, setEditMode] = useState<{ [key: number]: boolean }>({});
+  const [showDetails, setShowDetails] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const calculateAge = (birthday: string) => {
+    const birthDate = new Date(birthday);
+    const difference = Date.now() - birthDate.getTime();
+    const ageDate = new Date(difference);
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+  };
+  const toggleDetails = () => {
+    setShowDetails(!showDetails);
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -48,38 +59,71 @@ function DogPage() {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="max-w-sm overflow-hidden rounded bg-white p-4 shadow-lg">
-        <h1 className="mb-2 text-xl font-bold">Dog Information</h1>
-        {dogInfo ? (
-          <div>
+    <div className="max-w-sm overflow-hidden rounded-xl border-2 border-purple-400 bg-purple-200 p-4 shadow-lg drop-shadow-xl">
+      <div className="mb-2 text-center text-2xl font-bold">Dog Profile</div>
+      {dogInfo ? (
+        <div>
+          <div className="flex justify-center">
             <img
-              className="h-48 w-full object-cover"
+              className="h-56 w-56 rounded-lg object-cover"
               src={dogInfo[0].imageUrl}
               alt={dogInfo[0].dogname}
             />
-            <div className="px-6 py-4">
-              <div className="mb-2 text-xl font-bold">{dogInfo[0].dogname}</div>
-              <p className="text-base text-gray-700">
-                Breed: {dogInfo[0].breed}
-              </p>
-              <p className="text-base text-gray-700">
-                Gender: {dogInfo[0].gender}
-              </p>
-              <p className="text-base text-gray-700">
-                Birthday: {dogInfo[0].birthday}
-              </p>
-              <p className="text-base text-gray-700">
-                Description: {dogInfo[0].description}
-              </p>
-            </div>
           </div>
-        ) : (
-          <p className="text-base text-gray-700">
-            No dog information available.
-          </p>
-        )}
-      </div>
+          <div className="">
+            <div className="pl-1 pt-2 font-bold">
+              <div className="flex items-end gap-3 text-3xl">
+                {dogInfo[0].dogname}
+                <div className="flex text-base text-zinc-500">
+                  {calculateAge(dogInfo[0].birthday)}
+                </div>
+              </div>
+            </div>
+            <div className="gap-5 py-2 pl-2 font-bold">
+              <div className="my-1 flex items-center gap-2 text-base">
+                <div className="rounded-2xl bg-slate-200 px-1 text-zinc-500">
+                  品種
+                </div>
+                <div className="flex text-xs text-zinc-500">
+                  {dogInfo[0].breed}
+                </div>
+              </div>
+              <div className="my-1 flex items-center gap-2 text-base">
+                <div className="rounded-2xl bg-slate-200 px-1 text-zinc-500">
+                  性別
+                </div>
+                <div className="flex text-xs text-zinc-500">
+                  {dogInfo[0].gender}
+                </div>
+              </div>
+              <div className="my-1 flex items-center gap-2 text-base">
+                <div className="rounded-2xl bg-slate-200 px-1 text-zinc-500">
+                  生日
+                </div>
+                <div className="flex text-xs text-zinc-500">
+                  {dogInfo[0].birthday}
+                </div>
+              </div>
+            </div>
+            <button
+              className="mb-2 flex items-center pl-1 font-bold text-zinc-600 hover:text-zinc-500"
+              onClick={toggleDetails}
+            >
+              {/* {showDetails ? "Show less" : "About me"} */}
+              About me
+            </button>
+            {showDetails && (
+              <div className="my-1 flex items-center px-2 text-base text-gray-700">
+                <p>{dogInfo[0].description}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+        <p className="text-center text-base text-gray-500">
+          No dog information available.
+        </p>
+      )}
     </div>
   );
 }

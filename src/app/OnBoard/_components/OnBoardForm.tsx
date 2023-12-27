@@ -16,7 +16,6 @@ import { useEdgeStore } from "@/lib/edgestore";
 import DogImageInput from "./DogImageInput";
 
 // import DogForm  from "./DogForm";
-
 function OnBoardForm({}: {}) {
   // const [disableSubmit, setDisableSubmit] = useState<boolean>(true);
   // const [dogname, setDogname] = useState<string>("");
@@ -32,11 +31,9 @@ function OnBoardForm({}: {}) {
   });
   const [dogImage, setDogImage] = useState<any>(null);
   const { edgestore } = useEdgeStore();
-
   const handleImageUpload = (url: string, thumbnailUrl: string) => {
     setDogData({ ...dogData, imageUrl: url, thumbnailUrl: thumbnailUrl });
   };
-
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -51,22 +48,19 @@ function OnBoardForm({}: {}) {
     }
     setDogData({ ...dogData, [name]: finalValue });
   };
-
   const handleInfoSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await fetch("/api/dogs", {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(dogData),
       });
-
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-
       const result = await response.json();
       console.log("Submit Success:", result);
       router.push("/MainPage/DogPage");
@@ -74,14 +68,12 @@ function OnBoardForm({}: {}) {
       console.error("Submit Error:", error);
     }
   };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!dogImage) {
       console.log("No image selected");
       return;
     }
-
     try {
       const res = await edgestore.myPublicImages.upload({
         file: dogImage,
@@ -94,7 +86,6 @@ function OnBoardForm({}: {}) {
       // TODO: Handle the error appropriately
     }
   };
-
   return (
     <>
       <div className="flex items-center justify-center bg-gray-100">
@@ -113,9 +104,8 @@ function OnBoardForm({}: {}) {
                 placeholder="Dog's name"
                 value={dogData.dogname}
                 onChange={handleInputChange}
-                className="rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="mt-3 rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
-
               <input
                 type="text"
                 name="breed"
@@ -124,7 +114,6 @@ function OnBoardForm({}: {}) {
                 onChange={handleInputChange}
                 className="rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
-
               <select
                 name="gender"
                 value={dogData.gender}
@@ -137,7 +126,6 @@ function OnBoardForm({}: {}) {
                 <option value="male">Male</option>
                 <option value="female">Female</option>
               </select>
-
               <input
                 type="date"
                 name="birthday"
@@ -146,7 +134,6 @@ function OnBoardForm({}: {}) {
                 onChange={handleInputChange}
                 className="rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
-
               <textarea
                 name="description"
                 placeholder="Description"
@@ -154,7 +141,6 @@ function OnBoardForm({}: {}) {
                 onChange={handleInputChange}
                 className="rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
-
               <button
                 type="submit"
                 onClick={handleInfoSubmit}
@@ -169,5 +155,4 @@ function OnBoardForm({}: {}) {
     </>
   );
 }
-
 export default OnBoardForm;
