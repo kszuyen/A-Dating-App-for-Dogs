@@ -133,7 +133,7 @@ export default function DogCard({
                         textTransform: "none",
                       }}
                     >
-                      {dogname}
+                      {limit(dogname, 11)}
                     </Typography>
                   </div>
                   <div className="py-1">
@@ -160,20 +160,20 @@ export default function DogCard({
                 </div>
               </div>
             ) : (
-              <div className="flex w-full items-center rounded-b-xl bg-white p-4 shadow-lg">
+              <div className="flex max-w-[60] items-center rounded-b-xl bg-white p-4 shadow-lg">
                 {/* <div className="flex w-1/2 flex-col justify-center"> */}
 
                 {/* </div> */}
-                <div className="flex max-w-56 flex-col justify-center text-left">
+                <div className="flex max-w-48 flex-col justify-center break-words text-left ">
                   <div className="mb-1 text-center text-3xl font-bold text-gray-900">
-                    {dogname}
+                    {limit(dogname, 11)}
                   </div>
                   <div className="text-sm text-gray-600">生日 : {birthday}</div>
                   <div className="text-sm text-gray-600">品種 : {breed}</div>
 
                   <div className="text-sm text-gray-600">性別 : {gender}</div>
                   <div className="text-sm text-gray-600">
-                    介紹 : {description}
+                    介紹 : {limit(description, 55)}
                   </div>
                 </div>
               </div>
