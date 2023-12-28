@@ -142,8 +142,8 @@ function OnBoardForm({}: {}) {
   else {
     return (
       <>
-        <div className="flex items-center justify-center bg-gray-100">
-          <Card className="mx-auto mt-10 w-full max-w-md overflow-hidden rounded-lg bg-white shadow-lg">
+        <div className="flex w-full items-center justify-center px-4 md:max-w-xs lg:max-w-sm xl:max-w-md">
+          <Card className="mx-auto w-full max-w-md overflow-hidden rounded-lg bg-white shadow-lg">
             <CardHeader className="bg-purple-500 p-4 text-lg font-semibold text-white">
               <CardTitle>Fill out your dog's info!</CardTitle>
             </CardHeader>

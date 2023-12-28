@@ -18,9 +18,11 @@ const Navbar = ({ showButton }: { showButton: boolean }) => {
           </a>
         </div>
       </div>
-      <div className="m-5 flex flex-row items-center justify-center font-mono text-2xl font-bold">
-        " It's a match! "
-      </div>
+      {showButton && (
+        <div className="m-5 flex flex-row items-center justify-center font-mono text-2xl font-bold">
+          " It's a match! "
+        </div>
+      )}
       {showButton && (
         <div className="mb-5 mt-10 flex items-center justify-center">
           <button
