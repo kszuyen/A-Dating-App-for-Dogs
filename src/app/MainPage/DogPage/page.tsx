@@ -17,12 +17,13 @@ interface DogInfo {
   birthday: string;
   description: string;
   imageUrl: string;
+  isExpanded: boolean;
 }
 
 function DogPage() {
   const [dogInfo, setDogInfo] = useState<DogInfo[]>([]);
   // const [editMode, setEditMode] = useState<{ [key: number]: boolean }>({});
-  const [showDetails, setShowDetails] = useState(false);
+  // const [showDetails, setShowDetails] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -32,7 +33,7 @@ function DogPage() {
     );
     if (userConfirmed) {
       // User clicked 'OK'
-      router.push("/OnBoard");
+      router.push("/OnBoard?edit=true");
     } else {
       // User clicked 'Cancel'
       // Optionally handle the cancelation
@@ -44,9 +45,16 @@ function DogPage() {
     const ageDate = new Date(difference);
     return Math.abs(ageDate.getUTCFullYear() - 1970);
   };
-  // const toggleDetails = () => {
-  //   setShowDetails(!showDetails);
-  // };
+  // Toggle description function
+  // Toggle description function
+  const toggleDescription = (id: number) => {
+    setDogInfo(
+      dogInfo.map((dog) =>
+        dog.id === id ? { ...dog, isExpanded: !dog.isExpanded } : dog,
+      ),
+    );
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -130,7 +138,16 @@ function DogPage() {
             <div className="flex flex-grow flex-col break-words px-2 py-2 text-lg">
               <div className="pb-2 font-bold text-zinc-600 ">About me</div>
               <div className="mb-3 flex h-auto w-96 text-left">
-                {dogInfo[0].description}
+                <p
+                  className={`text-start ${
+                    dogInfo[0].isExpanded
+                      ? "line-clamp-none h-auto w-96"
+                      : "line-clamp-1"
+                  }`}
+                  onClick={() => toggleDescription(dogInfo[0].id)}
+                >
+                  {dogInfo[0].description}
+                </p>
               </div>
             </div>
           </div>

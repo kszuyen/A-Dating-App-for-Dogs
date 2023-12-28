@@ -66,7 +66,7 @@ const DogImageInput: React.FC<{
           />
         </div>
         <div className="flex whitespace-pre-wrap text-center">
-          {systemMessage}
+          <p className="font-mono ">{systemMessage}</p>
         </div>
 
         <Button
