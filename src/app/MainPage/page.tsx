@@ -42,7 +42,13 @@ function MainPage() {
   const [dislikedDogs, setDislikedDogs] = useState<DogItem[]>([]);
   // const [swipedCards, setSwipedCards] = useState<Set<string>>(new Set());
   // const [animateCard, setAnimateCard] = useState<{ [key: string]: string }>({});
-
+  function shuffleArray<T>(array: T[]): T[] {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]]; // 交換元素
+    }
+    return array;
+  }
   useEffect(() => {
     async function fetchFilterDogs() {
       try {
