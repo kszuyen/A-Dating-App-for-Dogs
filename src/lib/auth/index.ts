@@ -75,6 +75,7 @@ export const {
     },
   },
   pages: {
-    signIn: "/",
+    signIn: "/auth/signin",
+    error: "/auth/signin",
   },
 });

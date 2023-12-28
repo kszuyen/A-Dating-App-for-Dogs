@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { usersTable } from "@/db/schema";
 import { authSchema } from "@/validators/auth";
-import router from "next/navigation";
+// import router from "next/navigation";
 
 export default CredentialsProvider({
   name: "credentials",
