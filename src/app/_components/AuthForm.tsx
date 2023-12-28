@@ -81,8 +81,13 @@ function AuthForm({
       {showForm && (
         <Card className="max-w-[500px] rounded-3xl border-4 border-purple-200 bg-white p-8 shadow-xl">
           <div className="flex justify-end">
-            <div className="text-xl" onClick={handleClick}>
-              ⓧ
+            <div className="rounded-full">
+              <button
+                className="w-5 rounded text-xl hover:bg-purple-200"
+                onClick={handleClick}
+              >
+                <p>X</p>
+              </button>
             </div>
           </div>
           <div className="flex items-center justify-center font-mono text-5xl font-extrabold italic text-purple-500">
