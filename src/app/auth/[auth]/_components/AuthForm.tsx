@@ -33,7 +33,6 @@ function AuthForm({
   const [passwordTooShort, setPasswordTooShort] = useState<boolean>(false);
   const [wrongConfirmPassword, setWrongConfirmPassword] =
     useState<boolean>(false);
-  const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -79,8 +78,6 @@ function AuthForm({
   };
   const router = useRouter();
   const handleClick = () => {
-    // console.log("close form");
-    // setShowForm(false);
     router.push("/");
   };
   const searchParams = useSearchParams();
@@ -100,11 +97,9 @@ function AuthForm({
       "Sign in/up failed. Check the details you provided are correct.",
     default: "Unable to sign in/up.",
   };
-  // const [errorMessage, setErrorMessage] =
-  //   useState<string>("Unable to sign in.");
+
   const SignInError = (error: any) => {
     const errorMessage = error && (errors[error.error] ?? errors.default);
-    setShowErrorMessage(true);
     return (
       <div className="items-center pl-2 text-base text-red-500">
         {errorMessage}
@@ -221,13 +216,15 @@ function AuthForm({
                 </span>
               )}
             </div>
+            <div className="text-center">
+              {error && <SignInError error={error} />}
+            </div>
             <Button
               type="submit"
               className="mx-8 h-auto w-auto rounded-full bg-gradient-to-r from-purple-400 to-rose-400 shadow-lg hover:from-purple-300 hover:to-rose-300"
             >
               <p className="p-1 text-xl">Sign {isSignUp ? "Up" : "In"}</p>
             </Button>
-            {showErrorMessage && <SignInError error={error} />}
           </form>
           <div className="flex w-full items-center gap-1 py-2">
             <div className="h-[1px] grow border-t"></div>

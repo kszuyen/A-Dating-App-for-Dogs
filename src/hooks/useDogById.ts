@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 type DogType = {
   displayId: string;
@@ -51,6 +51,8 @@ export function useDogById(dogId: string): {
     fetchData();
     console.log("fetched Dog Data");
   }, [dogId]);
+  const memoizedDogData = useMemo(() => dogData, [dogData]);
 
-  return { dogData, loading, error };
+
+  return { dogData: memoizedDogData, loading, error };
 }
