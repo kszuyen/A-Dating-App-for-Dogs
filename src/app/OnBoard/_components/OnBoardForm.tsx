@@ -4,11 +4,8 @@ import { ChangeEvent, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
-// import { signIn } from "next-auth/react";
-// import Image from "next/image";
-// Run: npx shadcn-ui@latest add button
-// import { Button } from "@/components/ui/button";
-// Run: npx shadcn-ui@latest add card
+import LoadingModal from "@/components/LoadingModal";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 // import OnBoardInput from "./OnBoardInput";
 import { useEdgeStore } from "@/lib/edgestore";
@@ -17,8 +14,6 @@ import DogImageInput from "./DogImageInput";
 
 // import DogForm  from "./DogForm";
 function OnBoardForm({}: {}) {
-  // const [disableSubmit, setDisableSubmit] = useState<boolean>(true);
-  // const [dogname, setDogname] = useState<string>("");
   const router = useRouter();
   const [dogData, setDogData] = useState({
     dogname: "",
@@ -26,14 +21,29 @@ function OnBoardForm({}: {}) {
     gender: "",
     birthday: "",
     description: "",
-    imageUrl: "",
-    thumbnailUrl: "",
   });
-  const [dogImage, setDogImage] = useState<any>(null);
+
+  // from dogImageInput
+  const [validatedImage, setValidatedImage] = useState<File | undefined>(
+    undefined,
+  );
+
+  const [isImageValid, setIsImageValid] = useState<boolean>(false);
+  const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(false);
   const { edgestore } = useEdgeStore();
-  const handleImageUpload = (url: string, thumbnailUrl: string) => {
-    setDogData({ ...dogData, imageUrl: url, thumbnailUrl: thumbnailUrl });
-  };
+
+  const [invalidDogname, setInvalidDogname] = useState<boolean>(false);
+  const [invalidBreed, setInvalidBreed] = useState<boolean>(false);
+  const [invalidGender, setInvalidGender] = useState<boolean>(false);
+  const [invalidBirthday, setInvalidBirthday] = useState<boolean>(false);
+  const [invalidDescription, setInvalidDescription] = useState<boolean>(false);
+
+  const [invalidDognameLength, setInvalidDognameLength] =
+    useState<boolean>(false);
+  const [invalidDescriptionLength, setInvalidDescriptionLength] =
+    useState<boolean>(false);
+
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -48,15 +58,74 @@ function OnBoardForm({}: {}) {
     }
     setDogData({ ...dogData, [name]: finalValue });
   };
+
   const handleInfoSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validatedImage || !isImageValid) {
+      console.log("invalid image");
+      return;
+    }
+    if (dogData.dogname.length === 0) {
+      setInvalidDogname(true);
+    } else {
+      setInvalidDogname(false);
+    }
+    if (dogData.description.length > 10) {
+      setInvalidDognameLength(true);
+    } else {
+      setInvalidDognameLength(false);
+    }
+    if (dogData.breed.length === 0) {
+      setInvalidBreed(true);
+    } else {
+      setInvalidBreed(false);
+    }
+    if (dogData.gender.length === 0) {
+      setInvalidGender(true);
+    } else {
+      setInvalidGender(false);
+    }
+    if (dogData.birthday.length === 0) {
+      setInvalidBirthday(true);
+    } else {
+      setInvalidBirthday(false);
+    }
+    if (dogData.description.length === 0) {
+      setInvalidDescription(true);
+    } else {
+      setInvalidDescription(false);
+    }
+    if (dogData.description.length > 30) {
+      setInvalidDescriptionLength(true);
+    } else {
+      setInvalidDescriptionLength(false);
+    }
+    setLoading(true);
     try {
+      const res = await edgestore.myPublicImages.upload({
+        file: validatedImage,
+        input: { type: "post" },
+        onProgressChange: (progress: number) => {
+          setProgress(progress);
+        },
+      });
+
+      console.log(dogData);
+
       const response = await fetch("/api/dogs", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(dogData),
+        body: JSON.stringify({
+          dogname: dogData.dogname,
+          breed: dogData.breed,
+          gender: dogData.gender,
+          birthday: dogData.birthday,
+          description: dogData.description,
+          imageUrl: res.url,
+          thumbnailUrl: res.thumbnailUrl,
+        }),
       });
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -67,92 +136,119 @@ function OnBoardForm({}: {}) {
     } catch (error) {
       console.error("Submit Error:", error);
     }
+    setLoading(false);
   };
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!dogImage) {
-      console.log("No image selected");
-      return;
-    }
-    try {
-      const res = await edgestore.myPublicImages.upload({
-        file: dogImage,
-        input: { type: "post" },
-      });
-      console.log("Image URL:", res.url);
-      // TODO: redirect to the UserPage or handle the response
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      // TODO: Handle the error appropriately
-    }
-  };
-  return (
-    <>
-      <div className="flex items-center justify-center bg-gray-100">
-        <Card className="mx-auto mt-10 w-full max-w-md overflow-hidden rounded-lg bg-white shadow-lg">
-          <CardHeader className="bg-purple-500 p-4 text-lg font-semibold text-white">
-            <CardTitle>Fill out your dog's info!</CardTitle>
-          </CardHeader>
-          <CardContent className="p-4">
-            <div>
-              <DogImageInput onImageUpload={handleImageUpload} />
-            </div>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <input
-                type="text"
-                name="dogname"
-                placeholder="Dog's name"
-                value={dogData.dogname}
-                onChange={handleInputChange}
-                className="mt-3 rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
-              />
-              <input
-                type="text"
-                name="breed"
-                placeholder="Breed"
-                value={dogData.breed}
-                onChange={handleInputChange}
-                className="rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
-              />
-              <select
-                name="gender"
-                value={dogData.gender}
-                onChange={handleInputChange}
-                className="rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
-              >
-                <option value="" selected disabled hidden>
-                  Choose gender
-                </option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </select>
-              <input
-                type="date"
-                name="birthday"
-                placeholder="Birthday"
-                value={dogData.birthday}
-                onChange={handleInputChange}
-                className="rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
-              />
-              <textarea
-                name="description"
-                placeholder="Description"
-                value={dogData.description}
-                onChange={handleInputChange}
-                className="rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
-              />
-              <button
-                type="submit"
-                onClick={handleInfoSubmit}
-                className="w-full rounded bg-purple-400 p-2 text-white hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-blue-300"
-              >
-                Submit
-              </button>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
-    </>
-  );
+  if (loading) return <LoadingModal />;
+  else {
+    return (
+      <>
+        <div className="flex items-center justify-center bg-gray-100">
+          <Card className="mx-auto mt-10 w-full max-w-md overflow-hidden rounded-lg bg-white shadow-lg">
+            <CardHeader className="bg-purple-500 p-4 text-lg font-semibold text-white">
+              <CardTitle>Fill out your dog's info!</CardTitle>
+            </CardHeader>
+            <CardContent className="p-4">
+              <div>
+                <DogImageInput
+                  setValidatedImage={setValidatedImage}
+                  setIsImageValid={setIsImageValid}
+                  setProgress={setProgress}
+                />
+              </div>
+              <form className="flex flex-col gap-4">
+                <input
+                  type="text"
+                  name="dogname"
+                  placeholder="Dog's name"
+                  value={dogData.dogname}
+                  onChange={handleInputChange}
+                  className="mt-3 rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                />
+                {invalidDogname && (
+                  <div className="text-sm text-red-500">
+                    請輸入狗狗的名字...
+                  </div>
+                )}
+                {invalidDognameLength && (
+                  <div className="text-sm text-yellow-500">狗狗名字過長</div>
+                )}
+                <input
+                  type="text"
+                  name="breed"
+                  placeholder="Breed"
+                  value={dogData.breed}
+                  onChange={handleInputChange}
+                  className="rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                />{" "}
+                {invalidBreed && (
+                  <div className="text-sm text-red-500">請填寫狗狗的品種</div>
+                )}
+                <select
+                  name="gender"
+                  value={dogData.gender}
+                  onChange={handleInputChange}
+                  className="rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                >
+                  <option value="" disabled hidden>
+                    Choose gender
+                  </option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+                {invalidGender && (
+                  <div className="text-sm text-red-500">請填寫狗狗的性別</div>
+                )}
+                <input
+                  type="date"
+                  name="birthday"
+                  placeholder="Birthday"
+                  value={dogData.birthday}
+                  onChange={handleInputChange}
+                  className="rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                />
+                {invalidBirthday && (
+                  <div className="text-sm text-red-500">請選擇狗狗的生日</div>
+                )}
+                <textarea
+                  name="description"
+                  placeholder="Description"
+                  value={dogData.description}
+                  onChange={handleInputChange}
+                  className="rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                />
+                {invalidDescription && (
+                  <div className="text-sm text-red-500">
+                    介紹一下您的狗狗吧！
+                  </div>
+                )}
+                {invalidDescriptionLength && (
+                  <div className="text-sm text-yellow-500">
+                    請以更簡短的方式描述狗狗
+                  </div>
+                )}
+                <Button
+                  type="button"
+                  disabled={!isImageValid}
+                  onClick={handleInfoSubmit}
+                  // className="w-full rounded bg-white px-2 text-black hover:opacity-80"
+                  className="w-full rounded bg-purple-400 p-2 text-white hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                >
+                  Submit
+                </Button>
+                <div className="h-[6px] w-full overflow-hidden rounded border">
+                  <div
+                    className="h-full bg-black transition-all duration-150"
+                    style={{
+                      width: `${progress}%`,
+                    }}
+                  />
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </>
+    );
+  }
 }
 export default OnBoardForm;

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { Fragment } from "react";
-import { ClipLoader } from "react-spinners";
+import { PacmanLoader } from "react-spinners";
 
 import { Dialog, Transition } from "@headlessui/react";
 
@@ -52,7 +52,7 @@ const LoadingModal = () => {
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel>
-                <ClipLoader size={40} color="#0284c7" />
+                <PacmanLoader size={40} color="#c982db" />
               </Dialog.Panel>
             </Transition.Child>
           </div>
