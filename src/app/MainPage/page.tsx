@@ -122,7 +122,12 @@ function MainPage() {
       console.error("Submit Error:", error);
     }
   };
-
+  const calculateAge = (birthday: string) => {
+    const birthDate = new Date(birthday);
+    const difference = Date.now() - birthDate.getTime();
+    const ageDate = new Date(difference);
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+  };
   const sendDislike = async (userId: string, dogDisplayId: string) => {
     try {
       const response = await fetch("/api/liked", {
@@ -260,15 +265,15 @@ function MainPage() {
                     <div className="w-full py-1 pl-1 font-bold">
                       <div className="flex items-end gap-3 text-3xl">
                         {dog.dogname}
-                        {/* <div className="flex text-base text-zinc-500">
-                          {calculateAge(dogInfo[0].birthday)}
-                        </div> */}
+                        <div className="flex text-base text-black opacity-50">
+                          {calculateAge(dog.birthday)}
+                        </div>
                       </div>
                     </div>
 
                     <div className="gap-5 py-1 pl-2 font-bold">
                       <div className="my-1 flex items-center gap-2 text-base">
-                        <div className="rounded-2xl bg-slate-200 px-1 text-zinc-500">
+                        <div className="rounded-2xl bg-slate-100 px-1 text-zinc-500">
                           品種
                         </div>
                         <div className="flex text-xs text-zinc-500">
@@ -276,7 +281,7 @@ function MainPage() {
                         </div>
                       </div>
                       <div className="my-1 flex items-center gap-2 text-base">
-                        <div className="rounded-2xl bg-slate-200 px-1 text-zinc-500">
+                        <div className="rounded-2xl bg-slate-100 px-1 text-zinc-500">
                           性別
                         </div>
                         <div className="flex text-xs text-zinc-500">
@@ -284,7 +289,7 @@ function MainPage() {
                         </div>
                       </div>
                       <div className="my-1 flex items-center gap-2 text-base">
-                        <div className="rounded-2xl bg-slate-200 px-1 text-zinc-500">
+                        <div className="rounded-2xl bg-slate-100 px-1 text-zinc-500">
                           生日
                         </div>
                         <div className="flex text-xs text-zinc-500">
