@@ -27,6 +27,7 @@ export async function GET(request: NextRequest) {
   try {
     // Awaiting the database query to complete
     const dbliked = await db.select().from(likedTable).execute();
+    shuffleArray(dbliked);
     return NextResponse.json(dbliked);
   } catch (error) {
     console.error("Error fetching liked data:", error);
@@ -36,6 +37,14 @@ export async function GET(request: NextRequest) {
         "Content-Type": "application/json",
       },
     });
+  }
+}
+
+// 隨機化數組的函數
+function shuffleArray(array: any[]) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]]; // 交換元素
   }
 }
 

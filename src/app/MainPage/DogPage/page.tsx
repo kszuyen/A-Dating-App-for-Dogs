@@ -27,9 +27,16 @@ function DogPage() {
   const [error, setError] = useState("");
   const router = useRouter();
   const handleClick = () => {
-    // console.log("close form");
-    // setShowForm(false);
-    router.push("/OnBoard");
+    const userConfirmed = window.confirm(
+      "Are you sure you want to leave this page?",
+    );
+    if (userConfirmed) {
+      // User clicked 'OK'
+      router.push("/OnBoard");
+    } else {
+      // User clicked 'Cancel'
+      // Optionally handle the cancelation
+    }
   };
   const calculateAge = (birthday: string) => {
     const birthDate = new Date(birthday);
@@ -37,9 +44,9 @@ function DogPage() {
     const ageDate = new Date(difference);
     return Math.abs(ageDate.getUTCFullYear() - 1970);
   };
-  const toggleDetails = () => {
-    setShowDetails(!showDetails);
-  };
+  // const toggleDetails = () => {
+  //   setShowDetails(!showDetails);
+  // };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -121,9 +128,7 @@ function DogPage() {
               </div>
             </div>
             <div className="flex flex-grow flex-col break-words px-2 py-2 text-lg">
-              <div className="pb-2 font-bold text-zinc-600 hover:text-zinc-500">
-                About me
-              </div>
+              <div className="pb-2 font-bold text-zinc-600 ">About me</div>
               <div className="mb-3 flex h-auto w-96 text-left">
                 {dogInfo[0].description}
               </div>

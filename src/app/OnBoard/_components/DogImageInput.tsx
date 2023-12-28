@@ -18,7 +18,7 @@ const DogImageInput: React.FC<{
 }> = ({ setValidatedImage, setIsImageValid, setProgress }) => {
   const [previewImage, setPreviewImage] = useState<string>("");
   const [systemMessage, setSystemMessage] = useState<string>(
-    "照片需經過系統審核，上傳後點擊下方Test Image",
+    "照片需經過系統審核\n上傳後點擊下方的Test Image來驗證",
   );
   const [file, setFile] = useState<File | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
@@ -65,7 +65,9 @@ const DogImageInput: React.FC<{
             }}
           />
         </div>
-        <div>{systemMessage}</div>
+        <div className="flex whitespace-pre-wrap text-center">
+          {systemMessage}
+        </div>
 
         <Button
           type="button"
