@@ -70,58 +70,62 @@ function DogPage() {
   return (
     <>
       <div className="flex flex-col rounded-xl border-2 border-purple-400 bg-purple-200 p-4 shadow-lg drop-shadow-xl">
-        <div className="flex items-center justify-start p-5 text-center text-3xl font-bold">
+        <div className="mb-2 flex items-center justify-center p-5 text-center text-3xl font-bold">
           Dog Profile
         </div>
         {dogInfo ? (
-          <div className="flex">
-            <div className="flex justify-center">
-              <img
-                className="h-56 w-56 rounded-lg object-cover"
-                src={dogInfo[0].imageUrl}
-                alt={dogInfo[0].dogname}
-              />
-            </div>
-            <div className="mb-6 flex">
-              <div className="p-5 font-bold">
-                <div className="flex items-end gap-3 text-3xl">
-                  {dogInfo[0].dogname}
-                  <div className="flex text-base text-black opacity-50">
-                    {calculateAge(dogInfo[0].birthday)}
-                  </div>
-                </div>
-                <div className="mt-3 flex flex-col gap-4">
-                  <div className="my-1 flex items-center gap-2 text-base">
-                    <div className="rounded-2xl bg-slate-100 px-1 text-zinc-500">
-                      品種
-                    </div>
-                    <div className="flex text-xs text-zinc-500">
-                      {dogInfo[0].breed}
+          <div className="flex flex-col">
+            <div className="flex">
+              <div className="flex justify-center">
+                <img
+                  className="h-56 w-56 rounded-lg object-cover px-1"
+                  src={dogInfo[0].imageUrl}
+                  alt={dogInfo[0].dogname}
+                />
+              </div>
+              <div className="mb-6 flex">
+                <div className="p-5 font-bold">
+                  <div className="flex items-end gap-3 text-3xl">
+                    {dogInfo[0].dogname}
+                    <div className="flex text-base text-black opacity-50">
+                      {calculateAge(dogInfo[0].birthday)}
                     </div>
                   </div>
-                  <div className="my-1 flex items-center gap-2 text-base">
-                    <div className="rounded-2xl bg-slate-100 px-1 text-zinc-500">
-                      性別
+                  <div className="mt-3 flex flex-col gap-4">
+                    <div className="my-1 flex items-center gap-2 text-base">
+                      <div className="rounded-2xl bg-slate-100 px-1 text-zinc-500">
+                        品種
+                      </div>
+                      <div className="flex text-xs text-zinc-500">
+                        {dogInfo[0].breed}
+                      </div>
                     </div>
-                    <div className="flex text-xs text-zinc-500">
-                      {dogInfo[0].gender}
+                    <div className="my-1 flex items-center gap-2 text-base">
+                      <div className="rounded-2xl bg-slate-100 px-1 text-zinc-500">
+                        性別
+                      </div>
+                      <div className="flex text-xs text-zinc-500">
+                        {dogInfo[0].gender}
+                      </div>
                     </div>
-                  </div>
-                  <div className="my-1 flex items-center gap-2 text-base">
-                    <div className="rounded-2xl bg-slate-100 px-1 text-zinc-500">
-                      生日
-                    </div>
-                    <div className="flex text-xs text-zinc-500">
-                      {dogInfo[0].birthday}
+                    <div className="my-1 flex items-center gap-2 text-base">
+                      <div className="rounded-2xl bg-slate-100 px-1 text-zinc-500">
+                        生日
+                      </div>
+                      <div className="flex text-xs text-zinc-500">
+                        {dogInfo[0].birthday}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col">
-                <div className="font-bold text-zinc-600 hover:text-zinc-500">
-                  About me
-                </div>
-                <div className="flex h-auto w-10">{dogInfo[0].description}</div>
+            </div>
+            <div className="flex flex-grow flex-col break-words px-2 py-2 text-lg">
+              <div className="pb-2 font-bold text-zinc-600 hover:text-zinc-500">
+                About me
+              </div>
+              <div className="mb-3 flex h-auto w-96 text-left">
+                {dogInfo[0].description}
               </div>
             </div>
           </div>
