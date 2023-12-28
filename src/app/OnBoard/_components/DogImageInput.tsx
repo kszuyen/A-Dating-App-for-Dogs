@@ -18,7 +18,7 @@ const DogImageInput: React.FC<{
 }> = ({ setValidatedImage, setIsImageValid, setProgress }) => {
   const [previewImage, setPreviewImage] = useState<string>("");
   const [systemMessage, setSystemMessage] = useState<string>(
-    "照片需經過系統審核，上傳後點擊下方Test Image",
+    "照片需經過系統審核，上傳後點擊下方測試",
   );
   const [file, setFile] = useState<File | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
