@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import LoadingModal from "@/components/LoadingModal";
 
 // import { auth } from "@/lib/auth";
@@ -23,7 +25,12 @@ function DogPage() {
   const [showDetails, setShowDetails] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const router = useRouter();
+  const handleClick = () => {
+    // console.log("close form");
+    // setShowForm(false);
+    router.push("/OnBoard");
+  };
   const calculateAge = (birthday: string) => {
     const birthDate = new Date(birthday);
     const difference = Date.now() - birthDate.getTime();
@@ -61,72 +68,80 @@ function DogPage() {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="max-w-sm overflow-hidden rounded-xl border-2 border-purple-400 bg-purple-200 p-4 shadow-lg drop-shadow-xl">
-      <div className="mb-2 text-center text-2xl font-bold">Dog Profile</div>
-      {dogInfo ? (
-        <div>
-          <div className="flex justify-center">
-            <img
-              className="h-56 w-56 rounded-lg object-cover"
-              src={dogInfo[0].imageUrl}
-              alt={dogInfo[0].dogname}
-            />
-          </div>
-          <div className="">
-            <div className="pl-1 pt-2 font-bold">
-              <div className="flex items-end gap-3 text-3xl">
-                {dogInfo[0].dogname}
-                <div className="flex text-base text-zinc-500">
-                  {calculateAge(dogInfo[0].birthday)}
-                </div>
-              </div>
-            </div>
-            <div className="gap-5 py-2 pl-2 font-bold">
-              <div className="my-1 flex items-center gap-2 text-base">
-                <div className="rounded-2xl bg-slate-200 px-1 text-zinc-500">
-                  品種
-                </div>
-                <div className="flex text-xs text-zinc-500">
-                  {dogInfo[0].breed}
-                </div>
-              </div>
-              <div className="my-1 flex items-center gap-2 text-base">
-                <div className="rounded-2xl bg-slate-200 px-1 text-zinc-500">
-                  性別
-                </div>
-                <div className="flex text-xs text-zinc-500">
-                  {dogInfo[0].gender}
-                </div>
-              </div>
-              <div className="my-1 flex items-center gap-2 text-base">
-                <div className="rounded-2xl bg-slate-200 px-1 text-zinc-500">
-                  生日
-                </div>
-                <div className="flex text-xs text-zinc-500">
-                  {dogInfo[0].birthday}
-                </div>
-              </div>
-            </div>
-            <button
-              className="mb-2 flex items-center pl-1 font-bold text-zinc-600 hover:text-zinc-500"
-              onClick={toggleDetails}
-            >
-              {/* {showDetails ? "Show less" : "About me"} */}
-              About me
-            </button>
-            {showDetails && (
-              <div className="my-1 flex items-center px-2 text-base text-gray-700">
-                <p>{dogInfo[0].description}</p>
-              </div>
-            )}
-          </div>
+    <>
+      <div className="flex flex-col rounded-xl border-2 border-purple-400 bg-purple-200 p-4 shadow-lg drop-shadow-xl">
+        <div className="flex items-center justify-start p-5 text-center text-3xl font-bold">
+          Dog Profile
         </div>
-      ) : (
-        <p className="text-center text-base text-gray-500">
-          No dog information available.
-        </p>
-      )}
-    </div>
+        {dogInfo ? (
+          <div className="flex">
+            <div className="flex justify-center">
+              <img
+                className="h-56 w-56 rounded-lg object-cover"
+                src={dogInfo[0].imageUrl}
+                alt={dogInfo[0].dogname}
+              />
+            </div>
+            <div className="mb-6 flex">
+              <div className="p-5 font-bold">
+                <div className="flex items-end gap-3 text-3xl">
+                  {dogInfo[0].dogname}
+                  <div className="flex text-base text-black opacity-50">
+                    {calculateAge(dogInfo[0].birthday)}
+                  </div>
+                </div>
+                <div className="mt-3 flex flex-col gap-4">
+                  <div className="my-1 flex items-center gap-2 text-base">
+                    <div className="rounded-2xl bg-slate-100 px-1 text-zinc-500">
+                      品種
+                    </div>
+                    <div className="flex text-xs text-zinc-500">
+                      {dogInfo[0].breed}
+                    </div>
+                  </div>
+                  <div className="my-1 flex items-center gap-2 text-base">
+                    <div className="rounded-2xl bg-slate-100 px-1 text-zinc-500">
+                      性別
+                    </div>
+                    <div className="flex text-xs text-zinc-500">
+                      {dogInfo[0].gender}
+                    </div>
+                  </div>
+                  <div className="my-1 flex items-center gap-2 text-base">
+                    <div className="rounded-2xl bg-slate-100 px-1 text-zinc-500">
+                      生日
+                    </div>
+                    <div className="flex text-xs text-zinc-500">
+                      {dogInfo[0].birthday}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col">
+                <div className="font-bold text-zinc-600 hover:text-zinc-500">
+                  About me
+                </div>
+                <div className="flex h-auto w-10">{dogInfo[0].description}</div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <p className="text-center text-base text-gray-500">
+            No dog information available.
+          </p>
+        )}
+      </div>
+      <div className="flex items-center justify-center py-3 ">
+        <button
+          className="font-mono text-base font-bold text-gray-400"
+          onClick={handleClick}
+        >
+          <p className="underline-offset-1 hover:text-gray-500 hover:underline">
+            Want to change dog profile?
+          </p>
+        </button>
+      </div>
+    </>
   );
 }
 
