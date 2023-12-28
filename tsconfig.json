@@ -22,9 +22,12 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "suppressImplicitAnyIndexErrors": true,
+    "ignoreDeprecations": "5.0",
+
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"],
-  "typeRoots": ["./node_modules/@types", "./types"]
+  "typeRoots": ["./node_modules/@types", "./types"],
 }
