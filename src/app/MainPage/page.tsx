@@ -4,10 +4,13 @@ import React from "react";
 import { useEffect, useState } from "react";
 import TinderCard from "react-tinder-card";
 
+import { useRouter } from "next/navigation";
+
 import { useDogsInfo } from "../../hooks/useDogsInfo";
 import useUserInfo from "../../hooks/useUserInfo";
 
 import LoadingModal from "@/components/LoadingModal";
+import { pusherClient } from "@/lib/pusher/client";
 
 // import "./styles.css";
 
@@ -42,6 +45,60 @@ function MainPage() {
   const [dislikedDogs, setDislikedDogs] = useState<DogItem[]>([]);
   // const [swipedCards, setSwipedCards] = useState<Set<string>>(new Set());
   // const [animateCard, setAnimateCard] = useState<{ [key: string]: string }>({});
+  const router = useRouter();
+  // const [matched, setMatched] = useState<boolean>(false);
+  useEffect(() => {
+    if (!userId) return;
+    // Private channels are in the format: private-...
+    // Make a channel for the chatroom according to the 2 person's id
+    const channelName = `private-${userId}`;
+    try {
+      pusherClient.subscribe(channelName);
+      const matchDiv = document.getElementById("match-text")!;
+
+      pusherClient.bind("liked:mainpage", (currentMatched: boolean) => {
+        // setMatched(currentMatched);
+        matchDiv.style.display = "inline";
+
+        setTimeout(function () {
+          matchDiv.style.display = "none";
+        }, 2200); // <-- time in milliseconds
+      });
+    } catch (error) {
+      console.log("subscribe error:", error);
+    }
+    // Unsubscribe from pusher events when the component unmounts
+    return () => {
+      pusherClient.unsubscribe(channelName);
+    };
+  }, [userId, router]);
+
+  const MatchedText = () => {
+    const [isMatched, setIsMatched] = useState(false);
+
+    useEffect(() => {
+      // Simulate a delay to show the effect over time
+      const timeoutId = setTimeout(() => {
+        setIsMatched(true);
+      }, 2000);
+
+      // Clear the timeout on component unmount to avoid memory leaks
+      return () => clearTimeout(timeoutId);
+    }, []); // Run the effect only once on component mount
+
+    const textStyle = {
+      fontSize: isMatched ? "6rem" : "4rem", // Larger font size when matched
+      fontWeight: "bold",
+      color: isMatched ? "#66cdaa" : "purple", // Light green color when matched
+      transition: "font-size 2s, color 2s", // Transition over 2 seconds for font size and color
+    };
+
+    return (
+      <p className="text-4xl" style={textStyle}>
+        Matched!
+      </p>
+    );
+  };
   function shuffleArray<T>(array: T[]): T[] {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -241,85 +298,87 @@ function MainPage() {
     );
   };
   const renderContent = () => {
-    if (noCardsLeft === true) {
-      return <div className="text-center text-xl">你已經看完所有狗狗了！</div>;
-    } else {
-      return (
-        <>
-          {filteredDogs.map(
-            (dog) =>
-              userId !== dog.displayId && (
-                <TinderCard
-                  // className={`absolute rounded-2xl ${
-                  //   animateCard[dog.displayId] === "left" ? "swipe-left" : ""
-                  // } ${
-                  //   animateCard[dog.displayId] === "right" ? "swipe-right" : ""
-                  // }`}
-                  className="absolute rounded-2xl border-2 border-purple-400 shadow-[0px_0px_60px_0px_rgba(0,0,0,0.2)]"
-                  key={dog.displayId}
-                  onSwipe={(dir) => swiped(dir, dog.displayId)}
-                  onCardLeftScreen={() => outOfFrame(dog.dogname)}
-                  preventSwipe={["up", "down"]}
-                >
-                  <div className="rounded-t-2xl bg-purple-200 p-4 pb-1 pt-6">
-                    <div
-                      style={{ backgroundImage: "url(" + dog.imageUrl + ")" }}
-                      className="relative h-56 w-56 max-w-[300px] overflow-hidden rounded-xl bg-cover bg-center"
-                    ></div>
-                  </div>
-                  <div className="flex max-w-64 flex-col rounded-b-2xl bg-purple-200 px-4 pb-4 shadow-lg">
-                    <div className="w-full py-1 pl-1 font-bold">
-                      <div className="flex items-end gap-3 text-3xl">
-                        {dog.dogname}
-                        <div className="flex text-base text-black opacity-50">
-                          {calculateAge(dog.birthday)}
+    // if (noCardsLeft === true) {
+    //   return <div className="text-center text-xl">你已經看完所有狗狗了！</div>;
+    // } else {
+    return (
+      <>
+        {!noCardsLeft ? (
+          <>
+            {filteredDogs.map(
+              (dog) =>
+                userId !== dog.displayId && (
+                  <TinderCard
+                    // className={`absolute rounded-2xl ${
+                    //   animateCard[dog.displayId] === "left" ? "swipe-left" : ""
+                    // } ${
+                    //   animateCard[dog.displayId] === "right" ? "swipe-right" : ""
+                    // }`}
+                    className="absolute rounded-2xl border-2 border-purple-400 shadow-[0px_0px_60px_0px_rgba(0,0,0,0.2)]"
+                    key={dog.displayId}
+                    onSwipe={(dir) => swiped(dir, dog.displayId)}
+                    onCardLeftScreen={() => outOfFrame(dog.dogname)}
+                    preventSwipe={["up", "down"]}
+                  >
+                    <div className="rounded-t-2xl bg-purple-200 p-4 pb-1 pt-6">
+                      <div
+                        style={{ backgroundImage: "url(" + dog.imageUrl + ")" }}
+                        className="relative h-56 w-56 max-w-[300px] overflow-hidden rounded-xl bg-cover bg-center"
+                      ></div>
+                    </div>
+                    <div className="flex max-w-64 flex-col rounded-b-2xl bg-purple-200 px-4 pb-4 shadow-lg">
+                      <div className="w-full py-1 pl-1 font-bold">
+                        <div className="flex items-end gap-3 text-3xl">
+                          {dog.dogname}
+                          <div className="flex text-base text-black opacity-50">
+                            {calculateAge(dog.birthday)}
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="gap-5 py-1 pl-2 font-bold">
-                      <div className="my-1 flex items-center gap-2 text-base">
-                        <div className="rounded-2xl bg-slate-100 px-1 text-zinc-500">
-                          品種
+                      <div className="gap-5 py-1 pl-2 font-bold">
+                        <div className="my-1 flex items-center gap-2 text-base">
+                          <div className="rounded-2xl bg-slate-100 px-1 text-zinc-500">
+                            品種
+                          </div>
+                          <div className="flex text-xs text-zinc-500">
+                            {dog.breed}
+                          </div>
                         </div>
-                        <div className="flex text-xs text-zinc-500">
-                          {dog.breed}
+                        <div className="my-1 flex items-center gap-2 text-base">
+                          <div className="rounded-2xl bg-slate-100 px-1 text-zinc-500">
+                            性別
+                          </div>
+                          <div className="flex text-xs text-zinc-500">
+                            {dog.gender}
+                          </div>
+                        </div>
+                        <div className="my-1 flex items-center gap-2 text-base">
+                          <div className="rounded-2xl bg-slate-100 px-1 text-zinc-500">
+                            生日
+                          </div>
+                          <div className="flex text-xs text-zinc-500">
+                            {dog.birthday}
+                          </div>
                         </div>
                       </div>
-                      <div className="my-1 flex items-center gap-2 text-base">
-                        <div className="rounded-2xl bg-slate-100 px-1 text-zinc-500">
-                          性別
-                        </div>
-                        <div className="flex text-xs text-zinc-500">
-                          {dog.gender}
-                        </div>
+                      <div className="flex items-center pl-1 font-bold text-zinc-600">
+                        About me
                       </div>
-                      <div className="my-1 flex items-center gap-2 text-base">
-                        <div className="rounded-2xl bg-slate-100 px-1 text-zinc-500">
-                          生日
-                        </div>
-                        <div className="flex text-xs text-zinc-500">
-                          {dog.birthday}
-                        </div>
+                      <div className="my-1 flex h-auto items-center break-words px-2 text-base text-gray-700">
+                        <p
+                          className={`text-start ${
+                            dog.isExpanded
+                              ? "line-clamp-none h-auto w-52"
+                              : "line-clamp-1"
+                          }`}
+                          onClick={() => toggleDescription(dog.id)}
+                        >
+                          {dog.description}
+                        </p>
                       </div>
-                    </div>
-                    <div className="flex items-center pl-1 font-bold text-zinc-600">
-                      About me
-                    </div>
-                    <div className="my-1 flex h-auto items-center break-words px-2 text-base text-gray-700">
-                      <p
-                        className={`text-start ${
-                          dog.isExpanded
-                            ? "line-clamp-none h-auto w-52"
-                            : "line-clamp-1"
-                        }`}
-                        onClick={() => toggleDescription(dog.id)}
-                      >
-                        {dog.description}
-                      </p>
-                    </div>
 
-                    {/* <div className="absolute bottom-0 left-0 right-0 flex justify-around p-4">
+                      {/* <div className="absolute bottom-0 left-0 right-0 flex justify-around p-4">
                       <button
                         className="rounded bg-red-500 px-4 py-2 text-white"
                         onClick={() => animateSwipe("left", dog.displayId)}
@@ -333,18 +392,27 @@ function MainPage() {
                         Like
                       </button>
                     </div> */}
-                  </div>
-                </TinderCard>
-              ),
-          )}
-        </>
-      );
-    }
+                    </div>
+                  </TinderCard>
+                ),
+            )}
+          </>
+        ) : (
+          <div className="text-center text-xl">你已經看完所有狗狗了！</div>
+        )}
+      </>
+    );
   };
   return (
     <div className="flex h-screen w-[60%] flex-col items-center justify-center">
       <div className="flex h-[400px] items-center justify-center">
         {renderContent()}
+      </div>
+      <div
+        id="match-text"
+        className="absolute hidden items-center justify-center"
+      >
+        <MatchedText />
       </div>
     </div>
   );

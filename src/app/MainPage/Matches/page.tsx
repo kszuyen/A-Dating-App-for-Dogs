@@ -1,14 +1,14 @@
 "use client";
 
+import LoadingModal from "@/components/LoadingModal";
 import { useMatches } from "@/hooks/useMatches";
 
 import DogCard from "./_components/DogCard";
-import LoadingModal from "@/components/LoadingModal";
 
 function MessagePage() {
   const { matches, loading } = useMatches();
   if (loading) {
-    return <LoadingModal/>;
+    return <LoadingModal />;
   }
   if (matches.length === 0) {
     return <>No matches yet!!</>;
