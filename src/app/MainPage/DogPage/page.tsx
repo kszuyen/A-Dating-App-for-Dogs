@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 
+import LoadingModal from "@/components/LoadingModal";
+
 // import { auth } from "@/lib/auth";
 
 interface DogInfo {
@@ -55,7 +57,7 @@ function DogPage() {
   }, []);
 
   // 條件式渲染
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <LoadingModal />;
   if (error) return <p>Error: {error}</p>;
 
   return (

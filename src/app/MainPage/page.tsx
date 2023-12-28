@@ -6,6 +6,7 @@ import TinderCard from "react-tinder-card";
 
 import { useDogsInfo } from "../../hooks/useDogsInfo";
 import useUserInfo from "../../hooks/useUserInfo";
+import LoadingModal from "@/components/LoadingModal";
 
 // import "./styles.css";
 
@@ -217,7 +218,8 @@ function MainPage() {
     console.log(name + " left the screen!");
   };
 
-  if (loading) return <div>Loading...</div>;
+  // if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingModal />;
   if (error) return <div>Error: {error}</div>;
   const toggleDescription = (dogId: number) => {
     setFilteredDogs((prevDogs) =>

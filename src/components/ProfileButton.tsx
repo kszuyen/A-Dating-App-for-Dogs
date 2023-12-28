@@ -8,7 +8,14 @@ import UserAvatar from "@/components/UserAvatar";
 import { useDogById } from "@/hooks/useDogById";
 import useUserInfo from "@/hooks/useUserInfo";
 
-export default function ProfileButton() {
+type ProfileButtonProps = {
+  isActive: boolean;
+  setActiveLink: (link: string) => void;
+};
+export default function ProfileButton({
+  isActive,
+  setActiveLink,
+}: ProfileButtonProps) {
   const { userId, username } = useUserInfo();
 
   const { dogData } = useDogById(userId || "");
@@ -17,10 +24,15 @@ export default function ProfileButton() {
   return (
     <button
       // className="flex items-center gap-2 rounded-full p-3 text-start"
-      className="flex items-center gap-2 rounded-full p-3 text-start transition-colors duration-300 hover:bg-gray-200"
+      className={`${
+        isActive ? "bg-purple-100" : ""
+      } flex items-center gap-2 rounded-full p-3 text-start transition-colors duration-300 hover:bg-gray-200`}
       // go to home page without any query params to allow the user to change their username and handle
       // see src/components/NameDialog.tsx for more details
-      onClick={() => router.push("/MainPage/DogPage")}
+      onClick={() => {
+        setActiveLink("/MainPage/DogPage");
+        router.push("/MainPage/DogPage");
+      }}
     >
       {userId && <UserAvatar displayId={userId} />}
       <div className="max-lg w-40">

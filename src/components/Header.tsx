@@ -15,18 +15,6 @@ import ProfileButton from "./ProfileButton";
 
 // import Image from "next/image";
 
-// import Image from "next/image";
-
-// import Image from "next/image";
-
-// import Image from "next/image";
-
-// import Image from "next/image";
-
-// import Image from "next/image";
-
-// import Image from "next/image";
-
 export default function Header() {
   const [activeLink, setActiveLink] = useState("/MainPage");
   return (
@@ -67,7 +55,10 @@ export default function Header() {
         <HeaderButton Icon={User} text="Profile" />
         <HeaderButton Icon={MoreHorizontal} text="More" /> */}
       </div>
-      <ProfileButton />
+      <ProfileButton
+        setActiveLink={setActiveLink}
+        isActive={activeLink === "/MainPage/DogPage"}
+      />
     </aside>
   );
 }

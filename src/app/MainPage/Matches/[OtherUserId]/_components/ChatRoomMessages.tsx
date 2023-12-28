@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { format } from "date-fns";
 
+import LoadingModal from "@/components/LoadingModal";
 import UserAvatar from "@/components/UserAvatar";
 // import { eq } from "drizzle-orm";
 // import { Button } from "@/components/ui/button";
@@ -21,7 +22,7 @@ function ChatRoomMessages() {
 
   const { userId, messages, loading } = useMessages(bottomRef);
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingModal />;
   }
   if (!messages) {
     return <div>Start a conversation!!</div>;
