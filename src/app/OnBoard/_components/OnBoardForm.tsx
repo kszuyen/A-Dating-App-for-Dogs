@@ -2,7 +2,9 @@
 
 import { ChangeEvent, useState } from "react";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 import LoadingModal from "@/components/LoadingModal";
 import { Button } from "@/components/ui/button";
@@ -22,7 +24,9 @@ function OnBoardForm({}: {}) {
     birthday: "",
     description: "",
   });
+  const searchParams = useSearchParams();
 
+  const edit = searchParams.get("edit");
   // from dogImageInput
   const [validatedImage, setValidatedImage] = useState<File | undefined>(
     undefined,
@@ -144,8 +148,20 @@ function OnBoardForm({}: {}) {
       <>
         <div className="flex w-full items-center justify-center px-4 md:max-w-xs lg:max-w-sm xl:max-w-md">
           <Card className="mx-auto w-full max-w-md overflow-hidden rounded-lg bg-white shadow-lg">
-            <CardHeader className="bg-purple-500 p-4 text-lg font-semibold text-white">
-              <CardTitle>Fill out your dog's info!</CardTitle>
+            <CardHeader className="flex flex-row bg-purple-500 p-4 text-lg font-semibold text-white">
+              {edit === "true" && (
+                <>
+                  <Link
+                    className="mr-2 flex justify-items-start rounded-lg bg-purple-50 px-2 py-1 text-sm text-gray-500 transition duration-200 ease-in-out hover:bg-gray-100"
+                    href="/MainPage/DogPage"
+                  >
+                    <p>Back</p>
+                  </Link>
+                </>
+              )}
+              <CardTitle className="flex flex-grow">
+                {edit === "true" ? "Edit" : "Fill out"} your dog's info!
+              </CardTitle>
             </CardHeader>
             <CardContent className="p-4">
               <div>
