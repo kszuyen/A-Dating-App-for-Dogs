@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import type { Dog } from "@/lib/types/db";
-
+import { pusherClient } from "@/lib/pusher/client";
+import { find } from "lodash";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 type matchesType = {
+  dog: {
     id: string;
     dogname: string;
     breed: string;
@@ -10,17 +14,53 @@ type matchesType = {
     description: string;
     image_url: string;
     thumbnail_url: string;
-    lastMessage: string | null;
+  },
+  lastMessage: {
+    content: string | null;
     senderId: string | null;
-    sentAt: string | null;
+    sentAt: Date | null;
+  }
 }
 
 export function useMatches(): {
-  matches: any[];
+  matches: matchesType[];
   loading: boolean;
 } {
-  const [matches, setMatches] = useState([]);
+  const [matches, setMatches] = useState<matchesType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+  
+  useEffect(() => {
+    // Private channels are in the format: private-...
+    // Make a channel for the chatroom according to the 2 person's id
+    if (!userId) {
+      return;
+    }
+    const channelName =`private-${userId}`;
+    try {
+      pusherClient.subscribe(channelName);
+
+      pusherClient.bind("liked:matchpage", (newMatch: matchesType) => {
+        setMatches((prev) => {
+          if (find(prev, { dog: newMatch.dog })) {
+            return prev;
+          }
+
+          return [newMatch, ...prev]
+        });
+
+      });
+    } catch (error) {
+      console.log("subscribe error:", error);
+      // router.push("/Matches");
+    }
+    // Unsubscribe from pusher events when the component unmounts
+    return () => {
+      pusherClient.unsubscribe(channelName);
+    };
+  }, [router, userId]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +71,6 @@ export function useMatches(): {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        console.log(data);
         // Process and format data if needed
         setMatches(data);
       } catch (error) {

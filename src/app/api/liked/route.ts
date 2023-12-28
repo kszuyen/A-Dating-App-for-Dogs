@@ -1,13 +1,15 @@
 // route.ts
 import { NextResponse, type NextRequest } from "next/server";
 
-import { first } from "cheerio/lib/api/traversing";
-import { and, eq } from "drizzle-orm";
+// import { first } from "cheerio/lib/api/traversing";
+import { and, desc, eq, or } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "@/db";
-import { likedTable } from "@/db/schema";
-
+import { dogsTable, likedTable, messagesTable } from "@/db/schema";
+import Pusher from "pusher";
+import { privateEnv } from "@/lib/env/private";
+import { publicEnv } from "@/lib/env/public";
 // 更新為您的 likedTable
 // import { auth } from "@/lib/auth";
 
@@ -40,6 +42,55 @@ export async function PUT(request: NextRequest) {
   try {
     const data = (await request.json()) as PostLikedRequest;
     const parsedData = postLikedRequestSchema.parse(data);
+    async function applypusher() {
+//pusher for main page: channel: my Id
+const [otherpersonLiked] = await db
+.select()
+.from(likedTable)
+.where(
+  and(
+    eq(likedTable.firstId, parsedData.secondId),
+    eq(likedTable.secondId, parsedData.firstId),
+    eq(likedTable.likeStatus, true)
+  )
+);
+  //     // Trigger pusher event
+const pusher = new Pusher({
+  appId: privateEnv.PUSHER_ID,
+  key: publicEnv.NEXT_PUBLIC_PUSHER_KEY,
+  secret: privateEnv.PUSHER_SECRET,
+  cluster: publicEnv.NEXT_PUBLIC_PUSHER_CLUSTER,
+  useTLS: true,
+});
+
+if (parsedData.likeStatus && otherpersonLiked) {
+    // Private channels are in the format: private-...
+  const channelName_1 =`private-${parsedData.firstId}`;
+  await pusher.trigger(channelName_1, "liked:mainpage", {
+    // newMessage: inputMessage
+    currentMatched: true
+  });
+
+  //pusher for match page: channel: otherUserId
+
+  // get my dog's info
+  const [myDogInfo] = await db
+  .select()
+  .from(dogsTable)
+  .where(eq(dogsTable.displayId, parsedData.firstId));
+  
+  const channelName_2 =`private-${parsedData.secondId}`;
+  await pusher.trigger(channelName_2, "liked:matchpage", {
+    dog: myDogInfo,
+    lastMessage: {
+      content: null,
+      senderId: null,
+      sentAt: null,
+    }
+  });
+}
+
+    }
 
     // 檢查是否已存在相同的 like
     const existingLike = await db
@@ -61,6 +112,8 @@ export async function PUT(request: NextRequest) {
         .where(eq(likedTable.id, existingLike[0].id))
         .execute();
 
+        applypusher();
+
       return NextResponse.json(
         { message: "Like updated successfully" },
         { status: 200 },
@@ -76,6 +129,10 @@ export async function PUT(request: NextRequest) {
         likeStatus: parsedData.likeStatus,
       })
       .execute();
+
+      applypusher();
+
+      
 
     return NextResponse.json(
       { message: "Like added successfully" },

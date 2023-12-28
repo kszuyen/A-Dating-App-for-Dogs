@@ -6,6 +6,7 @@ import DogCard from "./_components/DogCard";
 
 function MessagePage() {
   const { matches, loading } = useMatches();
+
   if (loading) {
     return <>Loading...</>;
   }
