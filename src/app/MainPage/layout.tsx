@@ -13,7 +13,7 @@ export default async function MainPageLayout({ children }: Props) {
   const session = await auth();
 
   if (!session?.user) {
-    redirect("/error");
+    redirect("/");
   }
 
   return (
