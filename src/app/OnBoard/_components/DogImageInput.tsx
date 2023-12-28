@@ -33,7 +33,7 @@ const DogImageInput: React.FC<{
 
     if (inferenceResult[0] > 0.8) {
       setIsImageValid(true);
-      setSystemMessage("照片經過系統審核後可以使用！");
+      setSystemMessage("系統辨識狗狗成功！");
       setValidatedImage(file);
     } else {
       setIsImageValid(false);
