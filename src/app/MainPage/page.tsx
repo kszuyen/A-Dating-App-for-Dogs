@@ -6,6 +6,7 @@ import TinderCard from "react-tinder-card";
 
 import { useDogsInfo } from "../../hooks/useDogsInfo";
 import useUserInfo from "../../hooks/useUserInfo";
+
 import LoadingModal from "@/components/LoadingModal";
 
 // import "./styles.css";
@@ -296,7 +297,7 @@ function MainPage() {
                     </div>
                     <div className="my-1 flex items-center px-2 text-base text-gray-700">
                       <p
-                        className={`line-clamp-2 text-start ${
+                        className={`line-clamp-1 text-start ${
                           dog.isExpanded ? "line-clamp-none" : ""
                         }`}
                         onClick={() => toggleDescription(dog.id)}
