@@ -171,11 +171,11 @@ function OnBoardForm({}: {}) {
                   setProgress={setProgress}
                 />
               </div>
-              <form className="flex flex-col gap-4">
+              <form className="flex flex-col gap-4 font-mono ">
                 <input
                   type="text"
                   name="dogname"
-                  placeholder="Dog's name"
+                  placeholder="狗狗的名字..."
                   value={dogData.dogname}
                   onChange={handleInputChange}
                   className="mt-3 rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
@@ -191,7 +191,7 @@ function OnBoardForm({}: {}) {
                 <input
                   type="text"
                   name="breed"
-                  placeholder="Breed"
+                  placeholder="狗狗的品種"
                   value={dogData.breed}
                   onChange={handleInputChange}
                   className="rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
@@ -206,7 +206,7 @@ function OnBoardForm({}: {}) {
                   className="rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                 >
                   <option value="" disabled hidden>
-                    Choose gender
+                    狗狗的性別
                   </option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
@@ -215,11 +215,15 @@ function OnBoardForm({}: {}) {
                   <div className="text-sm text-red-500">請填寫狗狗的性別</div>
                 )}
                 <input
-                  type="date"
+                  type="text"
                   name="birthday"
-                  placeholder="Birthday"
-                  value={dogData.birthday}
-                  onChange={handleInputChange}
+                  placeholder="狗狗的生日"
+                  onFocus={(e) => (e.target.type = "date")}
+                  onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+                    if (e.target.value === "") {
+                      e.target.type = "text";
+                    }
+                  }}
                   className="rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                 />
                 {invalidBirthday && (
@@ -227,18 +231,18 @@ function OnBoardForm({}: {}) {
                 )}
                 <textarea
                   name="description"
-                  placeholder="Description"
+                  placeholder="介紹一下您的狗狗吧"
                   value={dogData.description}
                   onChange={handleInputChange}
                   className="rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                 />
                 {invalidDescription && (
-                  <div className="text-sm text-red-500">
+                  <div className="font-mono text-sm text-red-500">
                     介紹一下您的狗狗吧！
                   </div>
                 )}
                 {invalidDescriptionLength && (
-                  <div className="text-sm text-yellow-500">
+                  <div className="font-mono text-sm text-yellow-500">
                     請以更簡短的方式描述狗狗
                   </div>
                 )}

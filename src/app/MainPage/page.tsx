@@ -306,10 +306,12 @@ function MainPage() {
                     <div className="flex items-center pl-1 font-bold text-zinc-600">
                       About me
                     </div>
-                    <div className="my-1 flex items-center px-2 text-base text-gray-700">
+                    <div className="my-1 flex h-auto items-center break-words px-2 text-base text-gray-700">
                       <p
-                        className={`line-clamp-1 text-start ${
-                          dog.isExpanded ? "line-clamp-none" : ""
+                        className={`text-start ${
+                          dog.isExpanded
+                            ? "line-clamp-none h-auto w-52"
+                            : "line-clamp-1"
                         }`}
                         onClick={() => toggleDescription(dog.id)}
                       >
