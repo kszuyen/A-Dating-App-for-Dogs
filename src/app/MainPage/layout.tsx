@@ -19,10 +19,10 @@ export default async function MainPageLayout({ children }: Props) {
   return (
     <div className="mx-auto flex">
       <SessionProvider>
-        <div className="sticky top-0 h-screen">
+        <div className="sticky top-0 h-screen ">
           <Header />
         </div>
-        <main className="flex flex-grow flex-row items-center justify-between text-center">
+        <main className="flex flex-grow flex-row items-center justify-between bg-purple-50 text-center">
           <Separator orientation="vertical" />
           {children}
           <Separator orientation="vertical" />

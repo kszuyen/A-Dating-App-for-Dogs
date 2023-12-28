@@ -27,6 +27,7 @@ interface DogItem {
   description: string;
   imageUrl: string;
   thumbnailUrl: string;
+  isExpanded: boolean;
 }
 
 function MainPage() {
@@ -37,7 +38,7 @@ function MainPage() {
   const [swipedCardCount, setSwipedCardCount] = useState(0);
   const [noCardsLeft, setNoCardsLeft] = useState(false);
   const [dislikedDogs, setDislikedDogs] = useState<DogItem[]>([]);
-  const [swipedCards, setSwipedCards] = useState<Set<string>>(new Set());
+  // const [swipedCards, setSwipedCards] = useState<Set<string>>(new Set());
   // const [animateCard, setAnimateCard] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
@@ -52,25 +53,38 @@ function MainPage() {
         const allDogsData: DogItem[] = await dogsResponse.json();
 
         // 過濾掉已經在 liked 表中的狗狗
-        const likedIds = new Set(
-          likedData.map((item: LikedItem) => item.secondId),
+        const userLikedIds = new Set(
+          likedData
+            .filter((item: LikedItem) => item.firstId === userId)
+            .map((item: LikedItem) => item.secondId),
         );
         const unseenDogs = allDogsData.filter(
-          (dog: DogItem) => !likedIds.has(dog.displayId),
+          (dog: DogItem) => !userLikedIds.has(dog.displayId),
         );
 
         // Filter out dogs that are marked as disliked
         const dislikedDogIds = new Set(
           likedData
-            .filter((item) => !item.likeStatus)
-            .map((item) => item.secondId),
+            .filter(
+              (item: LikedItem) => item.firstId === userId && !item.likeStatus,
+            )
+            .map((item: LikedItem) => item.secondId),
         );
         const dislikedDogs = allDogsData.filter((dog) =>
           dislikedDogIds.has(dog.displayId),
         );
 
         // Combine unseenDogs and dislikedDogs
-        const combinedDogs = [...dislikedDogs, ...unseenDogs];
+        // 組合 unseenDogs 和 dislikedDogs，同時避免重複
+        const combinedDogsIds = new Set();
+        const combinedDogs = [];
+
+        for (let dog of [...dislikedDogs, ...unseenDogs]) {
+          if (!combinedDogsIds.has(dog.displayId)) {
+            combinedDogs.push(dog);
+            combinedDogsIds.add(dog.displayId);
+          }
+        }
 
         setFilteredDogs(combinedDogs);
         setDislikedDogs(dislikedDogs);
@@ -80,7 +94,7 @@ function MainPage() {
     }
     fetchFilterDogs();
     // console.log("noCardsLeft: ", noCardsLeft);
-  }, []);
+  }, [userId]);
 
   const sendLike = async (userId: string, dogDisplayId: string) => {
     try {
@@ -131,23 +145,23 @@ function MainPage() {
       console.error("Submit Error:", error);
     }
   };
-  const handleSwipe = (direction: "left" | "right", dogDisplayId: string) => {
-    setSwipedCards((prev) => {
-      const newSwipedCards = new Set(prev);
-      newSwipedCards.add(dogDisplayId);
-      return newSwipedCards;
-    });
+  // const handleSwipe = (direction: "left" | "right", dogDisplayId: string) => {
+  //   setSwipedCards((prev) => {
+  //     const newSwipedCards = new Set(prev);
+  //     newSwipedCards.add(dogDisplayId);
+  //     return newSwipedCards;
+  //   });
 
-    if (typeof userId === "string") {
-      if (direction === "left") {
-        sendDislike(userId, dogDisplayId);
-      } else if (direction === "right") {
-        sendLike(userId, dogDisplayId);
-      }
-    } else {
-      console.error("UserId is undefined");
-    }
-  };
+  //   if (typeof userId === "string") {
+  //     if (direction === "left") {
+  //       sendDislike(userId, dogDisplayId);
+  //     } else if (direction === "right") {
+  //       sendLike(userId, dogDisplayId);
+  //     }
+  //   } else {
+  //     console.error("UserId is undefined");
+  //   }
+  // };
   const swiped = (direction: any, dogDisplayId: string) => {
     console.log("removing: " + dogDisplayId);
     setLastDirection(direction);
@@ -205,7 +219,13 @@ function MainPage() {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
-
+  const toggleDescription = (dogId: number) => {
+    setFilteredDogs((prevDogs) =>
+      prevDogs.map((dog) =>
+        dog.id === dogId ? { ...dog, isExpanded: !dog.isExpanded } : dog,
+      ),
+    );
+  };
   const renderContent = () => {
     if (noCardsLeft === true) {
       return <div className="text-center text-xl">你已經看完所有狗狗了！</div>;
@@ -233,7 +253,7 @@ function MainPage() {
                       className="relative h-56 w-56 max-w-[300px] overflow-hidden rounded-xl bg-cover bg-center"
                     ></div>
                   </div>
-                  <div className="flex flex-col rounded-b-2xl bg-purple-200 px-4 pb-4 shadow-lg">
+                  <div className="flex max-w-64 flex-col rounded-b-2xl bg-purple-200 px-4 pb-4 shadow-lg">
                     <div className="w-full py-1 pl-1 font-bold">
                       <div className="flex items-end gap-3 text-3xl">
                         {dog.dogname}
@@ -269,12 +289,20 @@ function MainPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center pl-1 font-bold text-zinc-600 hover:text-zinc-500">
+                    <div className="flex items-center pl-1 font-bold text-zinc-600">
                       About me
                     </div>
                     <div className="my-1 flex items-center px-2 text-base text-gray-700">
-                      <p>{dog.description}</p>
+                      <p
+                        className={`line-clamp-2 text-start ${
+                          dog.isExpanded ? "line-clamp-none" : ""
+                        }`}
+                        onClick={() => toggleDescription(dog.id)}
+                      >
+                        {dog.description}
+                      </p>
                     </div>
+
                     {/* <div className="absolute bottom-0 left-0 right-0 flex justify-around p-4">
                       <button
                         className="rounded bg-red-500 px-4 py-2 text-white"
