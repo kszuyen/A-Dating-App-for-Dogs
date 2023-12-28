@@ -16,6 +16,7 @@ function AuthInput({ label, type, value, setValue }: Props) {
     <div className="w-full">
       <Label>{label}</Label>
       <Input
+        className="bg-white"
         type={type}
         value={value}
         onChange={(e) => {

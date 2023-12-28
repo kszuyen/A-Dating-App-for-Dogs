@@ -7,7 +7,7 @@ import OnBoardForm from "./_components/OnBoardForm";
 function OnBoardPage() {
   return (
     <>
-      <Navbar showForm={true} setShowForm={() => {}} setIsSignUp={() => {}} />
+      <Navbar showButton={true} setShowForm={() => {}} setIsSignUp={() => {}} />
       <OnBoardForm />
     </>
   );
