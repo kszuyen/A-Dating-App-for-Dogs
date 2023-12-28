@@ -28,10 +28,13 @@ const Navbar = ({
           </a>
         </div>
       </div>
+      <div className="m-5 flex flex-row items-center justify-center font-mono text-2xl font-bold">
+        " It's a match! "
+      </div>
       {!showForm && (
-        <div className="mt-10 flex items-center justify-center">
+        <div className="mb-5 mt-10 flex items-center justify-center">
           <button
-            className="animate-bounce rounded-full bg-gradient-to-r from-blue-300 to-yellow-300 px-2 py-1 text-center text-base font-bold text-black hover:bg-gradient-to-r hover:from-blue-400 hover:to-yellow-400"
+            className="animate-bounce rounded-full bg-gradient-to-r from-purple-400 to-rose-400 px-4 py-2 text-center font-mono text-3xl font-bold text-zinc-100 hover:bg-gradient-to-r hover:from-purple-300 hover:to-rose-300 "
             onClick={handleClick}
           >
             Log in

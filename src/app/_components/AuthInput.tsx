@@ -13,9 +13,10 @@ type Props = {
 
 function AuthInput({ label, type, value, setValue }: Props) {
   return (
-    <div className="w-full">
-      <Label>{label}</Label>
+    <div className="w-full ">
+      <Label className="text-xl text-purple-600">{label}</Label>
       <Input
+        className="bg-purple-100 p-6 px-3 text-2xl text-purple-700 shadow-inner hover:bg-purple-200"
         type={type}
         value={value}
         onChange={(e) => {

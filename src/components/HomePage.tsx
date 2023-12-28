@@ -20,14 +20,17 @@ const HomePage = ({
   return (
     <>
       {!showForm && (
-        <div className="items-center text-center font-bold">
-          <h1 className="pu-8 px-2 py-4 text-3xl ">Swipe Right@</h1>
-          <h2 className="px-2 py-4 text-2xl">Meet other dogs!</h2>
+        <div className="flex items-center justify-center text-center font-bold">
+          {/* <h1 className="pu-8 px-2 py-4 text-3xl ">Swipe Right@</h1>
+          <h2 className="px-2 py-4 text-2xl">Meet other dogs!</h2> */}
+          <p className="pl-8 font-mono text-xl  text-purple-400">
+            Don't have an account?
+          </p>
           <button
-            className="rounded-full bg-gradient-to-r from-blue-300 to-yellow-300 px-4 py-2 text-center text-xl font-bold hover:bg-gradient-to-r hover:from-blue-400 hover:to-yellow-400"
+            className="px-4 py-2 text-center font-mono text-xl font-bold text-purple-600 underline-offset-4  hover:underline"
             onClick={handleClick}
           >
-            {authToken ? "Signout" : "Creat Account"}
+            {authToken ? "Signout" : "Click here"}
           </button>
         </div>
       )}
