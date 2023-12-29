@@ -1,28 +1,8 @@
 "use client";
 
-import { redirect } from "next/navigation";
-import { useRouter } from "next/navigation";
-
-import LoadingModal from "@/components/LoadingModal";
-// import Navbar from "@/components/Navbar";
-import { useDogById } from "@/hooks/useDogById";
-import useUserInfo from "@/hooks/useUserInfo";
-
 import OnBoardForm from "./_components/OnBoardForm";
 
 function OnBoardPage() {
-  // const { userId } = useUserInfo();
-  // if (!userId) {
-  //   redirect("/");
-  // }
-  // const router = useRouter();
-  // const { dogData, loading, error } = useDogById(userId);
-  // if (dogData.displayId) {
-  //   router.push("/MainPage");
-  // }
-  // if (loading) return <LoadingModal />;
-  // else if (error) return <p>Error: {error}</p>;
-  // else
   return (
     <>
       <div className="h-full w-full bg-purple-50">

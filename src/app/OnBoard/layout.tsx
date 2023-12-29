@@ -14,7 +14,7 @@ type Props = {
 };
 
 export default async function OnBoardLayout({ children }: Props) {
-  const router = useRouter();
+  // const router = useRouter();
   const session = await auth();
 
   if (!session?.user) {
@@ -33,9 +33,9 @@ export default async function OnBoardLayout({ children }: Props) {
   return (
     // overflow-hidden for parent to hide scrollbar
     <main className="flex-rows fixed top-0 flex h-screen w-full overflow-hidden">
-      <SessionProvider>
-        <div className="w-full overflow-y-scroll bg-purple-50">{children}</div>
-      </SessionProvider>
+      {/* <SessionProvider> */}
+      <div className="w-full overflow-y-scroll bg-purple-50">{children}</div>
+      {/* </SessionProvider> */}
     </main>
   );
 }
