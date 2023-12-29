@@ -55,12 +55,13 @@ function MainPage() {
     const channelName = `private-${userId}`;
     try {
       pusherClient.subscribe(channelName);
-      const matchDiv = document.getElementById("match-text")!;
 
       pusherClient.bind("liked:mainpage", (currentMatched: boolean) => {
         // setMatched(currentMatched);
         if (currentMatched) {
           console.log("accepted pusher trigger");
+          const matchDiv = document.getElementById("match-text")!;
+          console.log(matchDiv);
           matchDiv.style.display = "inline";
 
           setTimeout(function () {
