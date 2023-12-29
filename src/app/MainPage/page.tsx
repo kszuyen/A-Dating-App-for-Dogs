@@ -37,6 +37,7 @@ interface DogItem {
 
 function MainPage() {
   // const [lastDirection, setLastDirection] = useState();
+  const [pageLoading, setPageLoading] = useState<boolean>(false);
   const { loading, error } = useDogsInfo();
   const { userId } = useUserInfo();
   const [filteredDogs, setFilteredDogs] = useState<DogItem[]>([]);
@@ -112,6 +113,8 @@ function MainPage() {
     if (!userId) return;
     async function fetchFilterDogs() {
       try {
+        setPageLoading(true);
+
         // 獲取 liked 數據
         const likedResponse = await fetch("/api/liked");
         const likedData: LikedItem[] = await likedResponse.json();
@@ -152,6 +155,7 @@ function MainPage() {
         if (combinedDogs.length === 0) {
           setNoCardsLeft(true);
         }
+        setPageLoading(false);
         // setDislikedDogs(dislikedDogs);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -255,7 +259,7 @@ function MainPage() {
   };
 
   // if (loading) return <div>Loading...</div>;
-  if (loading) return <LoadingModal />;
+  if (loading || pageLoading) return <LoadingModal />;
   if (error) return <div>Error: {error}</div>;
   const toggleDescription = (dogId: number) => {
     setFilteredDogs((prevDogs) =>
