@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 
 import { useDogsInfo } from "../../hooks/useDogsInfo";
 import useUserInfo from "../../hooks/useUserInfo";
+import { log } from "ndarray-ops";
 
 import LoadingModal from "@/components/LoadingModal";
 import { pusherClient } from "@/lib/pusher/client";
@@ -107,6 +108,7 @@ function MainPage() {
     return array;
   }
   useEffect(() => {
+    if (!userId) return;
     async function fetchFilterDogs() {
       try {
         // 獲取 liked 數據
@@ -126,7 +128,6 @@ function MainPage() {
         const unseenDogs = allDogsData.filter(
           (dog: DogItem) => !userLikedIds.has(dog.displayId),
         );
-
         // Filter out dogs that are marked as disliked
         const dislikedDogIds = new Set(
           likedData
@@ -141,15 +142,22 @@ function MainPage() {
 
         // Combine unseenDogs and dislikedDogs
         // 組合 unseenDogs 和 dislikedDogs，同時避免重複
-        const combinedDogsIds = new Set();
-        const combinedDogs = [];
+        // const combinedDogsIds = new Set();
+        // const combinedDogs = [];
 
-        for (let dog of [...dislikedDogs, ...unseenDogs]) {
-          if (!combinedDogsIds.has(dog.displayId)) {
-            combinedDogs.push(dog);
-            combinedDogsIds.add(dog.displayId);
-          }
-        }
+        // for (let dog of [...dislikedDogs, ...unseenDogs]) {
+        //   if (!combinedDogsIds.has(dog.displayId)) {
+        //     combinedDogs.push(dog);
+        //     combinedDogsIds.add(dog.displayId);
+        //   }
+        // }
+
+        // 分別洗牌
+        const shuffledDislikedDogs = shuffleArray([...dislikedDogs]);
+        const shuffledUnseenDogs = shuffleArray([...unseenDogs]);
+
+        // 合併陣列
+        const combinedDogs = [...shuffledDislikedDogs, ...shuffledUnseenDogs];
 
         setFilteredDogs(combinedDogs);
         // setDislikedDogs(dislikedDogs);
