@@ -1,22 +1,33 @@
-## environment
+# Tindog - A Dating App for Dogs
 
-## Install dependencies:
+## Deploy at Local
+
+### Install dependencies:
 
 ```bash
 yarn install
 ```
+### Environment variables
 
-## Migrate to database:
+Copy `.env.example` and create a new `.env.local` file.  
+Fill out the requiring variables.
+
+### Migrate to database:
 
 ```bash
 yarn migrate
 ```
 
-## Run the development server:
+### Run the development server:
 
 ```bash
 yarn dev
 ```
+
+### Open on browser
+
+Open `https://localhost:3000` on any browser.
+
 
 ## Contributing
 
