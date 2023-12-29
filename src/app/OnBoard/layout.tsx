@@ -1,5 +1,5 @@
 import { SessionProvider } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 import { eq } from "drizzle-orm";
 
@@ -13,10 +13,11 @@ type Props = {
 };
 
 export default async function OnBoardLayout({ children }: Props) {
+  const router = useRouter();
   const session = await auth();
 
   if (!session?.user) {
-    redirect("/");
+    router.push("/");
   } else {
     const [dogInfo] = await db
       .select()
@@ -24,7 +25,7 @@ export default async function OnBoardLayout({ children }: Props) {
       .where(eq(dogsTable.displayId, session.user.id))
       .limit(1);
     if (dogInfo) {
-      redirect("/MainPage");
+      router.push("/MainPage");
     }
   }
 
