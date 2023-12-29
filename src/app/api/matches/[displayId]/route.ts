@@ -6,6 +6,7 @@ import { and, eq, ne, or, inArray, desc } from "drizzle-orm";
 import { db } from "@/db";
 import { dogsTable, likedTable, messagesTable } from "@/db/schema";
 
+export const dynamic = 'force-dynamic';
 export async function GET(
   req: NextRequest,
   {

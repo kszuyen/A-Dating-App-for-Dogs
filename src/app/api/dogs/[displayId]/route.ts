@@ -8,6 +8,7 @@ import { db } from "@/db";
 import { dogsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
+export const dynamic = 'force-dynamic';
 export async function GET(
   req: NextRequest,
   {

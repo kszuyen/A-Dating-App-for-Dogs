@@ -6,6 +6,7 @@ import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { dogsTable } from "@/db/schema";
 
+export const dynamic = 'force-dynamic';
 export async function GET(request: NextRequest) {
   try {
     const dbDogs = await db.select().from(dogsTable).execute();
