@@ -106,7 +106,7 @@ function OnBoardForm({}: {}) {
     } else {
       setInvalidDescription(false);
     }
-    if (dogData.description.length > 30) {
+    if (dogData.description.length > 100) {
       setInvalidDescriptionLength(true);
       return;
     } else {

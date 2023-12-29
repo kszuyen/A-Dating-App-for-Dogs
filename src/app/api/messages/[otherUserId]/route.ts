@@ -31,10 +31,7 @@ export async function POST(request: NextRequest) {
     sentAt,
   };
   // db.messages.push(newMessage);
-  const [inputMessage] = await db
-    .insert(messagesTable)
-    .values(newMessage)
-    .returning();
+  const [inputMessage] = await db.insert(messagesTable).values(newMessage).returning();
 
   //     // Trigger pusher event
   const pusher = new Pusher({

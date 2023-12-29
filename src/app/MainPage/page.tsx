@@ -160,6 +160,9 @@ function MainPage() {
         const combinedDogs = [...shuffledDislikedDogs, ...shuffledUnseenDogs];
 
         setFilteredDogs(combinedDogs);
+        if (filteredDogs.length === 0) {
+          setNoCardsLeft(true);
+        }
         // setDislikedDogs(dislikedDogs);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -272,6 +275,7 @@ function MainPage() {
       ),
     );
   };
+
   const renderContent = () => {
     return (
       <>
