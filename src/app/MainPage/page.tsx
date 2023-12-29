@@ -148,7 +148,7 @@ function MainPage() {
         const combinedDogs = [...shuffledDislikedDogs, ...shuffledUnseenDogs];
 
         setFilteredDogs(combinedDogs);
-        if (filteredDogs.length === 0) {
+        if (combinedDogs.length === 0) {
           setNoCardsLeft(true);
         }
         // setDislikedDogs(dislikedDogs);
