@@ -60,6 +60,7 @@ function MainPage() {
       pusherClient.bind("liked:mainpage", (currentMatched: boolean) => {
         // setMatched(currentMatched);
         if (currentMatched) {
+          console.log("accepted pusher trigger");
           matchDiv.style.display = "inline";
 
           setTimeout(function () {
@@ -74,7 +75,7 @@ function MainPage() {
     return () => {
       pusherClient.unsubscribe(channelName);
     };
-  }, [userId, router]);
+  }, [userId, router, loading, pageLoading, noCardsLeft]);
 
   const MatchedText = () => {
     const [isMatched, setIsMatched] = useState(false);
