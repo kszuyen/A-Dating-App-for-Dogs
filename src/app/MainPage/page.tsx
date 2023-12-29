@@ -79,7 +79,7 @@ function MainPage() {
     return () => {
       pusherClient.unsubscribe(channelName);
     };
-  }, [userId, router]);
+  }, [userId, router, loading, pageLoading, noCardsLeft]);
 
   const MatchedText = () => {
     const [isMatched, setIsMatched] = useState(false);
