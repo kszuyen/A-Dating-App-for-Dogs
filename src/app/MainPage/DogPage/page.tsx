@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 import LoadingModal from "@/components/LoadingModal";
@@ -53,7 +54,9 @@ function DogPage() {
       ),
     );
   };
-
+  const handleSignOut = () => {
+    signOut();
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -141,7 +144,7 @@ function DogPage() {
                   className={`text-start ${
                     dogInfo[0].isExpanded
                       ? "line-clamp-none h-auto w-96"
-                      : "line-clamp-1"
+                      : "line-clamp-1 hover:text-zinc-400"
                   }`}
                   onClick={() => toggleDescription(dogInfo[0].id)}
                 >
@@ -166,6 +169,14 @@ function DogPage() {
           </p>
         </button>
       </div>
+      <button
+        className="font-mono text-base font-bold text-gray-400"
+        onClick={handleSignOut}
+      >
+        <p className="underline-offset-1 hover:text-gray-500 hover:underline">
+          登出
+        </p>
+      </button>
     </>
   );
 }
