@@ -220,6 +220,8 @@ function OnBoardForm({}: {}) {
                   name="birthday"
                   placeholder="狗狗的生日"
                   onFocus={(e) => (e.target.type = "date")}
+                  value={dogData.birthday} // Add this line
+                  onChange={handleInputChange}
                   onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
                     if (e.target.value === "") {
                       e.target.type = "text";

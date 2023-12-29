@@ -24,7 +24,7 @@ const es = initEdgeStore.context<Context>().create();
 const edgeStoreRouter = es.router({
   myPublicImages: es
     .imageBucket({
-      maxSize: 1024 * 1024 * 1, // 1MB
+      maxSize: 1024 * 1024 * 10, // 10MB
     })
     .input(
       z.object({
