@@ -60,6 +60,7 @@ export async function PUT(request: NextRequest) {
           eq(likedTable.secondId, parsedData.secondId),
         ),
       )
+      .limit(1)
       .execute();
 
     if (existingLike.length > 0) {

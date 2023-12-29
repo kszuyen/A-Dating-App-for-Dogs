@@ -59,12 +59,13 @@ function MainPage() {
 
       pusherClient.bind("liked:mainpage", (currentMatched: boolean) => {
         // setMatched(currentMatched);
+        if (currentMatched) {
+          matchDiv.style.display = "inline";
 
-        matchDiv.style.display = "inline";
-
-        setTimeout(function () {
-          matchDiv.style.display = "none";
-        }, 2200); // <-- time in milliseconds
+          setTimeout(function () {
+            matchDiv.style.display = "none";
+          }, 2200); // <-- time in milliseconds
+        }
       });
     } catch (error) {
       console.log("subscribe error:", error);
