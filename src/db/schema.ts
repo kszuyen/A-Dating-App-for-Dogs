@@ -81,20 +81,6 @@ export const likedTable = pgTable(
   }),
 );
 
-export const viewedTable = pgTable(
-  "viewed",
-  {
-    id: serial("id").primaryKey(),
-    firstId: uuid("firstId").notNull(),
-    secondId: uuid("secondId").notNull(),
-  },
-  (table) => ({
-    viewedFirstIdIndex: index("viewed_first_id_index").on(table.firstId),
-    ViewedSecondIdIndex: index("viewed_second_id_index").on(table.secondId),
-    uniqCombination: unique().on(table.firstId, table.secondId),
-  }),
-);
-
 export const messagesTable = pgTable(
   "messages",
   {

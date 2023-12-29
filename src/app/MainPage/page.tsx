@@ -140,18 +140,6 @@ function MainPage() {
           dislikedDogIds.has(dog.displayId),
         );
 
-        // Combine unseenDogs and dislikedDogs
-        // 組合 unseenDogs 和 dislikedDogs，同時避免重複
-        // const combinedDogsIds = new Set();
-        // const combinedDogs = [];
-
-        // for (let dog of [...dislikedDogs, ...unseenDogs]) {
-        //   if (!combinedDogsIds.has(dog.displayId)) {
-        //     combinedDogs.push(dog);
-        //     combinedDogsIds.add(dog.displayId);
-        //   }
-        // }
-
         // 分別洗牌
         const shuffledDislikedDogs = shuffleArray([...dislikedDogs]);
         const shuffledUnseenDogs = shuffleArray([...unseenDogs]);
@@ -160,6 +148,9 @@ function MainPage() {
         const combinedDogs = [...shuffledDislikedDogs, ...shuffledUnseenDogs];
 
         setFilteredDogs(combinedDogs);
+        if (filteredDogs.length === 0) {
+          setNoCardsLeft(true);
+        }
         // setDislikedDogs(dislikedDogs);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -272,6 +263,7 @@ function MainPage() {
       ),
     );
   };
+
   const renderContent = () => {
     return (
       <>

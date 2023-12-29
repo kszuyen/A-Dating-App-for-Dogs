@@ -86,7 +86,7 @@ export function useMatches(): {
     };
 
     fetchData();
-  }, []);
+  }, [userId, router]);
 
   return {
     matches,

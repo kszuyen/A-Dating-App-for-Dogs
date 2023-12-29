@@ -17,8 +17,6 @@ export async function GET(
   },
 ) {
   try {
-    const displayId = params.displayId;
-
     // Filter the dogs that I liked
     const dogsILiked = await db
       .select({
@@ -26,7 +24,7 @@ export async function GET(
       })
       .from(likedTable)
       .where(
-        and(eq(likedTable.firstId, displayId), eq(likedTable.likeStatus, true)),
+        and(eq(likedTable.firstId, params.displayId), eq(likedTable.likeStatus, true)),
       )
       .execute();
 
@@ -42,7 +40,7 @@ export async function GET(
       .from(likedTable)
       .where(
         and(
-          eq(likedTable.secondId, displayId),
+          eq(likedTable.secondId, params.displayId),
           inArray(likedTable.firstId, dogsILikedArray),
           eq(likedTable.likeStatus, true),
         ),
@@ -68,7 +66,7 @@ export async function GET(
       .from(dogsTable)
       .where(
         and(
-          ne(dogsTable.displayId, displayId),
+          ne(dogsTable.displayId, params.displayId),
           inArray(dogsTable.displayId, matchedDogsArray),
         ),
       )
@@ -114,7 +112,7 @@ export async function GET(
     // For each matched dog, get the last message
     const matchedDogsDataWithLastMessage = await Promise.all(
       matchedDogsData.map(async (dog) => {
-        const lastMessage = await getLastMessage(displayId, dog.id);
+        const lastMessage = await getLastMessage(params.displayId, dog.id);
 
         if (lastMessage) {
           return { dog, lastMessage };
@@ -137,19 +135,19 @@ export async function GET(
       const sentAtA = a.lastMessage?.sentAt || null;
       const sentAtB = b.lastMessage?.sentAt || null;
 
-      // if (!sentAtA || !sentAtB) {
-      //   return 0;
-      // }
-
-      if (sentAtA === null && sentAtB === null) {
-        return 0; // Both dates are null, consider them equal
-      } else if (sentAtA === null) {
-        return 1; // Null is considered greater than any date
-      } else if (sentAtB === null) {
-        return -1; // Null is considered greater than any date
-      } else {
-        return sentAtB.getTime() - sentAtA.getTime();
+      if (!sentAtA || !sentAtB) {
+        return 0;
       }
+
+      // if (sentAtA === null && sentAtB === null) {
+      //   return 0; // Both dates are null, consider them equal
+      // } else if (sentAtA === null) {
+      //   return 1; // Null is considered greater than any date
+      // } else if (sentAtB === null) {
+      //   return -1; // Null is considered greater than any date
+      // } else {
+        return sentAtB.getTime() - sentAtA.getTime();
+      // }
     });
 
     return NextResponse.json(sortedList);

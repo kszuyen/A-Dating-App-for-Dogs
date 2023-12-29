@@ -72,36 +72,43 @@ function OnBoardForm({}: {}) {
     }
     if (dogData.dogname.length === 0) {
       setInvalidDogname(true);
+      return;
     } else {
       setInvalidDogname(false);
     }
     if (dogData.dogname.length > 10) {
       setInvalidDognameLength(true);
+      return;
     } else {
       setInvalidDognameLength(false);
     }
     if (dogData.breed.length === 0) {
       setInvalidBreed(true);
+      return;
     } else {
       setInvalidBreed(false);
     }
     if (dogData.gender.length === 0) {
       setInvalidGender(true);
+      return;
     } else {
       setInvalidGender(false);
     }
     if (dogData.birthday.length === 0) {
       setInvalidBirthday(true);
+      return;
     } else {
       setInvalidBirthday(false);
     }
     if (dogData.description.length === 0) {
       setInvalidDescription(true);
+      return;
     } else {
       setInvalidDescription(false);
     }
-    if (dogData.description.length > 30) {
+    if (dogData.description.length > 100) {
       setInvalidDescriptionLength(true);
+      return;
     } else {
       setInvalidDescriptionLength(false);
     }
