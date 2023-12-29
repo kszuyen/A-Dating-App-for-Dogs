@@ -1,5 +1,12 @@
 # Tindog - A Dating App for Dogs
 
+[Tindog](https://tindog-wp/vercel/app)
+
+Expires at 2 weeks!!
+When we deployed our project to Vercel, we encountered an issue stating that "No more than 12 Serverless Functions can be added to a deployment on the Hobby plan".  
+Therefore we are now on a 2 week free pro trail plan at Vercel.  
+
+
 ## Deploy at Local
 
 ### Install dependencies:
