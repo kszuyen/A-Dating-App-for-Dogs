@@ -4,14 +4,16 @@
 import { useState } from "react";
 
 import Link from "next/link";
-import { Router } from "next/router";
 
 import { PawPrint, MessageSquareText } from "lucide-react";
 
-// import larry from "@/assets/larry.png";
 import { cn } from "@/lib/utils/shadcn";
 
 import ProfileButton from "./ProfileButton";
+
+// import Image from "next/image";
+
+// import Image from "next/image";
 
 // import Image from "next/image";
 
@@ -22,13 +24,9 @@ export default function Header() {
     <aside className="flex h-screen flex-col justify-between px-6 py-6 ">
       <div className="flex flex-col gap-2">
         <div className="p-2">
-          {/* <Link href="/">
-            {/* <Image src={larry} alt="Larry the bird" width={40} height={40} /> */}
-          {/* <div>Tindog Logo</div> */}
-          {/* </Link>  */}
           <a
             className="flex-grow text-2xl font-bold text-purple-600 lg:text-4xl"
-            href="/"
+            href="/MainPage"
           >
             Tindog
           </a>
@@ -47,13 +45,6 @@ export default function Header() {
           setActiveLink={setActiveLink}
           isActive={activeLink === "/MainPage/Matches"}
         />
-        {/* <HeaderButton Icon={Bell} text="Notifications" />
-        <HeaderButton Icon={Mail} text="Messages" />
-        <HeaderButton Icon={FileText} text="Lists" />
-        <HeaderButton Icon={Bookmark} text="Bookmarks" />
-        <HeaderButton Icon={Users} text="Communities" />
-        <HeaderButton Icon={User} text="Profile" />
-        <HeaderButton Icon={MoreHorizontal} text="More" /> */}
       </div>
       <ProfileButton
         setActiveLink={setActiveLink}
@@ -103,12 +94,6 @@ function HeaderButton({
             />
           </div>
           <span
-            // the `cn` helper function basically concatenate your tailwind classes in a safe way
-            // on the surface, it will remove any falsy values from the array, it also remove any redundant classes
-            // this is useful for conditional classes
-            // prefixing a class with max-lg: makes it only apply to screen size below lg, this is the tailwind way of media queries
-            // likewise, prefixing a class with lg: makes it only apply to screen size above lg
-            // read more about tailwind responsive design here: https://tailwindcss.com/docs/responsive-design
             className={cn("text-xl max-lg:hidden", isActive && "font-bold")}
           >
             {text}
