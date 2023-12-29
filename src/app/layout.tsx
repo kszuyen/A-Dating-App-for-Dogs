@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Head } from "next/document";
 import { Inter } from "next/font/google";
 
 import { EdgeStoreProvider } from "@/lib/edgestore";
