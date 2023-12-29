@@ -54,7 +54,7 @@ function OnBoardForm({}: {}) {
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >,
   ) => {
-    console.log(e.target);
+    // console.log(e.target);
     const { name, value, type } = e.target;
     let finalValue = value;
     if (type === "date") {
@@ -67,7 +67,7 @@ function OnBoardForm({}: {}) {
   const handleInfoSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validatedImage || !isImageValid) {
-      console.log("invalid image");
+      // console.log("invalid image");
       return;
     }
     if (dogData.dogname.length === 0) {
@@ -115,7 +115,7 @@ function OnBoardForm({}: {}) {
         },
       });
 
-      console.log(dogData);
+      // console.log(dogData);
 
       const response = await fetch("/api/dogs", {
         method: "PUT",
@@ -136,7 +136,7 @@ function OnBoardForm({}: {}) {
         throw new Error("Network response was not ok");
       }
       const result = await response.json();
-      console.log("Submit Success:", result);
+      // console.log("Submit Success:", result);
       router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}/MainPage/DogPage`);
     } catch (error) {
       console.error("Submit Error:", error);

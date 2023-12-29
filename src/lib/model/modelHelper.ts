@@ -9,7 +9,7 @@ export async function runModel(preprocessedData: any): Promise<[any, number]> {
     // "./src/model/My_Dog_Classifier.onnx",
     { executionProviders: ["webgl"], graphOptimizationLevel: "all" },
   );
-  console.log("Inference session created");
+  // console.log("Inference session created");
   // Run inference and get results.
   var [results, inferenceTime] = await runInference(session, preprocessedData);
   return [results, inferenceTime];
@@ -35,7 +35,7 @@ async function runInference(
   const output = outputData[session.outputNames[0]];
   //Get the softmax of the output data. The softmax transforms values to be between 0 and 1
   var outputSoftmax = softmax(Array.prototype.slice.call(output.data));
-  console.log(outputSoftmax);
+  // console.log(outputSoftmax);
   //Get the top 5 results.
   // var results = imagenetClassesTopK(outputSoftmax, 5);
   // console.log('results: ', results);

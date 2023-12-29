@@ -6,12 +6,13 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { usersTable } from "@/db/schema";
 import { authSchema } from "@/validators/auth";
+
 // import router from "next/navigation";
 
 export default CredentialsProvider({
   name: "credentials",
   credentials: {
-    isSignUp: { label: "isSignUp"},
+    isSignUp: { label: "isSignUp" },
     email: { label: "Email", type: "text" },
     username: { label: "Username", type: "text", optional: true },
     password: { label: "Password", type: "password" },
@@ -27,7 +28,7 @@ export default CredentialsProvider({
     try {
       validatedCredentials = authSchema.parse(credentials);
     } catch (error) {
-      console.log("Wrong credentials. Try again.");
+      // console.log("Wrong credentials. Try again.");
       return null;
     }
     const { isSignUp, email, username, password } = validatedCredentials;
@@ -44,11 +45,11 @@ export default CredentialsProvider({
       .where(eq(usersTable.email, validatedCredentials.email.toLowerCase()))
       .execute();
 
-    if (isSignUp === 'true') {
+    if (isSignUp === "true") {
       if (!existedUser) {
         // Sign up
         if (!username) {
-          console.log("Name is required.");
+          // console.log("Name is required.");
           return null;
         }
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -67,18 +68,18 @@ export default CredentialsProvider({
           id: createdUser.displayId,
         };
       } else {
-        console.log("User already exists!");
+        // console.log("User already exists!");
         return null;
       }
     } else {
       // Sign in
       if (existedUser.provider !== "credentials") {
-        console.log(`The email has registered with ${existedUser.provider}.`);
+        // console.log(`The email has registered with ${existedUser.provider}.`);
         return null;
       }
 
       if (!existedUser.hashedPassword) {
-        console.log("The email has registered with social account.");
+        // console.log("The email has registered with social account.");
         return null;
       }
 

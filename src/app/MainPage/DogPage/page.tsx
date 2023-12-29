@@ -23,8 +23,6 @@ interface DogInfo {
 
 function DogPage() {
   const [dogInfo, setDogInfo] = useState<DogInfo[]>([]);
-  // const [editMode, setEditMode] = useState<{ [key: number]: boolean }>({});
-  // const [showDetails, setShowDetails] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const router = useRouter();

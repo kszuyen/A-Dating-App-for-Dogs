@@ -36,13 +36,13 @@ interface DogItem {
 }
 
 function MainPage() {
-  const [lastDirection, setLastDirection] = useState();
-  const { dogsData, loading, error } = useDogsInfo();
-  const { userId, username } = useUserInfo();
+  // const [lastDirection, setLastDirection] = useState();
+  const { loading, error } = useDogsInfo();
+  const { userId } = useUserInfo();
   const [filteredDogs, setFilteredDogs] = useState<DogItem[]>([]);
   const [swipedCardCount, setSwipedCardCount] = useState(0);
   const [noCardsLeft, setNoCardsLeft] = useState(false);
-  const [dislikedDogs, setDislikedDogs] = useState<DogItem[]>([]);
+  // const [dislikedDogs, setDislikedDogs] = useState<DogItem[]>([]);
   // const [swipedCards, setSwipedCards] = useState<Set<string>>(new Set());
   // const [animateCard, setAnimateCard] = useState<{ [key: string]: string }>({});
   const router = useRouter();
@@ -152,13 +152,12 @@ function MainPage() {
         }
 
         setFilteredDogs(combinedDogs);
-        setDislikedDogs(dislikedDogs);
+        // setDislikedDogs(dislikedDogs);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
     fetchFilterDogs();
-    // console.log("noCardsLeft: ", noCardsLeft);
   }, [userId]);
 
   const sendLike = async (userId: string, dogDisplayId: string) => {
@@ -180,7 +179,7 @@ function MainPage() {
       }
 
       const result = await response.json();
-      console.log("Submit Success:", result);
+      // console.log("Submit Success:", result);
     } catch (error: any) {
       console.error("Submit Error:", error);
     }
@@ -210,42 +209,25 @@ function MainPage() {
       }
 
       const result = await response.json();
-      console.log("Submit Success:", result);
+      // console.log("Submit Success:", result);
     } catch (error: any) {
       console.error("Submit Error:", error);
     }
   };
-  // const handleSwipe = (direction: "left" | "right", dogDisplayId: string) => {
-  //   setSwipedCards((prev) => {
-  //     const newSwipedCards = new Set(prev);
-  //     newSwipedCards.add(dogDisplayId);
-  //     return newSwipedCards;
-  //   });
-
-  //   if (typeof userId === "string") {
-  //     if (direction === "left") {
-  //       sendDislike(userId, dogDisplayId);
-  //     } else if (direction === "right") {
-  //       sendLike(userId, dogDisplayId);
-  //     }
-  //   } else {
-  //     console.error("UserId is undefined");
-  //   }
-  // };
   const swiped = (direction: any, dogDisplayId: string) => {
-    console.log("removing: " + dogDisplayId);
-    setLastDirection(direction);
+    // console.log("removing: " + dogDisplayId);
+    // setLastDirection(direction);
 
     // 检查滑动方向
     if (direction === "left") {
-      console.log("Swiped left: " + dogDisplayId);
+      // console.log("Swiped left: " + dogDisplayId);
       if (typeof userId === "string" && userId && dogDisplayId) {
         sendDislike(userId, dogDisplayId);
       } else {
         console.error("Invalid userId or dogDisplayId");
       }
     } else if (direction === "right") {
-      console.log("Swiped right: " + dogDisplayId);
+      // console.log("Swiped right: " + dogDisplayId);
       // useSwipeInfo(swipedata.userId, swipedata.dogDisplayId);
       if (typeof userId === "string" && userId && dogDisplayId) {
         sendLike(userId, dogDisplayId);
@@ -267,21 +249,6 @@ function MainPage() {
       return newCount;
     });
   };
-  // const animateSwipe = (direction: "left" | "right", dogDisplayId: string) => {
-  //   setAnimateCard({ [dogDisplayId]: direction });
-  //   setTimeout(() => {
-  //     handleSwipe(direction, dogDisplayId);
-  //     setAnimateCard((prev) => {
-  //       const newAnim = { ...prev };
-  //       delete newAnim[dogDisplayId];
-  //       return newAnim;
-  //     });
-  //   }, 500); // duration of the animation
-  // };
-  // const dogsToDisplay = filteredDogs.length > 1 ? filteredDogs : dislikedDogs;
-  // console.log(filteredDogs.length, dislikedDogs.length);
-  // console.log("filteredDogs: ", filteredDogs);
-  // console.log("dogsToDisplay: ", dogsToDisplay);
 
   const outOfFrame = (name: string) => {
     console.log(name + " left the screen!");
@@ -298,9 +265,6 @@ function MainPage() {
     );
   };
   const renderContent = () => {
-    // if (noCardsLeft === true) {
-    //   return <div className="text-center text-xl">你已經看完所有狗狗了！</div>;
-    // } else {
     return (
       <>
         {!noCardsLeft ? (
@@ -309,11 +273,6 @@ function MainPage() {
               (dog) =>
                 userId !== dog.displayId && (
                   <TinderCard
-                    // className={`absolute rounded-2xl ${
-                    //   animateCard[dog.displayId] === "left" ? "swipe-left" : ""
-                    // } ${
-                    //   animateCard[dog.displayId] === "right" ? "swipe-right" : ""
-                    // }`}
                     className="absolute rounded-2xl border-2 border-purple-400 shadow-[0px_0px_60px_0px_rgba(0,0,0,0.2)]"
                     key={dog.displayId}
                     onSwipe={(dir) => swiped(dir, dog.displayId)}
@@ -377,21 +336,6 @@ function MainPage() {
                           {dog.description}
                         </p>
                       </div>
-
-                      {/* <div className="absolute bottom-0 left-0 right-0 flex justify-around p-4">
-                      <button
-                        className="rounded bg-red-500 px-4 py-2 text-white"
-                        onClick={() => animateSwipe("left", dog.displayId)}
-                      >
-                        Dislike
-                      </button>
-                      <button
-                        className="rounded bg-green-500 px-4 py-2 text-white"
-                        onClick={() => animateSwipe("right", dog.displayId)}
-                      >
-                        Like
-                      </button>
-                    </div> */}
                     </div>
                   </TinderCard>
                 ),

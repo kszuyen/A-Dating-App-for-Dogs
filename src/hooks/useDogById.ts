@@ -15,15 +15,15 @@ export function useDogById(dogId: string): {
   loading: boolean;
   error: string | null;
 } {
-  const [dogData, setDogData] = useState<DogType>(
-    {  displayId: "",
+  const [dogData, setDogData] = useState<DogType>({
+    displayId: "",
     dogname: "",
     imageUrl: "",
     breed: "",
     gender: "",
     birthday: "",
-    description: ""
-    });
+    description: "",
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null || "");
 
@@ -49,10 +49,9 @@ export function useDogById(dogId: string): {
     };
 
     fetchData();
-    console.log("fetched Dog Data");
+    // console.log("fetched Dog Data");
   }, [dogId]);
   const memoizedDogData = useMemo(() => dogData, [dogData]);
-
 
   return { dogData: memoizedDogData, loading, error };
 }

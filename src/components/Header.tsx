@@ -13,6 +13,8 @@ import ProfileButton from "./ProfileButton";
 
 // import Image from "next/image";
 
+// import Image from "next/image";
+
 export default function Header() {
   const [activeLink, setActiveLink] = useState("/MainPage");
   return (

@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
 
-// import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-// import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { Bone } from "lucide-react";
-import { div } from "ndarray-ops";
 
 import useUserInfo from "@/hooks/useUserInfo";
 import { publicEnv } from "@/lib/env/public";

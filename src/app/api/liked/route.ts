@@ -1,18 +1,14 @@
 // route.ts
 import { NextResponse, type NextRequest } from "next/server";
 
-// import { first } from "cheerio/lib/api/traversing";
-import { and, desc, eq, or } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import Pusher from "pusher";
 import { z } from "zod";
 
 import { db } from "@/db";
-import { dogsTable, likedTable, messagesTable } from "@/db/schema";
+import { dogsTable, likedTable } from "@/db/schema";
 import { privateEnv } from "@/lib/env/private";
 import { publicEnv } from "@/lib/env/public";
-
-// 更新為您的 likedTable
-// import { auth } from "@/lib/auth";
 
 // 定義 POST 請求的結構
 const postLikedRequestSchema = z.object({

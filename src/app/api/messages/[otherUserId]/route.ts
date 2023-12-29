@@ -31,7 +31,10 @@ export async function POST(request: NextRequest) {
     sentAt,
   };
   // db.messages.push(newMessage);
-  const [inputMessage] = await db.insert(messagesTable).values(newMessage).returning();
+  const [inputMessage] = await db
+    .insert(messagesTable)
+    .values(newMessage)
+    .returning();
 
   //     // Trigger pusher event
   const pusher = new Pusher({
@@ -49,14 +52,9 @@ export async function POST(request: NextRequest) {
       : `private-${newMessage.receiverId}_${newMessage.senderId}`;
   await pusher.trigger(channelName, "message:post", {
     // messages: messages,
-    newMessage: inputMessage
+    newMessage: inputMessage,
   });
-  return NextResponse.json(
-    // {
-    //   messages,
-    // },
-    { status: 200 },
-  );
+  return NextResponse.json({ status: 200 });
 }
 
 export async function GET(
@@ -70,7 +68,7 @@ export async function GET(
   },
 ) {
   try {
-    console.log("start GET");
+    // console.log("start GET");
     // Get user from session
     const session = await auth();
     if (!session || !session?.user?.id) {
@@ -102,7 +100,7 @@ export async function GET(
       .orderBy(asc(messagesTable.sentAt))
       .execute();
 
-    console.log(dbMessage);
+    // console.log(dbMessage);
 
     if (!dbMessage) {
       return NextResponse.json({ error: "Message Not Found" }, { status: 404 });

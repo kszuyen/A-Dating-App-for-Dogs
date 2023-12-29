@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { useParams } from "next/navigation";
 
-import HomePage from "@/components/HomePage";
+// import HomePage from "@/components/HomePage";
 import Navbar from "@/components/Navbar";
 
 import AuthForm from "./_components/AuthForm";
@@ -12,7 +12,7 @@ import AuthForm from "./_components/AuthForm";
 export default function Home() {
   const { auth } = useParams();
   const authMode = Array.isArray(auth) ? auth[0] : auth;
-  console.log(authMode);
+  // console.log(authMode);
   // const authToken = false;
   const [isSignUp, setIsSignUp] = useState<boolean>(
     authMode == "signin" ? false : true,

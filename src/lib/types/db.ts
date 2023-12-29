@@ -14,7 +14,7 @@ export type Dog = {
   description: string;
   image_url: string;
   thumbnail_url: string;
-}
+};
 
 export type newMessage = {
   senderId: string;

@@ -1,4 +1,5 @@
 ## environment
+
 ## Install dependencies:
 
 ```bash
@@ -10,12 +11,12 @@ yarn install
 ```bash
 yarn migrate
 ```
+
 ## Run the development server:
 
 ```bash
 yarn dev
 ```
-
 
 ## Contributing
 

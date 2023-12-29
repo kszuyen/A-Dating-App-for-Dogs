@@ -1,7 +1,6 @@
 "use client";
 
 import { useDogById } from "@/hooks/useDogById";
-import useUserInfo from "@/hooks/useUserInfo";
 import { cn } from "@/lib/utils/shadcn";
 
 type UserAvatarProps = {

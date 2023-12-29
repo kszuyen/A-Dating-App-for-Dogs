@@ -37,7 +37,7 @@ function AuthForm({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // TODO: sign in logic
-    console.log("Submitted");
+    // console.log("Submitted");
     if (!email) {
       setInvalidEmail(true);
       return;
@@ -127,10 +127,6 @@ function AuthForm({
             By clicking login in, you agree to our terms and conditions.
           </p>
         </div>
-        {/* 
-            <CardHeader>
-              <CardTitle>{isSignUp ? "Create Account" : "Log In"}</CardTitle>
-            </CardHeader> */}
         <CardContent className="flex flex-col gap-2">
           <form onSubmit={handleSubmit} className="flex flex-col gap-2">
             <AuthInput

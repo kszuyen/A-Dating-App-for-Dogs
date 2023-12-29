@@ -29,7 +29,7 @@ const edgeStoreRouter = es.router({
     .input(
       z.object({
         type: z.enum(["post", "profile"]),
-      })
+      }),
     )
     // e.g. /post/my-file.jpg
     .path(({ input }) => [{ type: input.type }]),

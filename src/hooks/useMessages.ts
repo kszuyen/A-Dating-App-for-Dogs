@@ -3,10 +3,11 @@ import { RefObject, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
 
+import { find } from "lodash";
+
+import { publicEnv } from "@/lib/env/public";
 // import { useDebounce } from "use-debounce";
 import { pusherClient } from "@/lib/pusher/client";
-import { find } from "lodash";
-import { publicEnv } from "@/lib/env/public";
 
 type Message = {
   id: string;
@@ -21,13 +22,13 @@ type PusherPayload = {
 };
 
 export const useMessages = (bottomRef: RefObject<HTMLDivElement>) => {
-    const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const { OtherUserId } = useParams();
   const otherUserId = Array.isArray(OtherUserId) ? OtherUserId[0] : OtherUserId;
   // const otherpersonName = getNameFromId(otherpersonId);
 
   const [messages, setMessages] = useState<Message[]>([]);
-  
+
   const router = useRouter();
 
   const { data: session } = useSession();
@@ -49,19 +50,17 @@ export const useMessages = (bottomRef: RefObject<HTMLDivElement>) => {
       bottomRef?.current?.scrollIntoView();
 
       pusherClient.bind("message:post", ({ newMessage }: PusherPayload) => {
-
         setMessages((prev) => {
           if (find(prev, { id: newMessage.id })) {
             return prev;
           }
-  
-          return [...prev, newMessage]
+
+          return [...prev, newMessage];
         });
         // setMessages(messages);
         // bottomRef?.current?.scrollIntoView();
         setLoading(false);
-        console.log("bottom");
-
+        // console.log("bottom");
       });
     } catch (error) {
       console.log("subscribe error:", error);
@@ -83,13 +82,13 @@ export const useMessages = (bottomRef: RefObject<HTMLDivElement>) => {
         router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}/Matches`);
         return;
       }
-    const data = await res.json();
-    console.log("3rd use effect");
+      const data = await res.json();
+      // console.log("3rd use effect");
 
       setMessages(data.messages);
       setLoading(false);
 
-    //   router.refresh();
+      //   router.refresh();
     };
     fetchMessages();
   }, [otherUserId, router]);
@@ -98,7 +97,7 @@ export const useMessages = (bottomRef: RefObject<HTMLDivElement>) => {
   useEffect(() => {
     bottomRef?.current?.scrollIntoView();
     // console.log("scrolled");
-  }, [messages])
+  }, [messages]);
 
   return {
     userId,

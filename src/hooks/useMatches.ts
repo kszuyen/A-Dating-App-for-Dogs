@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
-import type { Dog } from "@/lib/types/db";
-import { pusherClient } from "@/lib/pusher/client";
-import { find } from "lodash";
+
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+
+import { find } from "lodash";
+
+import { pusherClient } from "@/lib/pusher/client";
+import type { Dog } from "@/lib/types/db";
+
 type matchesType = {
   dog: {
     id: string;
@@ -14,13 +18,13 @@ type matchesType = {
     description: string;
     image_url: string;
     thumbnail_url: string;
-  },
+  };
   lastMessage: {
     content: string | null;
     senderId: string | null;
     sentAt: Date | null;
-  }
-}
+  };
+};
 
 export function useMatches(): {
   matches: matchesType[];
@@ -38,7 +42,7 @@ export function useMatches(): {
     if (!userId) {
       return;
     }
-    const channelName =`private-${userId}`;
+    const channelName = `private-${userId}`;
     try {
       pusherClient.subscribe(channelName);
 
@@ -48,12 +52,11 @@ export function useMatches(): {
             return prev;
           }
 
-          return [newMatch, ...prev]
+          return [newMatch, ...prev];
         });
-
       });
     } catch (error) {
-      console.log("subscribe error:", error);
+      // console.log("subscribe error:", error);
       // router.push("/Matches");
     }
     // Unsubscribe from pusher events when the component unmounts
@@ -64,19 +67,19 @@ export function useMatches(): {
 
   useEffect(() => {
     const fetchData = async () => {
-        setLoading(true);
+      setLoading(true);
       try {
         const response = await fetch(`/api/matches/${userId}`);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         // Process and format data if needed
         setMatches(data);
       } catch (error) {
-        console.log(error);
-        alert("error loading matches")
+        // console.log(error);
+        alert("error loading matches");
       } finally {
         setLoading(false);
       }
@@ -85,8 +88,8 @@ export function useMatches(): {
     fetchData();
   }, []);
 
-  return { 
-    matches, 
-    loading
- };
+  return {
+    matches,
+    loading,
+  };
 }

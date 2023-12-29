@@ -1,9 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
 
-// import { and, eq } from "drizzle-orm";
-
-// import { db } from "@/db";
-// import { usersToDocumentsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { pusherServer } from "@/lib/pusher/server";
 
@@ -26,20 +22,6 @@ export async function POST(request: NextRequest) {
         { status: 400 },
       );
     }
-
-    // Get the document from the database
-    // const [docOwnership] = await db
-    //   .select()
-    //   .from(usersToDocumentsTable)
-    //   .where(
-    //     and(
-    //       eq(usersToDocumentsTable.userId, session.user.id),
-    //       eq(usersToDocumentsTable.documentId, docId),
-    //     ),
-    //   );
-    // if (!docOwnership) {
-    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    // }
 
     const userData = {
       user_id: session.user.email,
