@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -75,7 +75,7 @@ function OnBoardForm({}: {}) {
     } else {
       setInvalidDogname(false);
     }
-    if (dogData.description.length > 10) {
+    if (dogData.dogname.length > 10) {
       setInvalidDognameLength(true);
     } else {
       setInvalidDognameLength(false);
@@ -135,9 +135,9 @@ function OnBoardForm({}: {}) {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      const result = await response.json();
+      // const result = await response.json();
       // console.log("Submit Success:", result);
-      router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}/MainPage/DogPage`);
+      router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}/MainPage`);
     } catch (error) {
       console.error("Submit Error:", error);
     }
@@ -154,7 +154,7 @@ function OnBoardForm({}: {}) {
                 <>
                   <Link
                     className="mr-2 flex justify-items-start rounded-lg bg-purple-50 px-2 py-1 text-sm text-gray-500 transition duration-200 ease-in-out hover:bg-gray-100"
-                    href="/MainPage/DogPage"
+                    href="/MainPage"
                   >
                     <p>Back</p>
                   </Link>
