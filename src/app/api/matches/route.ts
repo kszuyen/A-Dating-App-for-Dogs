@@ -150,26 +150,26 @@ export async function GET(
       const sentAtA = a.lastMessage?.sentAt || null;
       const sentAtB = b.lastMessage?.sentAt || null;
 
-      if (!sentAtA || !sentAtB) {
-        return 0;
-      }
-    
-      // if (sentAtA === null && sentAtB === null) {
-      //   return 0; // Both dates are null, consider them equal
-      // } else if (sentAtA === null) {
-      //   return 1; // Null is considered greater than any date
-      // } else if (sentAtB === null) {
-      //   return -1; // Null is considered greater than any date
-      // } else {
-        return sentAtB.getTime() - sentAtA.getTime();
+      // if (!sentAtA || !sentAtB) {
+      //   return 0;
       // }
+    
+      if (sentAtA === null && sentAtB === null) {
+        return 0; // Both dates are null, consider them equal
+      } else if (sentAtA === null) {
+        return 1; // Null is considered greater than any date
+      } else if (sentAtB === null) {
+        return -1; // Null is considered greater than any date
+      } else {
+        return sentAtB.getTime() - sentAtA.getTime();
+      }
     });
     
     return NextResponse.json(sortedList);
   } 
   catch (error) 
   {
-    console.error("Error fetching dogs data:", error);
+    console.error("Error fetching dogs data 4:", error);
     return new Response(JSON.stringify({ error: "Internal Server Error" }), {
       status: 500,
       headers: {

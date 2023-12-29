@@ -34,7 +34,7 @@ export async function GET(
 
     return NextResponse.json(dog[0]);
   } catch (error) {
-    console.error("Error fetching dogs data:", error);
+    console.error("Error fetching dogs data 3:", error);
     return new Response(JSON.stringify({ error: "Internal Server Error" }), {
       status: 500,
       headers: {

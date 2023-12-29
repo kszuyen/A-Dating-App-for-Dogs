@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(dbDogs);
   } catch (error) {
-    console.error("Error fetching dogs data:", error);
+    console.error("Error fetching dogs data 2:", error);
     return new Response(JSON.stringify({ error: "Internal Server Error" }), {
       status: 500,
       headers: {
