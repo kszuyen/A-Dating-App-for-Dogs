@@ -47,7 +47,7 @@ function MainPage() {
   // const [swipedCards, setSwipedCards] = useState<Set<string>>(new Set());
   // const [animateCard, setAnimateCard] = useState<{ [key: string]: string }>({});
   const router = useRouter();
-  const [showMatchText, setShowMatchText] = useState<boolean>(true);
+  // const [showMatchText, setShowMatchText] = useState<boolean>(true);
   // const [matched, setMatched] = useState<boolean>(false);
   useEffect(() => {
     if (!userId) return;

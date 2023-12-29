@@ -47,7 +47,11 @@ export async function POST(request: NextRequest) {
     newMessage.senderId > newMessage.receiverId
       ? `private-${newMessage.senderId}_${newMessage.receiverId}`
       : `private-${newMessage.receiverId}_${newMessage.senderId}`;
-  await pusher.trigger(channelName, "message:post", {
+  await pusher.trigger(channelName,`message:post-${newMessage.senderId}`  , {
+    // messages: messages,
+    newMessage: inputMessage,
+  });
+  await pusher.trigger(channelName,`message:post-${newMessage.receiverId}`  , {
     // messages: messages,
     newMessage: inputMessage,
   });

@@ -70,12 +70,12 @@ export default function DogCard({
     }
   }
 
-  const [lM, setLM] = useState<Message>({
-    content: content,
-    senderId: senderId || "",
-    // sentAt: sentAt || null,
-  });
-
+  // const [lM, setLM] = useState<Message>({
+  //   content: content,
+  //   senderId: senderId || "",
+  //   // sentAt: sentAt || null,
+  // });
+  const textId = `${id}-text`;
   useEffect(() => {
     if (!userId || !id) return;
 
@@ -85,13 +85,20 @@ export default function DogCard({
       userId > id ? `private-${userId}_${id}` : `private-${id}_${userId}`;
     try {
       pusherClient.subscribe(channelName);
-      pusherClient.bind("message:post", ({ newMessage }: PusherPayload) => {
-        setLM({
-          content: newMessage.content,
-          senderId: newMessage.senderId,
-          // sentAt: newMessage.sentAt,
-        });
-      });
+      pusherClient.bind(
+        `message:post-${id}`,
+        ({ newMessage }: PusherPayload) => {
+          const lastMessageContainer = document.getElementById(textId);
+          if (lastMessageContainer) {
+            lastMessageContainer.textContent = limit(newMessage.content, 15);
+          }
+          // setLM({
+          //   content: newMessage.content,
+          //   senderId: newMessage.senderId,
+          //   // sentAt: newMessage.sentAt,
+          // });
+        },
+      );
     } catch (error) {
       console.log("subscribe error:", error);
       router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}/Matches`);
@@ -103,7 +110,7 @@ export default function DogCard({
   }, [id, router, userId]);
 
   return (
-    <div className="flex items-center">
+    <div id={id} className="flex items-center">
       <div className="">
         <Paper className="h-full w-60 pb-2">
           <div className="flex items-center justify-center">
@@ -157,7 +164,13 @@ export default function DogCard({
                         //   variant="h5"
                         style={{ textAlign: "center", textTransform: "none" }}
                       >
-                        {lM.content ? (
+                        <span id={textId} className="text-gray-500">
+                          {senderId === userId && "you: "}
+                          {content
+                            ? limit(content, 15)
+                            : "Click to start chat!"}
+                        </span>
+                        {/* {lM.content ? (
                           <>
                             {lM.senderId == userId ? (
                               <span className="text-gray-500">you: </span>
@@ -170,7 +183,7 @@ export default function DogCard({
                           </>
                         ) : (
                           <span>Click to start chat!</span>
-                        )}
+                        )} */}
                       </Typography>
                     </div>
                   </div>

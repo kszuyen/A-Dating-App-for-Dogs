@@ -49,7 +49,7 @@ export const useMessages = (bottomRef: RefObject<HTMLDivElement>) => {
       pusherClient.subscribe(channelName);
       bottomRef?.current?.scrollIntoView();
 
-      pusherClient.bind("message:post", ({ newMessage }: PusherPayload) => {
+      pusherClient.bind( `message:post-${otherUserId}`, ({ newMessage }: PusherPayload) => {
         setMessages((prev) => {
           if (find(prev, { id: newMessage.id })) {
             return prev;
