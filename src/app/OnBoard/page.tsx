@@ -1,8 +1,38 @@
-"use client";
+// "use client";
+import { redirect, useRouter } from "next/navigation";
+
+import { eq } from "drizzle-orm";
+
+import { db } from "@/db";
+import { dogsTable } from "@/db/schema";
+// import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
+import { publicEnv } from "@/lib/env/public";
 
 import OnBoardForm from "./_components/OnBoardForm";
 
-function OnBoardPage() {
+type Props = {
+  params: {};
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+async function OnBoardPage(props: Props) {
+  const searchParams = props.searchParams;
+  const edit = searchParams.edit;
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
+  } else {
+    const [dogInfo] = await db
+      .select()
+      .from(dogsTable)
+      .where(eq(dogsTable.displayId, session.user.id))
+      .limit(1);
+    if (dogInfo && edit !== "true") {
+      redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}/MainPage`);
+    }
+  }
   return (
     <>
       <div className="h-full w-full bg-purple-50">
