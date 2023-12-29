@@ -24,6 +24,7 @@ type matchesType = {
     senderId: string | null;
     sentAt: Date | null;
   };
+  new: boolean | null;
 };
 
 export function useMatches(): {

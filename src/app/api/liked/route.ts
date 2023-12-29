@@ -123,6 +123,7 @@ export async function PUT(request: NextRequest) {
             senderId: null,
             sentAt: null,
           },
+          new: true
         });
       }
       return NextResponse.json(
@@ -193,6 +194,7 @@ export async function PUT(request: NextRequest) {
             senderId: null,
             sentAt: null,
           },
+          new: true
         });
       }
     return NextResponse.json(

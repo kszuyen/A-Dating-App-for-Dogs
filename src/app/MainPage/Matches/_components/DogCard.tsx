@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import Button from "@mui/material/Button";
@@ -13,10 +14,13 @@ import { publicEnv } from "@/lib/env/public";
 import { pusherClient } from "@/lib/pusher/client";
 import { Dog } from "@/lib/types/db";
 
+import defaultDogImage from "./defaultDog.png";
+
 type Props = Dog & {
   content: string | null;
   senderId: string | null;
   sentAt: Date | null;
+  isNew: boolean;
 };
 
 type Message = {
@@ -49,6 +53,7 @@ export default function DogCard({
   content,
   senderId,
   sentAt,
+  isNew,
 }: Props) {
   const { userId } = useUserInfo();
   const router = useRouter();
@@ -121,11 +126,19 @@ export default function DogCard({
             >
               {mode ? (
                 <div>
-                  <img
-                    className="h-48 w-full object-cover"
-                    src={image_url}
-                    alt={dogname}
-                  />
+                  {isNew ? (
+                    <Image
+                      className="h-48 w-full object-cover"
+                      src={defaultDogImage}
+                      alt={dogname}
+                    />
+                  ) : (
+                    <img
+                      className="h-48 w-full object-cover"
+                      src={image_url}
+                      alt={dogname}
+                    />
+                  )}
                   <Divider variant="middle" sx={{ mt: 1, mb: 1 }} />
                   <div className="flex flex-col justify-between">
                     <div className="">

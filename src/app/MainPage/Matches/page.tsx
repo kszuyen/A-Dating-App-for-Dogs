@@ -32,6 +32,7 @@ function MessagePage() {
               }
               senderId={match.lastMessage.senderId}
               sentAt={match.lastMessage.sentAt}
+              isNew={match.new ? match.new : false}
             />
           </div>
         ))}
