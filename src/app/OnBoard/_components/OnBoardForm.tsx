@@ -75,7 +75,7 @@ function OnBoardForm({}: {}) {
     } else {
       setInvalidDogname(false);
     }
-    if (dogData.description.length > 10) {
+    if (dogData.dogname.length > 10) {
       setInvalidDognameLength(true);
     } else {
       setInvalidDognameLength(false);
@@ -135,7 +135,7 @@ function OnBoardForm({}: {}) {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      const result = await response.json();
+      // const result = await response.json();
       // console.log("Submit Success:", result);
       router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}/MainPage/DogPage`);
     } catch (error) {
