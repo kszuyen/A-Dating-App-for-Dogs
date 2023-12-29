@@ -78,8 +78,8 @@ export function useMatches(): {
         // Process and format data if needed
         setMatches(data);
       } catch (error) {
-        // console.log(error);
-        alert("error loading matches");
+        console.log(error);
+        // alert("error loading matches");
       } finally {
         setLoading(false);
       }

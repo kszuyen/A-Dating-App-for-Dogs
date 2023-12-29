@@ -17,6 +17,10 @@ export async function GET(
   },
 ) {
   try {
+
+    if (!params.displayId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
     // Filter the dogs that I liked
     const dogsILiked = await db
       .select({

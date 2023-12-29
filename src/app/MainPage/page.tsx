@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 
 import { useDogsInfo } from "../../hooks/useDogsInfo";
 import useUserInfo from "../../hooks/useUserInfo";
-import { log } from "ndarray-ops";
 
 import LoadingModal from "@/components/LoadingModal";
 import { pusherClient } from "@/lib/pusher/client";
@@ -59,6 +58,7 @@ function MainPage() {
 
       pusherClient.bind("liked:mainpage", (currentMatched: boolean) => {
         // setMatched(currentMatched);
+
         matchDiv.style.display = "inline";
 
         setTimeout(function () {
@@ -100,6 +100,7 @@ function MainPage() {
       </p>
     );
   };
+
   function shuffleArray<T>(array: T[]): T[] {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -363,4 +364,3 @@ function MainPage() {
 }
 
 export default MainPage;
-export const dynamic = "force-dynamic";
