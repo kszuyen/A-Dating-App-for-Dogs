@@ -47,6 +47,7 @@ function MainPage() {
   // const [swipedCards, setSwipedCards] = useState<Set<string>>(new Set());
   // const [animateCard, setAnimateCard] = useState<{ [key: string]: string }>({});
   const router = useRouter();
+  const [showMatchText, setShowMatchText] = useState<boolean>(true);
   // const [matched, setMatched] = useState<boolean>(false);
   useEffect(() => {
     if (!userId) return;
@@ -59,13 +60,15 @@ function MainPage() {
       pusherClient.bind("liked:mainpage", (currentMatched: boolean) => {
         // setMatched(currentMatched);
         if (currentMatched) {
-          console.log("accepted pusher trigger");
-          const matchDiv = document.getElementById("match-text")!;
-          console.log(matchDiv);
-          matchDiv.style.display = "inline";
+          // console.log("accepted pusher trigger");
+          // const matchDiv = document.getElementById("match-text")!;
+          // console.log(matchDiv);
+          // matchDiv.style.display = "inline";
+          setShowMatchText(true);
 
           setTimeout(function () {
-            matchDiv.style.display = "none";
+            setShowMatchText(false);
+            // matchDiv.style.display = "none";
           }, 2200); // <-- time in milliseconds
         }
       });
@@ -360,12 +363,11 @@ function MainPage() {
       <div className="flex h-[400px] items-center justify-center">
         {renderContent()}
       </div>
-      <div
-        id="match-text"
-        className="absolute hidden items-center justify-center"
-      >
-        <MatchedText />
-      </div>
+      {showMatchText && (
+        <div className="absolute hidden items-center justify-center">
+          <MatchedText />
+        </div>
+      )}
     </div>
   );
 }
