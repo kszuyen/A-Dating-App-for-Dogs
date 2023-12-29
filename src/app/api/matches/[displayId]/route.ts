@@ -8,30 +8,25 @@ import { db } from "@/db";
 import { dogsTable, likedTable, messagesTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
-// 定義 POST 請求的結構
-// const postDogRequestSchema = z.object({
-//   dogname: z.string().min(1).max(100),
-//   breed: z.string().min(1).max(100),
-//   gender: z.enum(["male", "female"]),
-//   birthday: z.string().optional(),
-//   description: z.string().min(1).max(280),
-//   imageUrl: z.string().optional(),
-//   thumbnailUrl: z.string().optional(),
-// });
-
-// type PostDogRequest = z.infer<typeof postDogRequestSchema>;
-
 export async function GET(
-    request: NextRequest,
+  req: NextRequest,
+  {
+    params,
+  }: {
+    params: {
+      displayId: string;
+    };
+  },
   ) {
   try {
-    const session = await auth();
+    // const session = await auth();
 
-    if (!session || !session?.user?.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    // if (!session || !session?.user?.id) {
+    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    // }
 
-    const displayId = session.user.id;
+    // const displayId = session.user.id;
+    const displayId = params.displayId;
     
     // Filter the dogs that I liked
     const dogsILiked = await db

@@ -61,12 +61,12 @@ export function useMatches(): {
       pusherClient.unsubscribe(channelName);
     };
   }, [router, userId]);
-  
+
   useEffect(() => {
     const fetchData = async () => {
         setLoading(true);
       try {
-        const response = await fetch(`/api/matches`);
+        const response = await fetch(`/api/matches/${userId}`);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
