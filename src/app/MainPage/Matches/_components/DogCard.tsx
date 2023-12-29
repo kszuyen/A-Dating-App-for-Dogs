@@ -12,6 +12,7 @@ import { Bone } from "lucide-react";
 import { div } from "ndarray-ops";
 
 import useUserInfo from "@/hooks/useUserInfo";
+import { publicEnv } from "@/lib/env/public";
 import { pusherClient } from "@/lib/pusher/client";
 import { Dog } from "@/lib/types/db";
 
@@ -56,7 +57,7 @@ export default function DogCard({
   const router = useRouter();
   const [mode, setMode] = useState<boolean>(true);
   const handleClickedCard = async () => {
-    router.push(`/MainPage/Matches/${id}`);
+    router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}/MainPage/Matches/${id}`);
   };
 
   function limit(string = "", limit = 0) {
@@ -91,7 +92,7 @@ export default function DogCard({
       });
     } catch (error) {
       console.log("subscribe error:", error);
-      router.push("/Matches");
+      router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}/Matches`);
     }
     // Unsubscribe from pusher events when the component unmounts
     return () => {

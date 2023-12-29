@@ -7,6 +7,7 @@ import { db } from "@/db";
 import { dogsTable } from "@/db/schema";
 // import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import { publicEnv } from "@/lib/env/public";
 
 type Props = {
   children: React.ReactNode;
@@ -17,7 +18,7 @@ export default async function OnBoardLayout({ children }: Props) {
   const session = await auth();
 
   if (!session?.user) {
-    router.push("/");
+    redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
   } else {
     const [dogInfo] = await db
       .select()
@@ -25,7 +26,7 @@ export default async function OnBoardLayout({ children }: Props) {
       .where(eq(dogsTable.displayId, session.user.id))
       .limit(1);
     if (dogInfo) {
-      router.push("/MainPage");
+      redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}/MainPage`);
     }
   }
 

@@ -7,6 +7,7 @@ import { MoreHorizontal } from "lucide-react";
 import UserAvatar from "@/components/UserAvatar";
 import { useDogById } from "@/hooks/useDogById";
 import useUserInfo from "@/hooks/useUserInfo";
+import { publicEnv } from "@/lib/env/public";
 
 type ProfileButtonProps = {
   isActive: boolean;
@@ -31,7 +32,7 @@ export default function ProfileButton({
       // see src/components/NameDialog.tsx for more details
       onClick={() => {
         setActiveLink("/MainPage/DogPage");
-        router.push("/MainPage/DogPage");
+        router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}/MainPage/DogPage`);
       }}
     >
       {userId && <UserAvatar displayId={userId} />}

@@ -136,7 +136,7 @@ function OnBoardForm({}: {}) {
       }
       const result = await response.json();
       console.log("Submit Success:", result);
-      router.push("/MainPage/DogPage");
+      router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}/MainPage/DogPage`);
     } catch (error) {
       console.error("Submit Error:", error);
     }

@@ -2,13 +2,15 @@
 
 import { useRouter } from "next/navigation";
 
+import { publicEnv } from "@/lib/env/public";
+
 const HomePage = () => {
   const router = useRouter();
   const handleClick = () => {
     // console.log("Clicked Create Account");
     // setIsSignUp(true);
     // setShowForm(true);
-    router.push("/auth/signup");
+    router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}/auth/signup`);
   };
 
   return (

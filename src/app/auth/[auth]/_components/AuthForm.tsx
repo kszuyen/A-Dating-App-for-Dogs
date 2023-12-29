@@ -78,7 +78,7 @@ function AuthForm({
   };
   const router = useRouter();
   const handleClick = () => {
-    router.push("/");
+    router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
   };
   const searchParams = useSearchParams();
 

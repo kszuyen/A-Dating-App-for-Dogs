@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import LoadingModal from "@/components/LoadingModal";
+import { publicEnv } from "@/lib/env/public";
 
 // import { auth } from "@/lib/auth";
 
@@ -33,7 +34,7 @@ function DogPage() {
     );
     if (userConfirmed) {
       // User clicked 'OK'
-      router.push("/OnBoard?edit=true");
+      router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}/OnBoard?edit=true`);
     } else {
       // User clicked 'Cancel'
       // Optionally handle the cancelation

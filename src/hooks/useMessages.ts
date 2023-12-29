@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 // import { useDebounce } from "use-debounce";
 import { pusherClient } from "@/lib/pusher/client";
 import { find } from "lodash";
+import { publicEnv } from "@/lib/env/public";
 
 type Message = {
   id: string;
@@ -64,7 +65,7 @@ export const useMessages = (bottomRef: RefObject<HTMLDivElement>) => {
       });
     } catch (error) {
       console.log("subscribe error:", error);
-      router.push("/Matches");
+      router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}/Matches`);
     }
     // Unsubscribe from pusher events when the component unmounts
     return () => {
@@ -79,7 +80,7 @@ export const useMessages = (bottomRef: RefObject<HTMLDivElement>) => {
       const res = await fetch(`/api/messages/${otherUserId}`);
       if (!res.ok) {
         console.log(res.json());
-        router.push(`/Matches`);
+        router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}/Matches`);
         return;
       }
     const data = await res.json();

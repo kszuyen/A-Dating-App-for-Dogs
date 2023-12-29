@@ -2,12 +2,12 @@
 
 import { useRouter } from "next/navigation";
 
-import { div } from "ndarray-ops";
+import { publicEnv } from "@/lib/env/public";
 
 const Navbar = ({ showButton }: { showButton: boolean }) => {
   const router = useRouter();
   const handleClick = () => {
-    router.push("/auth/signin");
+    router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}/auth/signin`);
   };
   return (
     <nav id="header" className="top-0 z-30 w-full">
