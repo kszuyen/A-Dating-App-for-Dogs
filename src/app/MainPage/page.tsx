@@ -60,15 +60,15 @@ function MainPage() {
       pusherClient.bind("liked:mainpage", (currentMatched: boolean) => {
         // setMatched(currentMatched);
         if (currentMatched) {
-          // console.log("accepted pusher trigger");
-          // const matchDiv = document.getElementById("match-text")!;
-          // console.log(matchDiv);
-          // matchDiv.style.display = "inline";
-          setShowMatchText(true);
+          console.log("accepted pusher trigger");
+          const matchDiv = document.getElementById("match-text")!;
+          console.log(matchDiv);
+          matchDiv.style.display = "inline";
+          // setShowMatchText(true);
 
           setTimeout(function () {
-            setShowMatchText(false);
-            // matchDiv.style.display = "none";
+            // setShowMatchText(false);
+            matchDiv.style.display = "none";
           }, 2200); // <-- time in milliseconds
         }
       });
@@ -79,7 +79,7 @@ function MainPage() {
     return () => {
       pusherClient.unsubscribe(channelName);
     };
-  }, [userId, router, loading, pageLoading, noCardsLeft]);
+  }, [userId, router]);
 
   const MatchedText = () => {
     const [isMatched, setIsMatched] = useState(false);
@@ -363,11 +363,14 @@ function MainPage() {
       <div className="flex h-[400px] items-center justify-center">
         {renderContent()}
       </div>
-      {showMatchText && (
-        <div className="absolute hidden items-center justify-center">
-          <MatchedText />
-        </div>
-      )}
+      {/* {showMatchText && ( */}
+      <div
+        id="match-text"
+        className="absolute hidden items-center justify-center"
+      >
+        <MatchedText />
+      </div>
+      {/* )} */}
     </div>
   );
 }
