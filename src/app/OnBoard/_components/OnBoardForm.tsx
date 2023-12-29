@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 // import OnBoardInput from "./OnBoardInput";
 import { useEdgeStore } from "@/lib/edgestore";
+import { publicEnv } from "@/lib/env/public";
 
 import DogImageInput from "./DogImageInput";
 
