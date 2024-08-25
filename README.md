@@ -2,6 +2,8 @@
 
 ## [Deployed Link](https://tindog-wp.vercel.app)
 
+## [Demo Video Link](https://youtu.be/v_aTQ8E0nzI)
+
 # Link Expires at 2 Weeks!!
 
 When we deployed our project to Vercel, we encountered an issue stating that:  
